@@ -1,7 +1,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/google-fonts', '@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/google-fonts', '@nuxtjs/tailwindcss', 'nuxt-lottie'],
 
   app: {
     head: {
@@ -35,6 +35,11 @@ export default defineNuxtConfig({
         },
       ],
     },
+  },
+
+  lottie: {
+    componentName: 'Lottie',
+    lottieFolder: '/assets/lottie',
   },
 
   googleFonts: {
