@@ -1,41 +1,73 @@
 <script setup>
-// 儲存目前時間（字串）
+// 只在瀏覽器端執行（避免 SSR/hydration 觸發）
+const isClient = import.meta.client;
+
 const currentTime = ref("");
-// 用來保存 setTimeout 的 ID，以便清除
-let timer;
+let timer = null;
 
-// 主計時函式：顯示當下時間，並排程到下一個整分鐘再更新
-function tick() {
+function renderNow() {
   const n = new Date();
-  // 格式化成 HH:mm
   currentTime.value = `${String(n.getHours()).padStart(2, "0")}:${String(n.getMinutes()).padStart(2, "0")}`;
+}
 
-  // 計算距離下一個整分鐘還有多少毫秒
-  // 60秒減去目前秒數，再扣掉毫秒數
+function scheduleNextMinute() {
+  const n = new Date();
   const ms = 60000 - (n.getSeconds() * 1000 + n.getMilliseconds());
-
-  // 安排下一次 tick，在「下一個整分鐘」的時間點執行
-  timer = setTimeout(tick, ms);
+  timer = setTimeout(() => {
+    renderNow();
+    scheduleNextMinute(); // 重新排到下一個整分，避免漂移
+  }, ms);
 }
 
-// 重新同步時間（例如從背景回到前景時呼叫）
+function clearTimer() {
+  if (timer) {
+    clearTimeout(timer);
+    timer = null;
+  }
+}
+
 function resync() {
-  clearTimeout(timer); // 清除原本的計時器，避免重複
-  tick(); // 立刻執行一次，並重新安排下一個整分
+  clearTimer();
+  renderNow();
+  scheduleNextMinute();
 }
+
+// 具名 handler，之後才能正確 remove
+const onVisibility = () => {
+  if (!document.hidden) resync();
+};
+const onFocus = () => resync();
 
 onMounted(() => {
-  tick(); // 初始化時間並開始計時
-  // 當頁面從背景回到前景時，立即校準時間
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) resync();
+  if (!isClient) return;
+  // 初始化並開始排程
+  resync();
+  // 綁定一次就好，且都用具名函式
+  document.addEventListener("visibilitychange", onVisibility, {
+    passive: true,
   });
+  window.addEventListener("focus", onFocus, { passive: true });
 });
 
 onUnmounted(() => {
-  // 元件卸載時清除計時器，避免記憶體洩漏
-  clearTimeout(timer);
+  // 正常導航離開時清理
+  clearTimer();
+  if (isClient) {
+    document.removeEventListener("visibilitychange", onVisibility);
+    window.removeEventListener("focus", onFocus);
+  }
 });
+
+// HMR 熱更新時也要確實清掉（開發模式很重要）
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    clearTimer();
+    if (isClient) {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("focus", onFocus);
+    }
+  });
+}
 </script>
 
 <template>
