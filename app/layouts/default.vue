@@ -77,7 +77,7 @@ if (import.meta.hot) {
     <div class="app-wrapper | relative h-full sm:h-[812px] sm:w-[375px]">
       <!-- APP 內容 -->
       <section
-        class="app-content | size-full sm:rounded-[50px] sm:bg-white"
+        class="app-content | relative size-full sm:rounded-[50px] sm:bg-white"
         :class="
           $route.path === '/' || ''
             ? 'sm:overflow-hidden'

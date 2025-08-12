@@ -88,7 +88,7 @@ const showCeremonyNav = ref(false);
     <transition name="bottomsheets">
       <nav
         v-if="showCeremonyNav"
-        class="absolute bottom-0 left-0 right-0 z-30 block rounded-t-[32px] bg-neutral-950 px-6 pt-5 sm:rounded-b-[50px]"
+        class="absolute inset-x-0 bottom-0 z-50 block max-h-[75vh] overflow-y-auto rounded-t-[32px] bg-neutral-950 px-6 pb-6 pt-5"
         role="dialog"
         aria-modal="true"
       >
