@@ -40,9 +40,7 @@ onUnmounted(() => {
 
 <template>
   <!-- 最外層的容器 -->
-  <div
-    class="items-center justify-center sm:flex sm:min-h-dvh sm:bg-secondary-50 sm:py-8"
-  >
+  <div class="items-center justify-center sm:flex sm:bg-secondary-50 sm:py-8">
     <!-- 模擬手機容器 -->
     <div class="app-wrapper | relative sm:h-[812px] sm:w-[375px]">
       <!-- APP 內容 -->
