@@ -45,7 +45,12 @@ onUnmounted(() => {
     <div class="app-wrapper | relative sm:h-[812px] sm:w-[375px]">
       <!-- APP 內容 -->
       <section
-        class="app-content | sm:size-full sm:overflow-x-hidden sm:overflow-y-scroll sm:rounded-[50px] sm:bg-white"
+        class="app-content | sm:size-full sm:rounded-[50px] sm:bg-white"
+        :class="
+          $route.path === '/' || ''
+            ? 'sm:overflow-hidden'
+            : 'sm:overflow-x-hidden sm:overflow-y-scroll'
+        "
       >
         <!-- 時間、動態島、狀態（純裝飾） -->
         <div
