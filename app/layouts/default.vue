@@ -51,15 +51,12 @@ onUnmounted(() => {
       >
         <!-- 時間、動態島、狀態（純裝飾） -->
         <div
-          class="sticky top-0 hidden grid-cols-3 items-center bg-secondary-50 sm:grid"
+          class="sticky top-0 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
+          :class="$route.path === '/' || '' ? 'bg-secondary' : 'bg-neutral-950'"
         >
-          <div class="p-3 text-center">{{ currentTime }}</div>
-          <div class="p-3">
-            <img src="/dynamic-island.svg" alt="island" />
-          </div>
-          <div class="p-3">
-            <img src="/status.svg" alt="status" />
-          </div>
+          <span>{{ currentTime }}</span>
+          <img src="/dynamic-island.svg" alt="island" />
+          <img src="/status.svg" alt="status" />
         </div>
         <!-- 主要內容插槽 -->
         <slot />
