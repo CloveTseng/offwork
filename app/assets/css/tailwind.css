@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 測試 */
+/* @layer utilities {
+  .red {
+    background-color: red;
+  }
+} */

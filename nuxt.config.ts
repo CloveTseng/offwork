@@ -2,7 +2,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   modules: ["@nuxtjs/google-fonts", "@nuxtjs/tailwindcss", "nuxt-lottie"],
-
+  tailwindcss: {
+    cssPath: "~/assets/css/tailwind.css",
+  },
   app: {
     head: {
       title: "健康生活 OFFWORK APP",
