@@ -147,7 +147,7 @@ useSeoMeta({
       <!-- nav -->
       <div class="sticky inset-x-0 bottom-3">
         <LayoutNavBar />
-        <LayoutBottomBar />
+        <LayoutBottomBar class="mb-2 mt-[27px]" />
       </div>
     </div>
   </main>

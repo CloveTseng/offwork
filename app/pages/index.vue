@@ -32,7 +32,7 @@ useSeoMeta({
     />
     <!-- 漸層底色&導覽選單 -->
     <div
-      class="absolute bottom-0 left-1/2 z-10 w-full -translate-x-1/2 rounded-b-[50px] bg-gradient-to-t from-[#49B3DD] from-40% to-[#49B3DD00] px-4 pb-10 pt-2"
+      class="absolute bottom-0 left-1/2 z-10 w-full -translate-x-1/2 rounded-b-[50px] bg-gradient-to-t from-[#49B3DD] from-40% to-[#49B3DD00] px-4 pt-2"
     >
       <!-- 下班儀式 -->
       <div
@@ -41,7 +41,7 @@ useSeoMeta({
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
           >
             <img src="/icons/home/mood.svg" alt="紀錄心情" />
           </button>
@@ -50,7 +50,7 @@ useSeoMeta({
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
           >
             <img src="/icons/home/ceremony.svg" alt="下班儀式" />
           </button>
@@ -59,7 +59,7 @@ useSeoMeta({
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
           >
             <img src="/icons/home/sleep.svg" alt="睡眠" />
           </button>
@@ -68,6 +68,7 @@ useSeoMeta({
       </div>
       <!-- 切換頁面 -->
       <LayoutNavBar />
+      <LayoutBottomBar class="mb-2 mt-[27px]" />
     </div>
   </main>
 </template>
