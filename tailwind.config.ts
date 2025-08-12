@@ -76,19 +76,19 @@ export default <Partial<Config>>{
         h3: [
           "2rem",
           {
-            lineHeight: "1.2",
+            lineHeight: "1.4",
           },
         ],
         h4: [
           "1.75rem",
           {
-            lineHeight: "1.2",
+            lineHeight: "1.4",
           },
         ],
         h5: [
           "1.5rem",
           {
-            lineHeight: "1.2",
+            lineHeight: "1.4",
           },
         ],
         xl: [
