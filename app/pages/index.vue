@@ -80,7 +80,7 @@ const showCeremonyNav = ref(false);
     <transition name="backdrop">
       <div
         v-if="showCeremonyNav"
-        class="absolute inset-0 z-20 block rounded-[50px] bg-[#16161699]"
+        class="absolute inset-0 z-20 block bg-[#16161699] sm:rounded-[50px]"
         @click="showCeremonyNav = false"
       ></div>
     </transition>
@@ -88,7 +88,7 @@ const showCeremonyNav = ref(false);
     <transition name="offcanvas">
       <nav
         v-if="showCeremonyNav"
-        class="absolute bottom-0 left-0 right-0 z-30 block rounded-b-[50px] rounded-t-[32px] bg-neutral-950 px-6 pt-5"
+        class="absolute bottom-0 left-0 right-0 z-30 block rounded-t-[32px] bg-neutral-950 px-6 pt-5 sm:rounded-b-[50px]"
         role="dialog"
         aria-modal="true"
       >
