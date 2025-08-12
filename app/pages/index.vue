@@ -4,7 +4,7 @@ useSeoMeta({
   ogTitle: "首頁 | 健康生活 OFFWORK APP",
 });
 
-// 控制 Off Canvas (下班儀式) 顯示狀態
+// 控制 Buttom Sheets (下班儀式) 顯示狀態
 const showCeremonyNav = ref(false);
 </script>
 
@@ -84,8 +84,8 @@ const showCeremonyNav = ref(false);
         @click="showCeremonyNav = false"
       ></div>
     </transition>
-    <!-- Off Canvas：由下往上滑入 -->
-    <transition name="offcanvas">
+    <!-- Buttom Sheets：由下往上滑入 -->
+    <transition name="bottomsheets">
       <nav
         v-if="showCeremonyNav"
         class="absolute bottom-0 left-0 right-0 z-30 block rounded-t-[32px] bg-neutral-950 px-6 pt-5 sm:rounded-b-[50px]"
@@ -163,13 +163,13 @@ const showCeremonyNav = ref(false);
   opacity: 0;
 }
 
-/* Off Canvas：自下而上滑入 */
-.offcanvas-enter-active,
-.offcanvas-leave-active {
+/* Buttom Sheets：自下而上滑入 */
+.bottomsheets-enter-active,
+.bottomsheets-leave-active {
   transition: transform 0.3s ease-in;
 }
-.offcanvas-enter-from,
-.offcanvas-leave-to {
+.bottomsheets-enter-from,
+.bottomsheets-leave-to {
   transform: translateY(100%);
 }
 </style>
