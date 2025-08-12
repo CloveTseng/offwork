@@ -131,6 +131,9 @@ export default <Partial<Config>>{
       fontFamily: {
         sans: ['"Noto Sans TC"', "ui-sans-serif", "system-ui"],
       },
+      boxShadow: {
+        button: "0 4px 4px 0 #FFFFFF0A",
+      },
     },
   },
 };

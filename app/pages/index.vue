@@ -41,7 +41,7 @@ useSeoMeta({
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
           >
             <img src="/icons/home/mood.svg" alt="紀錄心情" />
           </button>
@@ -50,7 +50,7 @@ useSeoMeta({
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
           >
             <img src="/icons/home/ceremony.svg" alt="下班儀式" />
           </button>
@@ -59,7 +59,7 @@ useSeoMeta({
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
           >
             <img src="/icons/home/sleep.svg" alt="睡眠" />
           </button>
