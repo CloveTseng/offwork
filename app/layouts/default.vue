@@ -49,7 +49,7 @@ onUnmounted(() => {
       >
         <!-- 時間、動態島、狀態（純裝飾） -->
         <div
-          class="sticky top-0 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
+          class="sticky top-0 z-50 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
           :class="$route.path === '/' || '' ? 'bg-secondary' : 'bg-neutral-950'"
         >
           <span>{{ currentTime }}</span>
