@@ -3,6 +3,9 @@ useSeoMeta({
   title: "首頁 | 健康生活 OFFWORK APP",
   ogTitle: "首頁 | 健康生活 OFFWORK APP",
 });
+
+// 控制 Off Canvas (下班儀式) 顯示狀態
+const showCeremonyNav = ref(false);
 </script>
 
 <template>
@@ -51,6 +54,7 @@ useSeoMeta({
           <button
             type="button"
             class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
+            @click="showCeremonyNav = true"
           >
             <img src="/icons/home/ceremony.svg" alt="下班儀式" />
           </button>
@@ -71,4 +75,101 @@ useSeoMeta({
       <LayoutBottomBar class="mb-2 mt-[27px]" />
     </div>
   </main>
+  <ClientOnly>
+    <!-- Backdrop：淡入淡出 -->
+    <transition name="backdrop">
+      <div
+        v-if="showCeremonyNav"
+        class="absolute inset-0 z-20 block rounded-[50px] bg-[#16161699]"
+        @click="showCeremonyNav = false"
+      ></div>
+    </transition>
+    <!-- Off Canvas：由下往上滑入 -->
+    <transition name="offcanvas">
+      <nav
+        v-if="showCeremonyNav"
+        class="absolute bottom-0 left-0 right-0 z-30 block rounded-b-[50px] rounded-t-[32px] bg-neutral-950 px-6 pt-5"
+        role="dialog"
+        aria-modal="true"
+      >
+        <LayoutBottomBar isInBottomSheet class="mb-6" />
+        <!-- 標題區 -->
+        <div class="mb-6 text-center">
+          <h3 class="mb-2 text-xl font-bold text-white">
+            下班了，也讓腦袋收工吧！
+          </h3>
+          <p class="text-md text-neutral-300">你現在的狀態如何呢？</p>
+        </div>
+        <ul class="space-y-4">
+          <!-- 感覺有點煩 -->
+          <li>
+            <NuxtLink to="/yelling">
+              <article
+                class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
+              >
+                <img src="/images/home/eruption.webp" alt="感覺有點煩" />
+                <div>
+                  <h4 class="mb-1 text-md font-bold text-white">感覺有點煩</h4>
+                  <p class="flex items-center gap-0.5 text-md text-neutral-300">
+                    讓我吼一吼
+                    <img src="/icons/right-arrow.svg" alt="右箭頭" />
+                  </p>
+                </div>
+              </article>
+            </NuxtLink>
+          </li>
+          <!-- 想找回平靜 -->
+          <li>
+            <NuxtLink to="/find-peace">
+              <article
+                class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
+              >
+                <img src="/images/home/breath.webp" alt="想找回平靜" />
+                <div>
+                  <h4 class="mb-1 text-md font-bold text-white">想找回平靜</h4>
+                  <p class="flex items-center gap-0.5 text-md text-neutral-300">
+                    來吸幾口氣
+                    <img src="/icons/right-arrow.svg" alt="右箭頭" />
+                  </p>
+                </div>
+              </article>
+            </NuxtLink>
+          </li>
+          <!-- 先躺平，晚點再說 -->
+          <li>
+            <button
+              type="button"
+              class="w-full rounded-full bg-neutral-900 px-6 py-3 text-center text-md font-bold text-neutral-100"
+              @click="showCeremonyNav = false"
+            >
+              先躺平，晚點再說
+            </button>
+          </li>
+        </ul>
+        <LayoutBottomBar class="mb-2 mt-[27px]" />
+      </nav>
+    </transition>
+  </ClientOnly>
 </template>
+
+<style scoped>
+/* Backdrop：淡入淡出 */
+.backdrop-enter-active,
+.backdrop-leave-active {
+  transition: opacity 0.3s ease;
+}
+.backdrop-enter-from,
+.backdrop-leave-to {
+  opacity: 0;
+}
+
+/* Off Canvas：自下而上滑入 */
+.offcanvas-enter-active,
+.offcanvas-leave-active {
+  transition: transform 0.3s ease-in;
+}
+.offcanvas-enter-from,
+.offcanvas-leave-to {
+  transform: translateY(100%);
+}
+</style>
