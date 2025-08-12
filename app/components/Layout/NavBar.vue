@@ -82,10 +82,10 @@
       <!-- 我的 -->
       <li>
         <NuxtLink
-          to="#"
+          to="/my"
           class="flex flex-col items-center rounded-full py-1 transition hover:text-white"
           :class="
-            $route.path === '#'
+            $route.path === '/my'
               ? 'bg-neutral-900 text-white'
               : 'text-neutral-500'
           "
@@ -107,4 +107,10 @@
       </li>
     </ul>
   </nav>
+  <!-- 底部橫杠 -->
+  <div class="flex justify-center">
+    <div
+      class="mb-2 mt-[27px] h-[5px] w-[134px] rounded-[100px] bg-neutral"
+    ></div>
+  </div>
 </template>
