@@ -19,7 +19,7 @@ useSeoMeta({
     </div>
     <!-- 爆發指數 -->
     <p
-      class="flex items-center justify-center gap-1 text-sm font-bold text-white"
+      class="relative z-10 flex items-center justify-center gap-1 text-sm font-bold text-white"
     >
       <img src="/icons/light.svg" alt="白色點點" />
       爆發指數 70％
