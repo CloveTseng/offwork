@@ -41,17 +41,22 @@ onUnmounted(() => {
 <template>
   <!-- 最外層的容器 -->
   <div
-    class="items-center justify-center sm:flex sm:min-h-dvh sm:bg-secondary-50 sm:py-8"
+    class="h-dvh items-center justify-center sm:flex sm:bg-secondary-950 sm:py-8"
   >
     <!-- 模擬手機容器 -->
-    <div class="app-wrapper | relative sm:h-[812px] sm:w-[375px]">
+    <div class="app-wrapper | relative h-full sm:h-[812px] sm:w-[375px]">
       <!-- APP 內容 -->
       <section
-        class="app-content | sm:size-full sm:overflow-x-hidden sm:overflow-y-scroll sm:rounded-[50px] sm:bg-white"
+        class="app-content | size-full sm:rounded-[50px] sm:bg-white"
+        :class="
+          $route.path === '/' || ''
+            ? 'sm:overflow-hidden'
+            : 'sm:overflow-x-hidden sm:overflow-y-scroll'
+        "
       >
         <!-- 時間、動態島、狀態（純裝飾） -->
         <div
-          class="sticky top-0 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
+          class="sticky top-0 z-50 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
           :class="$route.path === '/' || '' ? 'bg-secondary' : 'bg-neutral-950'"
         >
           <span>{{ currentTime }}</span>
