@@ -1,3 +1,10 @@
+<script setup>
+useSeoMeta({
+  title: "我的 | 健康生活 OFFWORK APP",
+  ogTitle: "我的 | 健康生活 OFFWORK APP",
+});
+</script>
+
 <template>
   <main class="bg-neutral-950">
     <div class="p-4 text-white">
