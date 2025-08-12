@@ -128,6 +128,9 @@ export default <Partial<Config>>{
           },
         ],
       },
+      fontFamily: {
+        sans: ['"Noto Sans TC"', "ui-sans-serif", "system-ui"],
+      },
     },
   },
 };
