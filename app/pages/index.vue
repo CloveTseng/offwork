@@ -9,7 +9,7 @@ useSeoMeta({
   <main class="h-full overflow-y-hidden bg-secondary pt-5">
     <!-- CTA、標題、時間 -->
     <div
-      class="mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
+      class="relative z-10 mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
     >
       <h2 class="font-medium">讓火山降溫，從下班開始</h2>
       <h1 class="text-h2 font-bold text-neutral-900">啟動下班人生</h1>
