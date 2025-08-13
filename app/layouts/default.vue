@@ -1,4 +1,23 @@
 <script setup>
+const route = useRoute();
+const appContentRef = ref(null);
+
+function resetScroll() {
+  if (!import.meta.client) return;
+  const el = appContentRef?.value;
+  if (el) el.scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+// 每次「路徑變更」捲到頂（query 變更不會觸發）
+watch(
+  () => route.path,
+  async () => {
+    await nextTick(); // 等 class/DOM 切好（overflow 切換完成）
+    resetScroll();
+  },
+);
+
 // 只在瀏覽器端執行（避免 SSR/hydration 觸發）
 const isClient = import.meta.client;
 
@@ -39,6 +58,8 @@ const onVisibility = () => {
 const onFocus = () => resync();
 
 onMounted(() => {
+  // 首次進到任何頁面，保險捲到頂
+  resetScroll();
   if (!isClient) return;
   // 初始化並開始排程
   resync();
@@ -77,6 +98,7 @@ if (import.meta.hot) {
     <div class="app-wrapper | relative h-full sm:h-[812px] sm:w-[375px]">
       <!-- APP 內容 -->
       <section
+        ref="appContentRef"
         class="app-content | relative size-full sm:rounded-[50px] sm:bg-white"
         :class="
           $route.path === '/' || ''
