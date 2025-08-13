@@ -109,7 +109,7 @@ function onDragEnd() {
     <div
       class="relative z-10 mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
     >
-      <h2 class="font-medium">讓火山降溫，從下班開始</h2>
+      <h2 class="font-medium">火山悶燒中，你還不下班嗎？</h2>
       <h1 class="text-h2 font-bold text-neutral-900">啟動下班人生</h1>
       <span class="flex items-center gap-1 font-medium">
         <img src="/icons/clock.svg" alt="鬧鐘 icon" />下班儀式｜下午 06:30
