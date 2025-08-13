@@ -212,7 +212,11 @@ function onDragEnd() {
               <article
                 class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
               >
-                <img src="/images/home/eruption.webp" alt="感覺有點煩" />
+                <img
+                  src="/images/home/eruption.webp"
+                  alt="感覺有點煩"
+                  class="w-[120px]"
+                />
                 <div>
                   <h4 class="mb-1 text-md font-bold text-white">感覺有點煩</h4>
                   <p class="flex items-center gap-0.5 text-md text-neutral-300">
@@ -229,7 +233,11 @@ function onDragEnd() {
               <article
                 class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
               >
-                <img src="/images/home/breath.webp" alt="想找回平靜" />
+                <img
+                  src="/images/home/breath.webp"
+                  alt="想找回平靜"
+                  class="w-[120px]"
+                />
                 <div>
                   <h4 class="mb-1 text-md font-bold text-white">想找回平靜</h4>
                   <p class="flex items-center gap-0.5 text-md text-neutral-300">
