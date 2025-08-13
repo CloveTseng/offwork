@@ -17,7 +17,7 @@ useSeoMeta({
     </NuxtLink>
     找回平靜
   </h1>
-  <main class="bg-neutral-950 p-4">
+  <main class="bg-neutral-950 px-4 pt-4">
     <!-- Tab -->
     <nav
       class="mb-4 grid grid-cols-2 rounded-full bg-neutral-900 p-1 text-center"
@@ -152,6 +152,8 @@ useSeoMeta({
         </li>
       </ul>
     </nav>
-    <LayoutBottomBar class="sticky bottom-2" />
+    <div class="sticky bottom-0 pb-2 pt-[27px]">
+      <LayoutBottomBar />
+    </div>
   </main>
 </template>
