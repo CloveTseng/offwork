@@ -186,7 +186,7 @@ function onDragEnd() {
       <nav
         v-if="showCeremonyNav"
         ref="sheetRef"
-        class="absolute inset-x-0 bottom-0 z-50 block max-h-[75vh] overflow-y-auto rounded-t-[32px] bg-neutral-950 px-6 pb-6 pt-5"
+        class="absolute inset-x-0 bottom-0 z-50 block overflow-y-auto rounded-t-[32px] bg-neutral-950 px-6 pt-5"
         role="dialog"
         aria-modal="true"
       >
