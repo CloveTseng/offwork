@@ -4,6 +4,12 @@ useSeoMeta({
   ogTitle: "首頁 | 健康生活 OFFWORK APP",
 });
 
+const route = useRoute();
+const router = useRouter();
+
+// 是否帶了 openCeremony 參數（空字串/true/1 都視為存在）
+const hasOpenParam = computed(() => route.query.openCeremony !== undefined);
+
 // 控制 Buttom Sheets (下班儀式) 顯示狀態
 const showCeremonyNav = ref(false);
 
@@ -101,6 +107,35 @@ function onDragEnd() {
     el.addEventListener("transitionend", back);
   }
 }
+
+// 監看 URL → 反映到 UI（例如使用者手動改網址 / 瀏覽器前進後退）
+watch(hasOpenParam, (has) => {
+  if (has && !showCeremonyNav.value) showCeremonyNav.value = true;
+  if (!has && showCeremonyNav.value) showCeremonyNav.value = false;
+});
+
+// 監看 UI → 反映到 URL（關閉時移除參數；開啟時補上參數）
+// 用 replace 避免塞滿歷史紀錄；若想用返回鍵關閉，這裡可改用 push
+watch(showCeremonyNav, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openCeremony" in q)) {
+      router.replace({ query: { ...q, openCeremony: "" } });
+    }
+  } else {
+    if ("openCeremony" in q) {
+      delete q.openCeremony;
+      router.replace({ query: q });
+    }
+  }
+});
+
+// 首次進入頁面：若有參數就打開 bottom sheet
+onMounted(async () => {
+  await nextTick();
+  if (hasOpenParam.value) showCeremonyNav.value = true;
+});
 </script>
 
 <template>
