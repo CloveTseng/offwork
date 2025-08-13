@@ -135,7 +135,7 @@ if (import.meta.hot) {
       -->
       <section
         ref="appContentRef"
-        class="app-content | relative size-full sm:rounded-[50px] sm:bg-white"
+        class="app-content | relative size-full sm:rounded-[50px] sm:bg-neutral-950"
         :class="
           $route.path === '/'
             ? 'sm:overflow-hidden'
@@ -150,7 +150,11 @@ if (import.meta.hot) {
         -->
         <div
           class="sticky top-0 z-10 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
-          :class="$route.path === '/' || '' ? 'bg-secondary' : 'bg-neutral-950'"
+          :class="
+            $route.path === '/' || ''
+              ? 'bg-secondary'
+              : 'bg-[#29292DCC] backdrop-blur-lg'
+          "
         >
           <span>{{ currentTime }}</span>
           <img src="/dynamic-island.svg" alt="island" />
