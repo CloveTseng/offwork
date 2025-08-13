@@ -7,7 +7,7 @@ useSeoMeta({
 
 <template>
   <h1
-    class="relative bg-neutral-950 py-2.5 text-center text-xl font-bold text-white"
+    class="sticky top-0 bg-[#29292DCC] py-2.5 text-center text-xl font-bold text-white backdrop-blur-lg sm:top-14"
   >
     <NuxtLink
       :to="{ path: '/', query: { openCeremony: 'true' } }"
@@ -17,7 +17,7 @@ useSeoMeta({
     </NuxtLink>
     找回平靜
   </h1>
-  <section class="bg-neutral-950 p-4">
+  <main class="bg-neutral-950 p-4">
     <!-- Tab -->
     <nav
       class="mb-4 grid grid-cols-2 rounded-full bg-neutral-900 p-1 text-center"
@@ -153,5 +153,5 @@ useSeoMeta({
       </ul>
     </nav>
     <LayoutBottomBar class="sticky bottom-2" />
-  </section>
+  </main>
 </template>
