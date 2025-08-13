@@ -135,7 +135,7 @@ if (import.meta.hot) {
       -->
       <section
         ref="appContentRef"
-        class="app-content | relative size-full sm:rounded-[50px] sm:bg-neutral-950"
+        class="app-content | relative size-full bg-neutral-950 sm:rounded-[50px]"
         :class="
           $route.path === '/'
             ? 'sm:overflow-hidden'
