@@ -1,7 +1,13 @@
 <script setup>
+/* ──────────────────────────────────────────────
+ * ① 路由 & 滾動狀態：換頁時把內容區捲回頂端
+ *  - 桌面預覽時，真正捲動的是 .app-content（不是 window）
+ *  - 手機/小螢幕時，可能是 window 在捲動
+ * ────────────────────────────────────────────── */
 const route = useRoute();
 const appContentRef = ref(null);
 
+/** 將 .app-content 與 window 都捲回頂端（雙保險） */
 function resetScroll() {
   if (!import.meta.client) return;
   const el = appContentRef?.value;
@@ -9,35 +15,44 @@ function resetScroll() {
   window.scrollTo({ top: 0, behavior: "auto" });
 }
 
-// 每次「路徑變更」捲到頂（query 變更不會觸發）
+/** 只有「路徑(path)」改變才重置（query 改變不會觸發） */
 watch(
   () => route.path,
   async () => {
-    await nextTick(); // 等 class/DOM 切好（overflow 切換完成）
+    // 等 DOM/class 切換完成（例如 overflow-hidden ↔︎ overflow-y-scroll）
+    await nextTick();
     resetScroll();
   },
 );
 
-// 只在瀏覽器端執行（避免 SSR/hydration 觸發）
+/* ──────────────────────────────────────────────
+ * ② 客戶端判斷：避免 SSR / hydration 在伺服器端動到 DOM
+ * ────────────────────────────────────────────── */
 const isClient = import.meta.client;
 
+/* ──────────────────────────────────────────────
+ * ③ 顯示當下時間：每分鐘整點校時，避免「越跑越飄」
+ * ────────────────────────────────────────────── */
 const currentTime = ref("");
 let timer = null;
 
+/** 以 HH:MM 方式渲染現在時間（手動補零） */
 function renderNow() {
   const n = new Date();
   currentTime.value = `${String(n.getHours()).padStart(2, "0")}:${String(n.getMinutes()).padStart(2, "0")}`;
 }
 
+/** 排到「下一個整分」再觸發，維持長時間精準 */
 function scheduleNextMinute() {
   const n = new Date();
   const ms = 60000 - (n.getSeconds() * 1000 + n.getMilliseconds());
   timer = setTimeout(() => {
     renderNow();
-    scheduleNextMinute(); // 重新排到下一個整分，避免漂移
+    scheduleNextMinute(); // 重新排下一個整分
   }, ms);
 }
 
+/** 清掉計時器（避免記憶體外洩或重複排程） */
 function clearTimer() {
   if (timer) {
     clearTimeout(timer);
@@ -45,25 +60,32 @@ function clearTimer() {
   }
 }
 
+/** 重新校時：先清舊計時器，再立刻渲染、重排下一個整分 */
 function resync() {
   clearTimer();
   renderNow();
   scheduleNextMinute();
 }
 
-// 具名 handler，之後才能正確 remove
+/* ──────────────────────────────────────────────
+ * ④ 頁面可見性/焦點：回到分頁時重新校時（時間不會落後）
+ * ────────────────────────────────────────────── */
 const onVisibility = () => {
   if (!document.hidden) resync();
 };
 const onFocus = () => resync();
 
+/* ──────────────────────────────────────────────
+ * ⑤ 生命週期：掛載/卸載
+ * ────────────────────────────────────────────── */
 onMounted(() => {
-  // 首次進到任何頁面，保險捲到頂
+  // 首次載入就把內容區捲回頂端（避免從其他頁帶著捲動位置回來）
   resetScroll();
+
   if (!isClient) return;
-  // 初始化並開始排程
+  // 啟動時間顯示與精準排程
   resync();
-  // 綁定一次就好，且都用具名函式
+  // 只綁一次全域事件，且使用具名 handler，卸載時才能正確移除
   document.addEventListener("visibilitychange", onVisibility, {
     passive: true,
   });
@@ -71,7 +93,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  // 正常導航離開時清理
+  // 清理計時器與事件監聽，保持乾淨
   clearTimer();
   if (isClient) {
     document.removeEventListener("visibilitychange", onVisibility);
@@ -79,7 +101,9 @@ onUnmounted(() => {
   }
 });
 
-// HMR 熱更新時也要確實清掉（開發模式很重要）
+/* ──────────────────────────────────────────────
+ * ⑥ HMR（開發模式熱更新）：重新載入前也要確實清理
+ * ────────────────────────────────────────────── */
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     clearTimer();
@@ -92,21 +116,38 @@ if (import.meta.hot) {
 </script>
 
 <template>
-  <!-- 最外層的容器 -->
+  <!--
+    最外層：讓「手機殼」在桌面置中顯示；小螢幕直接滿版
+    - h-dvh：滿高（支援動態瀏覽器工具列高度）
+    - sm:flex：桌面才置中
+  -->
   <div class="h-dvh items-center justify-center sm:flex sm:py-8">
-    <!-- 模擬手機容器 -->
+    <!--
+      模擬手機容器：負責放 iPhone 外框（用 ::before / ::after 畫）
+      - relative：提供定位參考給外框與內部絕對定位元素
+    -->
     <div class="app-wrapper | relative h-full sm:h-[812px] sm:w-[375px]">
-      <!-- APP 內容 -->
+      <!--
+        APP 內容：實際顯示頁面的地方
+        - ref=appContentRef：桌面預覽時「真正的滾動容器」
+        - 首頁：overflow-hidden（不捲動，像真手機首頁）
+        - 其他頁：允許縱向捲動
+      -->
       <section
         ref="appContentRef"
         class="app-content | relative size-full sm:rounded-[50px] sm:bg-white"
         :class="
-          $route.path === '/' || ''
+          $route.path === '/'
             ? 'sm:overflow-hidden'
             : 'sm:overflow-x-hidden sm:overflow-y-scroll'
         "
       >
-        <!-- 時間、動態島、狀態（純裝飾） -->
+        <!--
+          頂部狀態列（僅桌面顯示，用來模擬動態島與系統狀態）
+          - sticky top-0：捲動時固定在頂
+          - z-10：壓在內容之上
+          - 背景色根據是否為首頁切換
+        -->
         <div
           class="sticky top-0 z-10 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
           :class="$route.path === '/' || '' ? 'bg-secondary' : 'bg-neutral-950'"
@@ -115,7 +156,7 @@ if (import.meta.hot) {
           <img src="/dynamic-island.svg" alt="island" />
           <img src="/status.svg" alt="status" />
         </div>
-        <!-- 主要內容插槽 -->
+        <!-- 子頁面會透過 <slot/> 插進來 -->
         <slot />
       </section>
     </div>
@@ -155,7 +196,7 @@ if (import.meta.hot) {
     pointer-events: none;
   }
 
-  /* APP 內容 */
+  /* 內容區（桌面）隱藏滾動條外觀（仍可捲動） */
   .app-content {
     scrollbar-width: none;
   }
