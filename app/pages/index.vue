@@ -4,6 +4,12 @@ useSeoMeta({
   ogTitle: "首頁 | 健康生活 OFFWORK APP",
 });
 
+const route = useRoute();
+const router = useRouter();
+
+// 是否帶了 openCeremony 參數（空字串/true/1 都視為存在）
+const hasOpenParam = computed(() => route.query.openCeremony !== undefined);
+
 // 控制 Buttom Sheets (下班儀式) 顯示狀態
 const showCeremonyNav = ref(false);
 
@@ -101,6 +107,35 @@ function onDragEnd() {
     el.addEventListener("transitionend", back);
   }
 }
+
+// 監看 URL → 反映到 UI（例如使用者手動改網址 / 瀏覽器前進後退）
+watch(hasOpenParam, (has) => {
+  if (has && !showCeremonyNav.value) showCeremonyNav.value = true;
+  if (!has && showCeremonyNav.value) showCeremonyNav.value = false;
+});
+
+// 監看 UI → 反映到 URL（關閉時移除參數；開啟時補上參數）
+// 用 replace 避免塞滿歷史紀錄；若想用返回鍵關閉，這裡可改用 push
+watch(showCeremonyNav, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openCeremony" in q)) {
+      router.replace({ query: { ...q, openCeremony: "" } });
+    }
+  } else {
+    if ("openCeremony" in q) {
+      delete q.openCeremony;
+      router.replace({ query: q });
+    }
+  }
+});
+
+// 首次進入頁面：若有參數就打開 bottom sheet
+onMounted(async () => {
+  await nextTick();
+  if (hasOpenParam.value) showCeremonyNav.value = true;
+});
 </script>
 
 <template>
@@ -109,7 +144,7 @@ function onDragEnd() {
     <div
       class="relative z-10 mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
     >
-      <h2 class="font-medium">讓火山降溫，從下班開始</h2>
+      <h2 class="font-medium">火山悶燒中，你還不下班嗎？</h2>
       <h1 class="text-h2 font-bold text-neutral-900">啟動下班人生</h1>
       <span class="flex items-center gap-1 font-medium">
         <img src="/icons/clock.svg" alt="鬧鐘 icon" />下班儀式｜下午 06:30
@@ -186,7 +221,7 @@ function onDragEnd() {
       <nav
         v-if="showCeremonyNav"
         ref="sheetRef"
-        class="absolute inset-x-0 bottom-0 z-50 block max-h-[75vh] overflow-y-auto rounded-t-[32px] bg-neutral-950 px-6 pb-6 pt-5"
+        class="absolute inset-x-0 bottom-0 z-50 block overflow-y-auto rounded-t-[32px] bg-neutral-950 px-6 pt-5"
         role="dialog"
         aria-modal="true"
       >
@@ -208,11 +243,15 @@ function onDragEnd() {
         <ul class="space-y-4">
           <!-- 感覺有點煩 -->
           <li>
-            <NuxtLink to="/yelling">
+            <NuxtLink to="/yelling" class="gradient-border-1px">
               <article
                 class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
               >
-                <img src="/images/home/eruption.webp" alt="感覺有點煩" />
+                <img
+                  src="/images/home/eruption.webp"
+                  alt="感覺有點煩"
+                  class="w-[120px]"
+                />
                 <div>
                   <h4 class="mb-1 text-md font-bold text-white">感覺有點煩</h4>
                   <p class="flex items-center gap-0.5 text-md text-neutral-300">
@@ -225,11 +264,15 @@ function onDragEnd() {
           </li>
           <!-- 想找回平靜 -->
           <li>
-            <NuxtLink to="/find-peace">
+            <NuxtLink to="/find-peace" class="gradient-border-1px">
               <article
                 class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
               >
-                <img src="/images/home/breath.webp" alt="想找回平靜" />
+                <img
+                  src="/images/home/breath.webp"
+                  alt="想找回平靜"
+                  class="w-[120px]"
+                />
                 <div>
                   <h4 class="mb-1 text-md font-bold text-white">想找回平靜</h4>
                   <p class="flex items-center gap-0.5 text-md text-neutral-300">
