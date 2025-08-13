@@ -208,10 +208,7 @@ function onDragEnd() {
         <ul class="space-y-4">
           <!-- 感覺有點煩 -->
           <li>
-            <NuxtLink
-              to="/yelling"
-              class="block rounded-[32px] bg-[linear-gradient(135deg,_#C0C7DC_0%,_#C0C7DC_30%,_#39393F_65%,_#ADACC5_100%)] p-[1px]"
-            >
+            <NuxtLink to="/yelling" class="gradient-border-1px">
               <article
                 class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
               >
@@ -228,10 +225,7 @@ function onDragEnd() {
           </li>
           <!-- 想找回平靜 -->
           <li>
-            <NuxtLink
-              to="/find-peace"
-              class="block rounded-[32px] bg-[linear-gradient(135deg,_#C0C7DC_0%,_#C0C7DC_30%,_#39393F_65%,_#ADACC5_100%)] p-[1px]"
-            >
+            <NuxtLink to="/find-peace" class="gradient-border-1px">
               <article
                 class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
               >
