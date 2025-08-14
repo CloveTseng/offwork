@@ -3,6 +3,12 @@ useSeoMeta({
   title: "平穩呼吸法 | 健康生活 OFFWORK APP",
   ogTitle: "平穩呼吸法 | 健康生活 OFFWORK APP",
 });
+
+// 控制 Buttom Sheets (時間設定) 顯示狀態
+const showTimeSetting = ref(false);
+
+// 你想呼吸多久？（預設 3 分鐘）
+const breathingMinutes = ref("3");
 </script>
 
 <template>
@@ -35,14 +41,15 @@ useSeoMeta({
           這個呼吸法可以幫助你降低心跳與緊張感，讓身體慢慢鬆下來，穩定情緒、幫助你從混亂中重新找回節奏。
         </p>
       </div>
-      <!-- 你想呼吸多久？（時間設定） -->
+      <!-- 你想呼吸多久？（開啟時間設定） -->
       <button
         type="button"
         class="flex w-full flex-wrap items-center justify-between rounded-3xl bg-neutral px-6 py-5 text-md font-bold text-white"
+        @click="showTimeSetting = true"
       >
         你想呼吸多久？
         <span class="flex gap-1 text-alert-success">
-          3 分鐘
+          {{ breathingMinutes }} 分鐘
           <img src="/icons/green-down-arrow.svg" alt="綠色下箭頭 icon" />
         </span>
       </button>
@@ -50,7 +57,7 @@ useSeoMeta({
       <NuxtLink
         :to="{
           path: '/find-peace/calm-breathe/breathing',
-          query: { minutes: 3 },
+          query: { minutes: breathingMinutes },
         }"
         class="flex w-full items-center justify-center gap-1 rounded-full bg-alert-success py-3 text-center text-md font-bold text-neutral-950"
       >
@@ -60,4 +67,59 @@ useSeoMeta({
       <LayoutBottomBar class="mb-2 mt-[27px]" />
     </div>
   </section>
+  <!-- 時間設定 Bottom Sheet -->
+  <LayoutBottomSheet
+    v-model="showTimeSetting"
+    handleMarginBottom="mb-5"
+    :threshold="0.3"
+    :backdrop-fade="0.6"
+  >
+    <ul class="text-center text-white">
+      <li
+        class="cursor-pointer rounded-xl py-4 text-md font-bold transition hover:text-alert-success"
+        :class="{
+          'bg-neutral-900 text-alert-success': breathingMinutes === '1',
+        }"
+        @click="breathingMinutes = '1'"
+      >
+        1 分鐘
+      </li>
+      <li
+        class="cursor-pointer rounded-xl py-4 text-md font-bold transition hover:text-alert-success"
+        :class="{
+          'bg-neutral-900 text-alert-success': breathingMinutes === '3',
+        }"
+        @click="breathingMinutes = '3'"
+      >
+        3 分鐘
+      </li>
+      <li
+        class="cursor-pointer rounded-xl py-4 text-md font-bold transition hover:text-alert-success"
+        :class="{
+          'bg-neutral-900 text-alert-success': breathingMinutes === '5',
+        }"
+        @click="breathingMinutes = '5'"
+      >
+        5 分鐘
+      </li>
+      <li
+        class="cursor-pointer rounded-xl py-4 text-md font-bold transition hover:text-alert-success"
+        :class="{
+          'bg-neutral-900 text-alert-success': breathingMinutes === '10',
+        }"
+        @click="breathingMinutes = '10'"
+      >
+        10 分鐘
+      </li>
+      <li
+        class="cursor-pointer rounded-xl py-4 text-md font-bold transition hover:text-alert-success"
+        :class="{
+          'bg-neutral-900 text-alert-success': breathingMinutes === '15',
+        }"
+        @click="breathingMinutes = '15'"
+      >
+        15 分鐘
+      </li>
+    </ul>
+  </LayoutBottomSheet>
 </template>
