@@ -25,7 +25,7 @@ useSeoMeta({
       <!-- 呼吸 -->
       <NuxtLink
         to="/find-peace"
-        class="rounded-full text-md font-bold transition hover:text-white"
+        class="block rounded-full py-1 text-md font-bold transition hover:text-white"
         :class="
           $route.path === '/find-peace'
             ? 'bg-neutral text-white shadow-tab'
@@ -36,7 +36,7 @@ useSeoMeta({
       <!-- 冥想（沒有頁面純裝飾） -->
       <NuxtLink
         to="#"
-        class="rounded-full text-md font-bold transition hover:text-white"
+        class="block rounded-full py-1 text-md font-bold transition hover:text-white"
         :class="
           $route.path === '#'
             ? 'bg-neutral text-white shadow-tab'
