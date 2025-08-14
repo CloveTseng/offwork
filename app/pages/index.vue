@@ -161,7 +161,7 @@ onMounted(async () => {
     <img
       src="/images/home/red-valcano.webp"
       alt="紅色火山君"
-      class="absolute bottom-10 left-1/2 z-0 w-full max-w-[366px] -translate-x-1/2"
+      class="pointer-events-none absolute bottom-10 left-1/2 z-0 w-full max-w-[366px] -translate-x-1/2"
     />
     <!-- 漸層底色&導覽選單 -->
     <div
@@ -174,7 +174,7 @@ onMounted(async () => {
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="rounded-full bg-[#33333980] p-5 shadow-button backdrop-blur"
           >
             <img src="/icons/home/mood.svg" alt="紀錄心情" />
           </button>
@@ -183,7 +183,7 @@ onMounted(async () => {
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="rounded-full bg-[#33333980] p-5 shadow-button backdrop-blur"
             @click="showCeremonyNav = true"
           >
             <img src="/icons/home/ceremony.svg" alt="下班儀式" />
@@ -193,7 +193,7 @@ onMounted(async () => {
         <div class="flex flex-col gap-2">
           <button
             type="button"
-            class="shadow-button rounded-full bg-[#33333980] p-5 backdrop-blur"
+            class="rounded-full bg-[#33333980] p-5 shadow-button backdrop-blur"
           >
             <img src="/icons/home/sleep.svg" alt="睡眠" />
           </button>
