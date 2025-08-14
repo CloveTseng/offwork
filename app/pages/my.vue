@@ -7,7 +7,7 @@ useSeoMeta({
 
 <template>
   <main class="bg-neutral-950">
-    <div class="p-4 text-white">
+    <div class="px-4 pt-4 text-white">
       <!-- 使用者區塊 -->
       <section class="mb-3 flex items-center py-4">
         <div class="me-3">
@@ -118,7 +118,7 @@ useSeoMeta({
         </div>
       </section>
       <!-- notify -->
-      <section class="mb-3 rounded-3xl bg-neutral-900 px-6 py-7">
+      <section class="mb-4 rounded-3xl bg-neutral-900 px-6 py-7">
         <div class="mb-5 flex items-center">
           <div class="me-2">
             <img src="/icons/my/alarm-add-fill.svg" alt="通知" />
@@ -145,7 +145,7 @@ useSeoMeta({
         </div>
       </section>
       <!-- nav -->
-      <div class="sticky inset-x-0 bottom-3">
+      <div class="sticky inset-x-0 bottom-2">
         <LayoutNavBar />
         <LayoutBottomBar class="mb-2 mt-[27px]" />
       </div>
