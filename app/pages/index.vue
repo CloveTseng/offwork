@@ -139,7 +139,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="h-full overflow-y-hidden bg-secondary pt-5">
+  <main class="h-full bg-secondary pt-5">
     <!-- CTA、標題、時間 -->
     <div
       class="relative z-10 mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
