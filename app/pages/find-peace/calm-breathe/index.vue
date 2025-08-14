@@ -33,9 +33,9 @@ const breathingMinutes = ref("3");
     ></div>
     <!-- 平穩呼吸法介紹&時間設定 -->
     <div
-      class="absolute bottom-0 left-1/2 z-20 w-full -translate-x-1/2 space-y-5 rounded-t-[32px] bg-neutral-950 px-8 pt-8 sm:rounded-b-[50px]"
+      class="absolute bottom-0 left-1/2 z-20 w-full -translate-x-1/2 rounded-t-[32px] bg-neutral-950 px-8 pt-8 sm:rounded-b-[50px]"
     >
-      <div>
+      <div class="mb-5">
         <h1 class="mb-2 text-h5 font-bold text-white">平穩呼吸法</h1>
         <p class="text-sm text-neutral-300">
           這個呼吸法可以幫助你降低心跳與緊張感，讓身體慢慢鬆下來，穩定情緒、幫助你從混亂中重新找回節奏。
@@ -44,7 +44,7 @@ const breathingMinutes = ref("3");
       <!-- 你想呼吸多久？（開啟時間設定） -->
       <button
         type="button"
-        class="flex w-full flex-wrap items-center justify-between rounded-3xl bg-neutral px-6 py-5 text-md font-bold text-white"
+        class="mb-5 flex w-full flex-wrap items-center justify-between rounded-3xl bg-neutral px-6 py-5 text-md font-bold text-white"
         @click="showTimeSetting = true"
       >
         你想呼吸多久？
