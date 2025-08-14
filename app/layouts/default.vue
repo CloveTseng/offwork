@@ -113,6 +113,36 @@ if (import.meta.hot) {
     }
   });
 }
+
+/* ──────────────────────────────────────────────
+ * A) 路徑白名單：完全相符才生效（不吃父層/包含）
+ * ────────────────────────────────────────────── */
+// 1) 內容區「不可捲動」的路徑
+const NON_SCROLLABLE_PATHS = new Set(["/", "/find-peace/calm-breathe"]);
+
+// 2) 狀態列使用 bg-secondary 的路徑
+const STATUSBAR_SECONDARY_PATHS = new Set(["/", "/find-peace/calm-breathe"]);
+
+const currentPath = computed(() => route.path);
+
+/* ──────────────────────────────────────────────
+ * B) 視覺與互動邏輯：由 computed 輸出 class
+ * ────────────────────────────────────────────── */
+const isNonScrollable = computed(() =>
+  NON_SCROLLABLE_PATHS.has(currentPath.value),
+);
+
+const appContentScrollClass = computed(() =>
+  isNonScrollable.value
+    ? "overflow-hidden"
+    : "sm:overflow-x-hidden sm:overflow-y-scroll",
+);
+
+const statusBarBgClass = computed(() =>
+  STATUSBAR_SECONDARY_PATHS.has(currentPath.value)
+    ? "bg-secondary"
+    : "bg-[#29292DCC] backdrop-blur-lg",
+);
 </script>
 
 <template>
@@ -130,31 +160,22 @@ if (import.meta.hot) {
       <!--
         APP 內容：實際顯示頁面的地方
         - ref=appContentRef：桌面預覽時「真正的滾動容器」
-        - 首頁：overflow-hidden（不捲動，像真手機首頁）
-        - 其他頁：允許縱向捲動
+        - :class="appContentScrollClass"：「不可捲動」的白名單
       -->
       <section
         ref="appContentRef"
         class="app-content | relative size-full bg-neutral-950 sm:rounded-[50px]"
-        :class="
-          $route.path === '/'
-            ? 'sm:overflow-hidden'
-            : 'sm:overflow-x-hidden sm:overflow-y-scroll'
-        "
+        :class="appContentScrollClass"
       >
         <!--
           頂部狀態列（僅桌面顯示，用來模擬動態島與系統狀態）
           - sticky top-0：捲動時固定在頂
           - z-10：壓在內容之上
-          - 背景色根據是否為首頁切換
+          - 背景色根據 statusBarBgClass 白名單切換
         -->
         <div
           class="sticky top-0 z-10 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
-          :class="
-            $route.path === '/' || ''
-              ? 'bg-secondary'
-              : 'bg-[#29292DCC] backdrop-blur-lg'
-          "
+          :class="statusBarBgClass"
         >
           <span>{{ currentTime }}</span>
           <img src="/dynamic-island.svg" alt="island" />
