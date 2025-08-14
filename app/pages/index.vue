@@ -115,9 +115,6 @@ onMounted(() => {
     :threshold="0.3"
     :backdrop-fade="0.6"
   >
-    <template #handle>
-      <LayoutBottomBar isInBottomSheet />
-    </template>
     <div class="mb-6 text-center">
       <h3 class="mb-2 text-xl font-bold text-white">
         下班了，也讓腦袋收工吧！

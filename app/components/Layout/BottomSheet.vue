@@ -2,6 +2,7 @@
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   hasBottomBar: { type: Boolean, default: false },
+  handleMarginBottom: { type: String, default: "mb-6" },
   threshold: { type: Number, default: 0.3 }, // 拖過高度 30% 就關
   backdropFade: { type: Number, default: 0.6 }, // 拖曳時背板淡出比例
 });
@@ -159,13 +160,13 @@ defineExpose({ open, close, sheetRef, backdropRef, handleRef });
         aria-modal="true"
       >
         <!-- 手把區（可拖曳） -->
-        <div
+        <LayoutBottomBar
+          isInBottomSheet
           ref="handleRef"
-          class="mb-6 cursor-grab touch-none select-none active:cursor-grabbing"
+          class="cursor-grab touch-none select-none active:cursor-grabbing"
+          :class="handleMarginBottom"
           @pointerdown="onDragStart"
-        >
-          <slot name="handle" />
-        </div>
+        />
 
         <!-- 內容插槽 -->
         <slot />
