@@ -25,10 +25,10 @@ useSeoMeta({
       <!-- 呼吸 -->
       <NuxtLink
         to="/find-peace"
-        class="rounded-full text-md font-bold transition hover:text-white"
+        class="block rounded-full py-1 text-md font-bold transition hover:text-white"
         :class="
           $route.path === '/find-peace'
-            ? 'shadow-tab bg-neutral text-white'
+            ? 'bg-neutral text-white shadow-tab'
             : 'bg-transparent text-neutral-500'
         "
         >呼吸
@@ -36,10 +36,10 @@ useSeoMeta({
       <!-- 冥想（沒有頁面純裝飾） -->
       <NuxtLink
         to="#"
-        class="rounded-full text-md font-bold transition hover:text-white"
+        class="block rounded-full py-1 text-md font-bold transition hover:text-white"
         :class="
           $route.path === '#'
-            ? 'shadow-tab bg-neutral text-white'
+            ? 'bg-neutral text-white shadow-tab'
             : 'bg-transparent text-neutral-500'
         "
         >冥想
@@ -50,7 +50,7 @@ useSeoMeta({
       <ul class="space-y-4">
         <!-- 平穩呼吸法 -->
         <li>
-          <NuxtLink to="/find-peace/breathe" class="gradient-border-1px">
+          <NuxtLink to="/find-peace/calm-breathe" class="gradient-border-1px">
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
             >
@@ -70,7 +70,7 @@ useSeoMeta({
         </li>
         <!-- 腹式呼吸法（沒有頁面純裝飾） -->
         <li>
-          <NuxtLink to="/find-peace/breathe" class="gradient-border-1px">
+          <NuxtLink to="/find-peace/calm-breathe" class="gradient-border-1px">
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
             >
@@ -90,7 +90,7 @@ useSeoMeta({
         </li>
         <!-- 4-7-8 呼吸（沒有頁面純裝飾） -->
         <li>
-          <NuxtLink to="/find-peace/breathe" class="gradient-border-1px">
+          <NuxtLink to="/find-peace/calm-breathe" class="gradient-border-1px">
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
             >
@@ -110,7 +110,7 @@ useSeoMeta({
         </li>
         <!-- 4-4-4 方格呼吸（沒有頁面純裝飾） -->
         <li>
-          <NuxtLink to="/find-peace/breathe" class="gradient-border-1px">
+          <NuxtLink to="/find-peace/calm-breathe" class="gradient-border-1px">
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
             >
@@ -132,7 +132,7 @@ useSeoMeta({
         </li>
         <!-- 平穩呼吸法 -->
         <li>
-          <NuxtLink to="/find-peace/breathe" class="gradient-border-1px">
+          <NuxtLink to="/find-peace/calm-breathe" class="gradient-border-1px">
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
             >
