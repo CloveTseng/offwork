@@ -111,6 +111,7 @@ onMounted(() => {
   </main>
   <LayoutBottomSheet
     v-model="showCeremonyNav"
+    hasBottomBar
     :threshold="0.3"
     :backdrop-fade="0.6"
   >

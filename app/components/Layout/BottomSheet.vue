@@ -1,6 +1,7 @@
 <script setup>
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
+  hasBottomBar: { type: Boolean, default: false },
   threshold: { type: Number, default: 0.3 }, // 拖過高度 30% 就關
   backdropFade: { type: Number, default: 0.6 }, // 拖曳時背板淡出比例
 });
@@ -144,7 +145,7 @@ defineExpose({ open, close, sheetRef, backdropRef, handleRef });
         class="backdrop-layer absolute inset-0 z-40 bg-[#16161699]"
         :style="{ '--drag': String(backdropOpacity) }"
         @click="close"
-      />
+      ></div>
     </transition>
 
     <!-- Sheet -->
@@ -152,7 +153,8 @@ defineExpose({ open, close, sheetRef, backdropRef, handleRef });
       <nav
         v-if="modelValue"
         ref="sheetRef"
-        class="absolute inset-x-0 bottom-0 z-50 block overflow-y-auto rounded-t-[32px] bg-neutral-950 px-6 pt-5"
+        class="absolute inset-x-0 bottom-0 z-50 block overflow-y-auto rounded-t-[32px] bg-neutral-950"
+        :class="hasBottomBar ? 'px-6 pt-5' : 'px-6 pb-10 pt-5'"
         role="dialog"
         aria-modal="true"
       >
