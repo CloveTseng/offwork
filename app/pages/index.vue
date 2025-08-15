@@ -7,16 +7,26 @@ useSeoMeta({
 const route = useRoute();
 const router = useRouter();
 
-// 是否帶了 openCeremony 參數（空字串/true/1 都視為存在）
+// 是否帶了 openCeremony 或 openFeelingBetter 參數（空字串/true/1 都視為存在）
 const hasOpenParam = computed(() => route.query.openCeremony !== undefined);
+const hasFeelingParam = computed(
+  () => route.query.openFeelingBetter !== undefined,
+);
 
-// 控制 Buttom Sheets (下班儀式) 顯示狀態
+// 控制 Buttom Sheets (下班儀式、舒服點了嗎？) 顯示狀態
 const showCeremonyNav = ref(false);
+const showFeelingBetter = ref(false);
 
-// 監看 URL → 反映到 UI（例如使用者手動改網址 / 瀏覽器前進後退）
+// 監看 URL → UI（下班儀式）
 watch(hasOpenParam, (has) => {
   if (has && !showCeremonyNav.value) showCeremonyNav.value = true;
   if (!has && showCeremonyNav.value) showCeremonyNav.value = false;
+});
+
+// 監看 URL → UI（舒服點了嗎？）
+watch(hasFeelingParam, (has) => {
+  if (has && !showFeelingBetter.value) showFeelingBetter.value = true;
+  if (!has && showFeelingBetter.value) showFeelingBetter.value = false;
 });
 
 // 監看 UI → 反映到 URL（關閉時移除參數；開啟時補上參數）
@@ -36,9 +46,26 @@ watch(showCeremonyNav, (open) => {
   }
 });
 
+// UI → URL（舒服點了嗎？）
+watch(showFeelingBetter, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openFeelingBetter" in q)) {
+      router.replace({ query: { ...q, openFeelingBetter: "true" } });
+    }
+  } else {
+    if ("openFeelingBetter" in q) {
+      delete q.openFeelingBetter;
+      router.replace({ query: q });
+    }
+  }
+});
+
 // 首次進入頁面：若有參數就打開 bottom sheet
 onMounted(() => {
   if (hasOpenParam.value) showCeremonyNav.value = true;
+  if (hasFeelingParam.value) showFeelingBetter.value = true;
 });
 </script>
 
@@ -109,6 +136,7 @@ onMounted(() => {
       <LayoutBottomBar class="mb-2 mt-[27px]" />
     </div>
   </main>
+  <!-- 下班了，也讓腦袋收工吧！ -->
   <LayoutBottomSheet
     v-model="showCeremonyNav"
     hasBottomBar
@@ -172,7 +200,78 @@ onMounted(() => {
         </button>
       </li>
     </ul>
-
+    <LayoutBottomBar class="mb-2 mt-[27px]" />
+  </LayoutBottomSheet>
+  <!-- 舒服點了嗎？ -->
+  <LayoutBottomSheet
+    v-model="showFeelingBetter"
+    hasBottomBar
+    :threshold="0.3"
+    :backdrop-fade="0.6"
+  >
+    <img
+      src="/images/home/feeling-relieved.webp"
+      alt="舒服點了嗎？"
+      class="mx-auto mb-6 block size-32"
+    />
+    <!-- 標題 -->
+    <div class="mb-6 text-center">
+      <h3 class="mb-2 text-xl font-bold text-white">舒服點了嗎？</h3>
+      <p class="text-md text-neutral-300">今天的你，也值得好好喘口氣</p>
+    </div>
+    <!-- 時間&分貝數 -->
+    <ul class="mb-6 space-y-4">
+      <!-- 你釋放了 -->
+      <li>
+        <article class="flex items-center gap-4 rounded-3xl bg-neutral p-5">
+          <img
+            src="/icons/timer.svg"
+            alt="你釋放了 icon"
+            class="rounded-full bg-neutral-900 p-3"
+          />
+          <div>
+            <h4 class="mb-0.5 text-sm text-neutral-300">你釋放了</h4>
+            <p class="flex gap-1 text-h5 font-bold text-alert-success">
+              <span class="flex items-end gap-0.5"
+                >3<span class="text-xs font-normal">分</span>
+              </span>
+              <span class="flex items-end gap-0.5"
+                >24<span class="text-xs font-normal">秒</span>
+              </span>
+            </p>
+          </div>
+        </article>
+      </li>
+      <!-- 最高分貝 -->
+      <li>
+        <article class="flex items-center gap-4 rounded-3xl bg-neutral p-5">
+          <img
+            src="/icons/voice.svg"
+            alt="最高分貝 icon"
+            class="rounded-full bg-neutral-900 p-3"
+          />
+          <div>
+            <h4 class="mb-0.5 text-sm text-neutral-300">最高分貝</h4>
+            <p
+              class="flex items-end gap-0.5 text-h5 font-bold text-alert-success"
+            >
+              80<span class="text-xs font-normal">dB</span>
+            </p>
+          </div>
+        </article>
+      </li>
+    </ul>
+    <!-- 按鈕 -->
+    <div
+      class="flex items-center gap-4 text-center text-md font-bold text-neutral-950"
+    >
+      <NuxtLink to="/yelling" class="block flex-1 rounded-full bg-white py-3">
+        繼續大吼
+      </NuxtLink>
+      <NuxtLink to="#" class="block flex-1 rounded-full bg-alert-success py-3">
+        前往分析
+      </NuxtLink>
+    </div>
     <LayoutBottomBar class="mb-2 mt-[27px]" />
   </LayoutBottomSheet>
 </template>
