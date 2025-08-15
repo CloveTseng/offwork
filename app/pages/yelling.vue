@@ -5,6 +5,12 @@ useSeoMeta({
 });
 
 const isYelling = ref(false);
+
+const startYelling = () => {
+  isYelling.value = true;
+  if (!import.meta.client) return;
+  sessionStorage.setItem("isRelieved", "true");
+};
 </script>
 
 <template>
@@ -61,7 +67,7 @@ const isYelling = ref(false);
         <button
           type="button"
           class="rounded-full bg-white p-6"
-          @click="isYelling = true"
+          @click="startYelling"
         >
           <img src="/icons/yelling/mic.svg" alt="麥克風 icon" />
         </button>
