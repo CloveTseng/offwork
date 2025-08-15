@@ -17,6 +17,9 @@ const hasFeelingParam = computed(
 const showCeremonyNav = ref(false);
 const showFeelingBetter = ref(false);
 
+// 記錄 isRelieved 值，供後續判斷使用
+const isRelieved = ref(false);
+
 // 監看 URL → UI（下班儀式）
 watch(hasOpenParam, (has) => {
   if (has && !showCeremonyNav.value) showCeremonyNav.value = true;
@@ -66,6 +69,11 @@ watch(showFeelingBetter, (open) => {
 onMounted(() => {
   if (hasOpenParam.value) showCeremonyNav.value = true;
   if (hasFeelingParam.value) showFeelingBetter.value = true;
+  // 讀取 sessionStorage 的 isRelieved
+  if (import.meta.client) {
+    const raw = sessionStorage.getItem("isRelieved");
+    if (raw !== null) isRelieved.value = raw === "true";
+  }
 });
 </script>
 
@@ -75,7 +83,11 @@ onMounted(() => {
     <div
       class="relative z-10 mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
     >
-      <h2 class="font-medium">火山悶燒中，你還不下班嗎？</h2>
+      <h2 class="font-medium">
+        {{
+          isRelieved ? "讓火山降溫，從下班開始" : "火山悶燒中，你還不下班嗎？"
+        }}
+      </h2>
       <h1 class="text-h2 font-bold text-neutral-900">啟動下班人生</h1>
       <span class="flex items-center gap-1 font-medium">
         <img src="/icons/clock.svg" alt="鬧鐘 icon" />下班儀式｜下午 06:30
@@ -86,12 +98,16 @@ onMounted(() => {
       class="relative z-10 flex items-center justify-center gap-1 text-sm font-bold text-white"
     >
       <img src="/icons/light.svg" alt="白色點點" />
-      爆發指數 70％
+      {{ isRelieved ? "爆發指數 30％" : "爆發指數 70％" }}
     </p>
     <!-- 火山君（會隨著爆發指數來換） -->
     <img
-      src="/images/home/red-valcano.webp"
-      alt="紅色火山君"
+      :src="
+        isRelieved
+          ? '/images/home/green-volcano.webp'
+          : '/images/home/red-volcano.webp'
+      "
+      :alt="isRelieved ? '綠色火山君' : '紅色火山君'"
       class="pointer-events-none absolute bottom-10 left-1/2 z-0 w-full max-w-[366px] -translate-x-1/2"
     />
     <!-- 漸層底色&導覽選單 -->
