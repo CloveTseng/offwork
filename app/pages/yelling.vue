@@ -10,6 +10,7 @@ const isYelling = ref(false);
 <template>
   <h1 class="relative py-2.5 text-center text-xl font-bold text-white">
     <NuxtLink
+      v-if="!isYelling"
       :to="{ path: '/', query: { openCeremony: 'true' } }"
       class="absolute left-0 top-1/2 block -translate-y-1/2 py-2 pl-4 pr-2"
     >
