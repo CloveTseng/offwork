@@ -7,16 +7,29 @@ useSeoMeta({
 const route = useRoute();
 const router = useRouter();
 
-// 是否帶了 openCeremony 參數（空字串/true/1 都視為存在）
+// 是否帶了 openCeremony 或 openFeelingBetter 參數（空字串/true/1 都視為存在）
 const hasOpenParam = computed(() => route.query.openCeremony !== undefined);
+const hasFeelingParam = computed(
+  () => route.query.openFeelingBetter !== undefined,
+);
 
-// 控制 Buttom Sheets (下班儀式) 顯示狀態
+// 控制 Buttom Sheets (下班儀式、舒服點了嗎？) 顯示狀態
 const showCeremonyNav = ref(false);
+const showFeelingBetter = ref(false);
 
-// 監看 URL → 反映到 UI（例如使用者手動改網址 / 瀏覽器前進後退）
+// 記錄 isRelieved 值，供後續判斷使用
+const isRelieved = ref(false);
+
+// 監看 URL → UI（下班儀式）
 watch(hasOpenParam, (has) => {
   if (has && !showCeremonyNav.value) showCeremonyNav.value = true;
   if (!has && showCeremonyNav.value) showCeremonyNav.value = false;
+});
+
+// 監看 URL → UI（舒服點了嗎？）
+watch(hasFeelingParam, (has) => {
+  if (has && !showFeelingBetter.value) showFeelingBetter.value = true;
+  if (!has && showFeelingBetter.value) showFeelingBetter.value = false;
 });
 
 // 監看 UI → 反映到 URL（關閉時移除參數；開啟時補上參數）
@@ -36,9 +49,31 @@ watch(showCeremonyNav, (open) => {
   }
 });
 
+// UI → URL（舒服點了嗎？）
+watch(showFeelingBetter, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openFeelingBetter" in q)) {
+      router.replace({ query: { ...q, openFeelingBetter: "true" } });
+    }
+  } else {
+    if ("openFeelingBetter" in q) {
+      delete q.openFeelingBetter;
+      router.replace({ query: q });
+    }
+  }
+});
+
 // 首次進入頁面：若有參數就打開 bottom sheet
 onMounted(() => {
   if (hasOpenParam.value) showCeremonyNav.value = true;
+  if (hasFeelingParam.value) showFeelingBetter.value = true;
+  // 讀取 sessionStorage 的 isRelieved
+  if (import.meta.client) {
+    const raw = sessionStorage.getItem("isRelieved");
+    if (raw !== null) isRelieved.value = raw === "true";
+  }
 });
 </script>
 
@@ -48,7 +83,11 @@ onMounted(() => {
     <div
       class="relative z-10 mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
     >
-      <h2 class="font-medium">火山悶燒中，你還不下班嗎？</h2>
+      <h2 class="font-medium">
+        {{
+          isRelieved ? "讓火山降溫，從下班開始" : "火山悶燒中，你還不下班嗎？"
+        }}
+      </h2>
       <h1 class="text-h2 font-bold text-neutral-900">啟動下班人生</h1>
       <span class="flex items-center gap-1 font-medium">
         <img src="/icons/clock.svg" alt="鬧鐘 icon" />下班儀式｜下午 06:30
@@ -59,12 +98,16 @@ onMounted(() => {
       class="relative z-10 flex items-center justify-center gap-1 text-sm font-bold text-white"
     >
       <img src="/icons/light.svg" alt="白色點點" />
-      爆發指數 70％
+      {{ isRelieved ? "爆發指數 30％" : "爆發指數 70％" }}
     </p>
     <!-- 火山君（會隨著爆發指數來換） -->
     <img
-      src="/images/home/red-valcano.webp"
-      alt="紅色火山君"
+      :src="
+        isRelieved
+          ? '/images/home/green-volcano.webp'
+          : '/images/home/red-volcano.webp'
+      "
+      :alt="isRelieved ? '綠色火山君' : '紅色火山君'"
       class="pointer-events-none absolute bottom-10 left-1/2 z-0 w-full max-w-[366px] -translate-x-1/2"
     />
     <!-- 漸層底色&導覽選單 -->
@@ -109,6 +152,7 @@ onMounted(() => {
       <LayoutBottomBar class="mb-2 mt-[27px]" />
     </div>
   </main>
+  <!-- 下班了，也讓腦袋收工吧！ -->
   <LayoutBottomSheet
     v-model="showCeremonyNav"
     hasBottomBar
@@ -172,7 +216,78 @@ onMounted(() => {
         </button>
       </li>
     </ul>
-
+    <LayoutBottomBar class="mb-2 mt-[27px]" />
+  </LayoutBottomSheet>
+  <!-- 舒服點了嗎？ -->
+  <LayoutBottomSheet
+    v-model="showFeelingBetter"
+    hasBottomBar
+    :threshold="0.3"
+    :backdrop-fade="0.6"
+  >
+    <img
+      src="/images/home/feeling-relieved.webp"
+      alt="舒服點了嗎？"
+      class="mx-auto mb-6 block size-32"
+    />
+    <!-- 標題 -->
+    <div class="mb-6 text-center">
+      <h3 class="mb-2 text-xl font-bold text-white">舒服點了嗎？</h3>
+      <p class="text-md text-neutral-300">今天的你，也值得好好喘口氣</p>
+    </div>
+    <!-- 時間&分貝數 -->
+    <ul class="mb-6 space-y-4">
+      <!-- 你釋放了 -->
+      <li>
+        <article class="flex items-center gap-4 rounded-3xl bg-neutral p-5">
+          <img
+            src="/icons/timer.svg"
+            alt="你釋放了 icon"
+            class="rounded-full bg-neutral-900 p-3"
+          />
+          <div>
+            <h4 class="mb-0.5 text-sm text-neutral-300">你釋放了</h4>
+            <p class="flex gap-1 text-h5 font-bold text-alert-success">
+              <span class="flex items-end gap-0.5"
+                >3<span class="text-xs font-normal">分</span>
+              </span>
+              <span class="flex items-end gap-0.5"
+                >24<span class="text-xs font-normal">秒</span>
+              </span>
+            </p>
+          </div>
+        </article>
+      </li>
+      <!-- 最高分貝 -->
+      <li>
+        <article class="flex items-center gap-4 rounded-3xl bg-neutral p-5">
+          <img
+            src="/icons/voice.svg"
+            alt="最高分貝 icon"
+            class="rounded-full bg-neutral-900 p-3"
+          />
+          <div>
+            <h4 class="mb-0.5 text-sm text-neutral-300">最高分貝</h4>
+            <p
+              class="flex items-end gap-0.5 text-h5 font-bold text-alert-success"
+            >
+              80<span class="text-xs font-normal">dB</span>
+            </p>
+          </div>
+        </article>
+      </li>
+    </ul>
+    <!-- 按鈕 -->
+    <div
+      class="flex items-center gap-4 text-center text-md font-bold text-neutral-950"
+    >
+      <NuxtLink to="/yelling" class="block flex-1 rounded-full bg-white py-3">
+        繼續大吼
+      </NuxtLink>
+      <NuxtLink to="#" class="block flex-1 rounded-full bg-alert-success py-3">
+        前往分析
+      </NuxtLink>
+    </div>
     <LayoutBottomBar class="mb-2 mt-[27px]" />
   </LayoutBottomSheet>
 </template>

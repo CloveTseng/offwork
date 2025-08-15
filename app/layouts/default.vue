@@ -118,7 +118,11 @@ if (import.meta.hot) {
  * A) 路徑白名單：完全相符才生效（不吃父層/包含）
  * ────────────────────────────────────────────── */
 // 1) 內容區「不可捲動」的路徑
-const NON_SCROLLABLE_PATHS = new Set(["/", "/find-peace/calm-breathe"]);
+const NON_SCROLLABLE_PATHS = new Set([
+  "/",
+  "/yelling",
+  "/find-peace/calm-breathe",
+]);
 
 // 2) 狀態列使用 bg-secondary 的路徑
 const STATUSBAR_SECONDARY_PATHS = new Set(["/", "/find-peace/calm-breathe"]);
