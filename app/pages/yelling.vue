@@ -8,7 +8,7 @@ const isYelling = ref(false);
 </script>
 
 <template>
-  <h1 class="relative py-2.5 text-center text-xl font-bold text-white">
+  <h1 class="relative z-10 py-2.5 text-center text-xl font-bold text-white">
     <NuxtLink
       v-if="!isYelling"
       :to="{ path: '/', query: { openCeremony: 'true' } }"
@@ -29,7 +29,9 @@ const isYelling = ref(false);
     <div
       class="absolute bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col items-center bg-gradient-to-t from-neutral-950 from-40% to-[#29292D00] pt-8"
     >
-      <Lottie name="yelling/volume" />
+      <div class="mb-8 max-w-[259px]">
+        <Lottie name="yelling/volume" />
+      </div>
       <!-- 停止按鈕 -->
       <div class="mb-10 rounded-full border-[11px] border-[#C0C7DC33]">
         <NuxtLink
