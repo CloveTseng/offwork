@@ -174,11 +174,11 @@ const statusBarBgClass = computed(() =>
         <!--
           頂部狀態列（僅桌面顯示，用來模擬動態島與系統狀態）
           - sticky top-0：捲動時固定在頂
-          - z-10：壓在內容之上
+          - z-40：壓在內容之上
           - 背景色根據 statusBarBgClass 白名單切換
         -->
         <div
-          class="sticky top-0 z-10 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
+          class="sticky top-0 z-40 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
           :class="statusBarBgClass"
         >
           <span>{{ currentTime }}</span>
