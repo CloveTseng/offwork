@@ -7,15 +7,17 @@ useSeoMeta({
 const route = useRoute();
 const router = useRouter();
 
-// 是否帶了 openCeremony 或 openFeelingBetter 參數（空字串/true/1 都視為存在）
+// 是否帶了 openCeremony 或 openFeelingBetter 或 openFeelingCalm 參數（空字串/true/1 都視為存在）
 const hasOpenParam = computed(() => route.query.openCeremony !== undefined);
 const hasFeelingParam = computed(
   () => route.query.openFeelingBetter !== undefined,
 );
+const hasCalmParam = computed(() => route.query.openFeelingCalm !== undefined);
 
-// 控制 Buttom Sheets (下班儀式、舒服點了嗎？) 顯示狀態
+// 控制 Buttom Sheets (下班儀式、舒服點了嗎？、平靜點了嗎？) 顯示狀態
 const showCeremonyNav = ref(false);
 const showFeelingBetter = ref(false);
+const showFeelingCalm = ref(false);
 
 // 記錄 isRelieved 值，供後續判斷使用
 const isRelieved = ref(false);
@@ -30,6 +32,12 @@ watch(hasOpenParam, (has) => {
 watch(hasFeelingParam, (has) => {
   if (has && !showFeelingBetter.value) showFeelingBetter.value = true;
   if (!has && showFeelingBetter.value) showFeelingBetter.value = false;
+});
+
+// 監看 URL → UI（平靜點了嗎？）
+watch(hasCalmParam, (has) => {
+  if (has && !showFeelingCalm.value) showFeelingCalm.value = true;
+  if (!has && showFeelingCalm.value) showFeelingCalm.value = false;
 });
 
 // 監看 UI → 反映到 URL（關閉時移除參數；開啟時補上參數）
@@ -65,10 +73,27 @@ watch(showFeelingBetter, (open) => {
   }
 });
 
-// 首次進入頁面：若有參數就打開 bottom sheet
+// UI → URL（平靜點了嗎？）
+watch(showFeelingCalm, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openFeelingCalm" in q)) {
+      router.replace({ query: { ...q, openFeelingCalm: "true" } });
+    }
+  } else {
+    if ("openFeelingCalm" in q) {
+      delete q.openFeelingCalm;
+      router.replace({ query: q });
+    }
+  }
+});
+
+// 首次進入頁面：若有參數就打開對應的 bottom sheet
 onMounted(() => {
   if (hasOpenParam.value) showCeremonyNav.value = true;
   if (hasFeelingParam.value) showFeelingBetter.value = true;
+  if (hasCalmParam.value) showFeelingCalm.value = true;
   // 讀取 sessionStorage 的 isRelieved
   if (import.meta.client) {
     const raw = sessionStorage.getItem("isRelieved");
@@ -283,6 +308,58 @@ onMounted(() => {
     >
       <NuxtLink to="/yelling" class="block flex-1 rounded-full bg-white py-3">
         繼續大吼
+      </NuxtLink>
+      <NuxtLink to="#" class="block flex-1 rounded-full bg-alert-success py-3">
+        前往分析
+      </NuxtLink>
+    </div>
+    <LayoutBottomBar class="mb-2 mt-[27px]" />
+  </LayoutBottomSheet>
+  <!-- 平靜點了嗎？ -->
+  <LayoutBottomSheet
+    v-model="showFeelingCalm"
+    hasBottomBar
+    :threshold="0.3"
+    :backdrop-fade="0.6"
+  >
+    <img
+      src="/images/home/feeling-calm.webp"
+      alt="平靜點了嗎？"
+      class="mx-auto mb-6 block size-32"
+    />
+    <!-- 標題 -->
+    <div class="mb-6 text-center">
+      <h3 class="mb-2 text-xl font-bold text-white">平靜點了嗎？</h3>
+      <p class="text-md text-neutral-300">每天幾分鐘，慢慢變得更平靜</p>
+    </div>
+    <!-- 你呼吸了 -->
+    <article class="mb-6 flex items-center gap-4 rounded-3xl bg-neutral p-5">
+      <img
+        src="/icons/timer.svg"
+        alt="你呼吸了 icon"
+        class="rounded-full bg-neutral-900 p-3"
+      />
+      <div>
+        <h4 class="mb-0.5 text-sm text-neutral-300">你呼吸了</h4>
+        <p class="flex gap-1 text-h5 font-bold text-alert-success">
+          <span class="flex items-end gap-0.5"
+            >3<span class="text-xs font-normal">分鐘</span>
+          </span>
+          <span class="flex items-end gap-0.5"
+            >24<span class="text-xs font-normal">秒</span>
+          </span>
+        </p>
+      </div>
+    </article>
+    <!-- 按鈕 -->
+    <div
+      class="flex items-center gap-4 text-center text-md font-bold text-neutral-950"
+    >
+      <NuxtLink
+        to="/find-peace"
+        class="block flex-1 rounded-full bg-white py-3"
+      >
+        繼續呼吸
       </NuxtLink>
       <NuxtLink to="#" class="block flex-1 rounded-full bg-alert-success py-3">
         前往分析
