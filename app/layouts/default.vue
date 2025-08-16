@@ -122,10 +122,16 @@ const NON_SCROLLABLE_PATHS = new Set([
   "/",
   "/yelling",
   "/find-peace/calm-breathe",
+  "/find-peace/calm-breathe/breathing",
 ]);
 
 // 2) 狀態列使用 bg-secondary 的路徑
 const STATUSBAR_SECONDARY_PATHS = new Set(["/", "/find-peace/calm-breathe"]);
+
+// 3) 狀態列「透明」的路徑
+const STATUSBAR_TRANSPARENT_PATHS = new Set([
+  "/find-peace/calm-breathe/breathing",
+]);
 
 const currentPath = computed(() => route.path);
 
@@ -142,11 +148,13 @@ const appContentScrollClass = computed(() =>
     : "sm:overflow-x-hidden sm:overflow-y-scroll",
 );
 
-const statusBarBgClass = computed(() =>
-  STATUSBAR_SECONDARY_PATHS.has(currentPath.value)
-    ? "bg-secondary"
-    : "bg-[#29292DCC] backdrop-blur-lg",
-);
+// 先判斷透明，其次 secondary，最後預設半透+模糊
+const statusBarBgClass = computed(() => {
+  const p = currentPath.value;
+  if (STATUSBAR_TRANSPARENT_PATHS.has(p)) return "bg-transparent";
+  if (STATUSBAR_SECONDARY_PATHS.has(p)) return "bg-secondary";
+  return "bg-[#29292DCC] backdrop-blur-lg";
+});
 </script>
 
 <template>
