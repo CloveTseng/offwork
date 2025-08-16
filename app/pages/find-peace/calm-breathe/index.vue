@@ -23,7 +23,7 @@ const breathingMinutes = ref("3");
     </NuxtLink>
     <!-- 呼吸火山君 -->
     <img
-      src="/images/find-peace/calm-breathe/breathing-green-valcano.webp"
+      src="/images/find-peace/calm-breathe/breathing-green-volcano.webp"
       alt="呼吸綠色火山君"
       class="pointer-events-none absolute bottom-[260px] left-1/2 z-0 w-full max-w-[344px] -translate-x-1/2 sm:bottom-[284px]"
     />

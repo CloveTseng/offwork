@@ -16,7 +16,7 @@ useSeoMeta({
               class="h-full w-full overflow-hidden rounded-full bg-secondary"
             >
               <img
-                src="/images/home/green-valcano.svg"
+                src="/images/home/green-volcano.svg"
                 alt="綠色火山君"
                 class="mt-0.5 scale-125 object-top"
               />
@@ -111,7 +111,7 @@ useSeoMeta({
               unit: '時',
               color: 'text-alert-success',
               url: '/',
-              icon: '/images/home/valcano-sleep.svg',
+              icon: '/images/home/volcano-sleep.svg',
               iconBg: 'bg-secondary-800',
             }"
           />
