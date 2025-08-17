@@ -1,6 +1,6 @@
 <script setup>
 /* ──────────────────────────────────────────────
- * ① 基本：路由、SEO
+ * 基本：路由、SEO
  * ────────────────────────────────────────────── */
 useSeoMeta({
   title: "平穩呼吸法呼吸中 | 健康生活 OFFWORK APP",
@@ -25,12 +25,12 @@ function triggerHover() {
 }
 
 /* ──────────────────────────────────────────────
- * ③ 業務參數：呼吸分鐘數（query）
+ * 呼吸分鐘數（query）
  * ────────────────────────────────────────────── */
 const breathingMinutes = Number(route.query.minutes);
 
 /* ──────────────────────────────────────────────
- * ④ 呼吸狀態：吸/吐切換（跟著 CSS 動畫節拍）
+ * 呼吸狀態：吸/吐切換（跟著 CSS 動畫節拍）
  *  - 以 .breathing-bar 的 animationiteration 作為節拍來源
  * ────────────────────────────────────────────── */
 const isBreathingIn = ref(false);
@@ -43,7 +43,7 @@ const onAnimIter = () => (isBreathingIn.value = !isBreathingIn.value);
 const onAnimStart = () => (isBreathingIn.value = false);
 
 /* ──────────────────────────────────────────────
- * ⑤ 倒數邏輯：MM:SS 顯示 + 歸零後導向 /?openFeelingCalm
+ * 倒數邏輯：MM:SS 顯示 + 歸零後導向 /?openFeelingCalm
  * ────────────────────────────────────────────── */
 const displayTime = ref("00:00");
 const remainingSec = ref(0);
@@ -83,7 +83,7 @@ function stopCountdown() {
 }
 
 /* ──────────────────────────────────────────────
- * ⑥ 暫停/繼續：動畫歸零 + 從頭播放、倒數停/啟
+ * 暫停/繼續：動畫歸零 + 從頭播放、倒數停/啟
  * ────────────────────────────────────────────── */
 const isPaused = ref(false);
 
@@ -132,10 +132,12 @@ function togglePause() {
 }
 
 /* ──────────────────────────────────────────────
- * ⑦ 生命週期：掛載/卸載
+ * 生命週期：掛載/卸載
  * ────────────────────────────────────────────── */
 onMounted(() => {
   if (!import.meta.client) return;
+  // 設定已放鬆
+  sessionStorage.setItem("isRelieved", "true");
 
   // 綁定動畫事件：跟著節拍切換吸/吐
   const bar = breathingBarRef.value;
