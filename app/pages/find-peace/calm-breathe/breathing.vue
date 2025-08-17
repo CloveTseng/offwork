@@ -7,19 +7,100 @@ useSeoMeta({
 const route = useRoute();
 const router = useRouter();
 
+// 暫停狀態（用來切換 icon）
+const isPaused = ref(false);
+
 // 設定的分鐘數（轉換成數字）
 const breathingMinutes = Number(route.query.minutes);
 
 // 跟著動畫切換，初始為 false（對應「吸氣」）
 const isBreathingIn = ref(false);
 
-// 取得動畫元素（白色呼吸條）
+// 取得動畫元素
 const breathingBarRef = ref(null);
+const volcanoRef = ref(null);
+const circleRef = ref(null);
 
 // 倒數（顯示用）與秒數狀態
 const displayTime = ref("00:00");
 const remainingSec = ref(0);
 let countdownTimer = null;
+
+// 小工具：啟動倒數 🔁 抽成函式
+function startCountdown() {
+  if (countdownTimer) return;
+  countdownTimer = setInterval(() => {
+    if (remainingSec.value > 0) {
+      remainingSec.value -= 1;
+      displayTime.value = fmt(remainingSec.value);
+    }
+    if (remainingSec.value <= 0) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+      router.replace("/?openFeelingCalm");
+    }
+  }, 1000);
+}
+
+// 小工具：停止倒數 🔁 抽成函式
+function stopCountdown() {
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+  }
+}
+
+// 小工具：把三個動畫元素「歸零並停住」
+function snapAnimationsToStart() {
+  const v = volcanoRef.value;
+  const c = circleRef.value;
+  const b = breathingBarRef.value;
+
+  // 移除動畫（避免覆蓋）
+  [v, c, b].forEach((el) => {
+    if (!el) return;
+    el.style.animation = "none";
+  });
+
+  // 設定初始影格狀態（對齊你的 keyframes from 值）
+  if (v) v.style.bottom = "102px";
+  if (c) c.style.transform = "translateX(-50%) scale(1)";
+  if (b) b.style.width = "24px";
+}
+
+// 小工具：清除暫停時的 inline style，並讓動畫從頭重新播放
+function restartAnimationsFromBeginning() {
+  const v = volcanoRef.value;
+  const c = circleRef.value;
+  const b = breathingBarRef.value;
+
+  [v, c, b].forEach((el) => {
+    if (!el) return;
+    // 清除我們剛剛塞的 inline 覆蓋
+    el.style.removeProperty("animation");
+    el.style.removeProperty("bottom");
+    el.style.removeProperty("transform");
+    el.style.removeProperty("width");
+    // 強制 reflow 讓 CSS 動畫確實重啟
+    void el.offsetWidth;
+  });
+}
+
+// 暫停/繼續 切換
+function togglePause() {
+  isPaused.value = !isPaused.value;
+
+  if (isPaused.value) {
+    // 暫停：倒數停住、動畫歸零並停住、狀態回吸氣
+    stopCountdown();
+    isBreathingIn.value = false;
+    snapAnimationsToStart();
+  } else {
+    // 繼續：動畫從頭開始、倒數繼續
+    restartAnimationsFromBeginning();
+    startCountdown();
+  }
+}
 
 // 格式化 MM:SS（分鐘至少 2 位）
 function fmt(sec) {
@@ -51,28 +132,16 @@ onMounted(() => {
   const mins =
     Number.isFinite(breathingMinutes) && breathingMinutes > 0
       ? Math.floor(breathingMinutes)
-      : 3; // fallback 3 分鐘
+      : 3;
   remainingSec.value = mins * 60;
   displayTime.value = fmt(remainingSec.value);
 
-  countdownTimer = setInterval(() => {
-    if (remainingSec.value > 0) {
-      remainingSec.value -= 1;
-      displayTime.value = fmt(remainingSec.value);
-    }
-    if (remainingSec.value <= 0) {
-      clearInterval(countdownTimer);
-      countdownTimer = null;
-      router.replace("/?openFeelingCalm"); // 倒數完導向
-    }
-  }, 1000);
+  // 開始倒數
+  startCountdown();
 });
 
 onUnmounted(() => {
-  if (countdownTimer) {
-    clearInterval(countdownTimer);
-    countdownTimer = null;
-  }
+  stopCountdown();
 });
 </script>
 
@@ -90,12 +159,14 @@ onUnmounted(() => {
     <main>
       <!-- 呼吸火山君 -->
       <img
+        ref="volcanoRef"
         src="/images/find-peace/calm-breathe/breathing-green-volcano.webp"
         alt="呼吸綠色火山君"
         class="volcano-animation | pointer-events-none absolute bottom-[102px] left-1/2 z-10 w-full max-w-[391px] -translate-x-1/2"
       />
       <!-- 背景呼吸圓圈 -->
       <div
+        ref="circleRef"
         class="breathing-circle | pointer-events-none absolute bottom-[290px] left-1/2 z-0 size-[231px] rounded-full bg-secondary-300"
       ></div>
       <!-- 漸層色塊容器 -->
@@ -131,11 +202,16 @@ onUnmounted(() => {
             <button
               type="button"
               class="rounded-full bg-white p-6"
-              @click="pauseBreathing"
+              @click="togglePause"
             >
               <img
-                src="/icons/find-peace/calm-breathe/pause.svg"
-                alt="暫停 icon"
+                :src="
+                  isPaused
+                    ? '/icons/play-fill.svg'
+                    : '/icons/find-peace/calm-breathe/pause.svg'
+                "
+                :alt="isPaused ? '繼續 icon' : '暫停 icon'"
+                class="size-8"
               />
             </button>
           </div>
