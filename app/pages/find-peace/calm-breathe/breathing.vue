@@ -1,41 +1,64 @@
 <script setup>
+/* ──────────────────────────────────────────────
+ * ① 基本：路由、SEO
+ * ────────────────────────────────────────────── */
 useSeoMeta({
   title: "平穩呼吸法呼吸中 | 健康生活 OFFWORK APP",
   ogTitle: "平穩呼吸法呼吸中 | 健康生活 OFFWORK APP",
 });
-
 const route = useRoute();
 const router = useRouter();
 
+/* ──────────────────────────────────────────────
+ * ② UI 互動（行為層）：模擬 group-hover（行動裝置）
+ *  - 點擊畫面觸發 2 秒的 UI 呈現（標題與控制列淡入/位移）
+ * ────────────────────────────────────────────── */
 const isGroupHover = ref(false);
-
+let hoverTimer = null;
 function triggerHover() {
   isGroupHover.value = true;
-  setTimeout(() => {
+  if (hoverTimer) clearTimeout(hoverTimer);
+  hoverTimer = setTimeout(() => {
     isGroupHover.value = false;
+    hoverTimer = null;
   }, 2000);
 }
 
-// 暫停狀態（用來切換 icon）
-const isPaused = ref(false);
-
-// 設定的分鐘數（轉換成數字）
+/* ──────────────────────────────────────────────
+ * ③ 業務參數：呼吸分鐘數（query）
+ * ────────────────────────────────────────────── */
 const breathingMinutes = Number(route.query.minutes);
 
-// 跟著動畫切換，初始為 false（對應「吸氣」）
+/* ──────────────────────────────────────────────
+ * ④ 呼吸狀態：吸/吐切換（跟著 CSS 動畫節拍）
+ *  - 以 .breathing-bar 的 animationiteration 作為節拍來源
+ * ────────────────────────────────────────────── */
 const isBreathingIn = ref(false);
-
-// 取得動畫元素
 const breathingBarRef = ref(null);
 const volcanoRef = ref(null);
 const circleRef = ref(null);
 
-// 倒數（顯示用）與秒數狀態
+// 動畫事件 handlers（提升到外層，便於卸載時移除）
+const onAnimIter = () => (isBreathingIn.value = !isBreathingIn.value);
+const onAnimStart = () => (isBreathingIn.value = false);
+
+/* ──────────────────────────────────────────────
+ * ⑤ 倒數邏輯：MM:SS 顯示 + 歸零後導向 /?openFeelingCalm
+ * ────────────────────────────────────────────── */
 const displayTime = ref("00:00");
 const remainingSec = ref(0);
 let countdownTimer = null;
 
-// 小工具：啟動倒數 🔁 抽成函式
+// 格式化 MM:SS（分鐘至少 2 位）
+function fmt(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  const mm = String(m).padStart(2, "0");
+  const ss = String(s).padStart(2, "0");
+  return `${mm}:${ss}`;
+}
+
+// 啟動倒數（避免重複啟動）
 function startCountdown() {
   if (countdownTimer) return;
   countdownTimer = setInterval(() => {
@@ -51,7 +74,7 @@ function startCountdown() {
   }, 1000);
 }
 
-// 小工具：停止倒數 🔁 抽成函式
+// 停止倒數
 function stopCountdown() {
   if (countdownTimer) {
     clearInterval(countdownTimer);
@@ -59,46 +82,43 @@ function stopCountdown() {
   }
 }
 
-// 小工具：把三個動畫元素「歸零並停住」
+/* ──────────────────────────────────────────────
+ * ⑥ 暫停/繼續：動畫歸零 + 從頭播放、倒數停/啟
+ * ────────────────────────────────────────────── */
+const isPaused = ref(false);
+
+// 把三個動畫元素「歸零並停住」
 function snapAnimationsToStart() {
   const v = volcanoRef.value;
   const c = circleRef.value;
   const b = breathingBarRef.value;
-
-  // 移除動畫（避免覆蓋）
   [v, c, b].forEach((el) => {
     if (!el) return;
     el.style.animation = "none";
   });
-
-  // 設定初始影格狀態（對齊你的 keyframes from 值）
   if (v) v.style.bottom = "102px";
   if (c) c.style.transform = "translateX(-50%) scale(1)";
   if (b) b.style.width = "24px";
 }
 
-// 小工具：清除暫停時的 inline style，並讓動畫從頭重新播放
+// 清除暫停時的 inline style，讓動畫從頭重新播放
 function restartAnimationsFromBeginning() {
   const v = volcanoRef.value;
   const c = circleRef.value;
   const b = breathingBarRef.value;
-
   [v, c, b].forEach((el) => {
     if (!el) return;
-    // 清除我們剛剛塞的 inline 覆蓋
-    el.style.removeProperty("animation");
-    el.style.removeProperty("bottom");
-    el.style.removeProperty("transform");
-    el.style.removeProperty("width");
-    // 強制 reflow 讓 CSS 動畫確實重啟
-    void el.offsetWidth;
+    const h = el;
+    h.style.removeProperty("animation");
+    h.style.removeProperty("bottom");
+    h.style.removeProperty("transform");
+    h.style.removeProperty("width");
+    void h.offsetWidth; // 強制 reflow
   });
 }
 
-// 暫停/繼續 切換
 function togglePause() {
   isPaused.value = !isPaused.value;
-
   if (isPaused.value) {
     // 暫停：倒數停住、動畫歸零並停住、狀態回吸氣
     stopCountdown();
@@ -111,55 +131,48 @@ function togglePause() {
   }
 }
 
-// 格式化 MM:SS（分鐘至少 2 位）
-function fmt(sec) {
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  const mm = String(m).padStart(2, "0");
-  const ss = String(s).padStart(2, "0");
-  return `${mm}:${ss}`;
-}
-
+/* ──────────────────────────────────────────────
+ * ⑦ 生命週期：掛載/卸載
+ * ────────────────────────────────────────────── */
 onMounted(() => {
   if (!import.meta.client) return;
 
-  // --- 動畫節拍 → 切換吸/吐 ---
-  const el = breathingBarRef.value;
-  if (el) {
-    const onIter = () => (isBreathingIn.value = !isBreathingIn.value);
-    const onStart = () => (isBreathingIn.value = false);
-    el.addEventListener("animationiteration", onIter);
-    el.addEventListener("animationstart", onStart);
-
-    onUnmounted(() => {
-      el.removeEventListener("animationiteration", onIter);
-      el.removeEventListener("animationstart", onStart);
-    });
+  // 綁定動畫事件：跟著節拍切換吸/吐
+  const bar = breathingBarRef.value;
+  if (bar) {
+    bar.addEventListener("animationiteration", onAnimIter);
+    bar.addEventListener("animationstart", onAnimStart);
   }
 
-  // --- 倒數計時 ---
+  // 初始化倒數（無效 minutes fallback 3 分）
   const mins =
     Number.isFinite(breathingMinutes) && breathingMinutes > 0
       ? Math.floor(breathingMinutes)
       : 3;
   remainingSec.value = mins * 60;
   displayTime.value = fmt(remainingSec.value);
-
-  // 開始倒數
   startCountdown();
 });
 
 onUnmounted(() => {
+  // 倒數＆hover 計時器
   stopCountdown();
+  if (hoverTimer) {
+    clearTimeout(hoverTimer);
+    hoverTimer = null;
+  }
+  // 動畫事件
+  const bar = breathingBarRef.value;
+  if (bar) {
+    bar.removeEventListener("animationiteration", onAnimIter);
+    bar.removeEventListener("animationstart", onAnimStart);
+  }
 });
 </script>
 
 <template>
   <section
-    :class="[
-      'h-full bg-secondary sm:-mt-14 sm:pt-14',
-      { 'group-hover-active': isGroupHover },
-    ]"
+    :class="['h-full bg-secondary sm:-mt-14 sm:pt-14']"
     @click="triggerHover"
   >
     <h1
