@@ -38,9 +38,31 @@ const breathingBarRef = ref(null);
 const volcanoRef = ref(null);
 const circleRef = ref(null);
 
-// 動畫事件 handlers（提升到外層，便於卸載時移除）
-const onAnimIter = () => (isBreathingIn.value = !isBreathingIn.value);
-const onAnimStart = () => (isBreathingIn.value = false);
+let animSec = 0; // 白色條動畫的實際秒數
+
+function setPhaseFromElapsed(elapsedSec) {
+  if (!animSec) return;
+  const iter = Math.floor(elapsedSec / animSec); // 已完成的迭代數
+  const forward = iter % 2 === 0;
+  isBreathingIn.value = !forward;
+}
+
+const onAnimStart = (e) => {
+  // 開始或重新開始時，重讀一次動畫秒數
+  const bar = breathingBarRef.value;
+  if (bar) {
+    const cs = getComputedStyle(bar);
+    const durStr = (cs.animationDuration || "0s").split(",")[0].trim();
+    animSec = durStr.endsWith("ms")
+      ? parseFloat(durStr) / 1000
+      : parseFloat(durStr) || 0;
+  }
+  setPhaseFromElapsed(e.elapsedTime);
+};
+
+const onAnimIter = (e) => {
+  setPhaseFromElapsed(e.elapsedTime);
+};
 
 /* ──────────────────────────────────────────────
  * 倒數邏輯：MM:SS 顯示 + 歸零後導向 /?openFeelingCalm
