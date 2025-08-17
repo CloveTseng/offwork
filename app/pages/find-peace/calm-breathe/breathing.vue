@@ -7,6 +7,15 @@ useSeoMeta({
 const route = useRoute();
 const router = useRouter();
 
+const isGroupHover = ref(false);
+
+function triggerHover() {
+  isGroupHover.value = true;
+  setTimeout(() => {
+    isGroupHover.value = false;
+  }, 2000);
+}
+
 // 暫停狀態（用來切換 icon）
 const isPaused = ref(false);
 
@@ -146,9 +155,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="group h-full bg-secondary sm:-mt-14 sm:pt-14">
+  <section
+    :class="[
+      'h-full bg-secondary sm:-mt-14 sm:pt-14',
+      { 'group-hover-active': isGroupHover },
+    ]"
+    @click="triggerHover"
+  >
     <h1
-      class="relative z-10 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition group-hover:opacity-100"
+      class="relative z-10 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition"
+      :class="{ 'opacity-100': isGroupHover }"
     >
       平穩呼吸法
     </h1>
@@ -175,7 +191,8 @@ onUnmounted(() => {
       >
         <!-- 吸氣吐氣容器 -->
         <div
-          class="absolute left-1/2 top-[131px] z-20 w-full max-w-[200px] -translate-x-1/2 text-center transition-all duration-300 group-hover:top-[46px]"
+          class="absolute left-1/2 top-[131px] z-20 w-full max-w-[200px] -translate-x-1/2 text-center transition-all duration-300"
+          :class="{ 'top-[46px]': isGroupHover }"
         >
           <!-- 吸氣吐氣 -->
           <div class="mb-6 h-6 rounded-full bg-white/20">
@@ -194,7 +211,8 @@ onUnmounted(() => {
         </div>
         <!-- 暫停、停止容器 -->
         <div
-          class="absolute top-40 flex w-full items-center justify-center gap-8 opacity-0 transition duration-300 group-hover:opacity-100"
+          class="absolute top-40 flex w-full items-center justify-center gap-8 opacity-0 transition duration-300"
+          :class="{ 'opacity-100': isGroupHover }"
         >
           <img src="/icons/find-peace/calm-breathe/music.svg" alt="音樂開關" />
           <!-- 暫停按鈕 -->
