@@ -248,8 +248,8 @@ onUnmounted(() => {
         </div>
         <!-- 暫停、停止容器 -->
         <div
-          class="absolute top-40 flex w-full items-center justify-center gap-8 opacity-0 transition duration-300"
-          :class="{ 'opacity-100': isGroupHover }"
+          class="pointer-events-none absolute top-40 flex w-full items-center justify-center gap-8 opacity-0 transition duration-300"
+          :class="{ 'pointer-events-auto opacity-100': isGroupHover }"
         >
           <img src="/icons/find-peace/calm-breathe/music.svg" alt="音樂開關" />
           <!-- 暫停按鈕 -->
