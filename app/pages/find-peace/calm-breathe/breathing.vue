@@ -224,11 +224,11 @@ onUnmounted(() => {
       ></div>
       <!-- 漸層色塊容器 -->
       <div
-        class="absolute bottom-0 z-20 h-[320px] w-full bg-gradient-to-t from-secondary from-50% to-[#5AB3D200] sm:rounded-b-[50px]"
+        class="absolute bottom-0 z-10 h-[320px] w-full bg-gradient-to-t from-secondary from-50% to-[#5AB3D200] sm:rounded-b-[50px]"
       >
         <!-- 吸氣吐氣容器 -->
         <div
-          class="absolute left-1/2 top-[131px] z-20 w-full max-w-[200px] -translate-x-1/2 text-center transition-all duration-300"
+          class="absolute left-1/2 top-[131px] w-full max-w-[200px] -translate-x-1/2 text-center transition-all duration-300"
           :class="{ 'top-[46px]': isGroupHover }"
         >
           <!-- 吸氣吐氣 -->
