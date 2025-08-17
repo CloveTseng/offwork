@@ -122,10 +122,16 @@ const NON_SCROLLABLE_PATHS = new Set([
   "/",
   "/yelling",
   "/find-peace/calm-breathe",
+  "/find-peace/calm-breathe/breathing",
 ]);
 
 // 2) 狀態列使用 bg-secondary 的路徑
 const STATUSBAR_SECONDARY_PATHS = new Set(["/", "/find-peace/calm-breathe"]);
+
+// 3) 狀態列「透明」的路徑
+const STATUSBAR_TRANSPARENT_PATHS = new Set([
+  "/find-peace/calm-breathe/breathing",
+]);
 
 const currentPath = computed(() => route.path);
 
@@ -142,11 +148,13 @@ const appContentScrollClass = computed(() =>
     : "sm:overflow-x-hidden sm:overflow-y-scroll",
 );
 
-const statusBarBgClass = computed(() =>
-  STATUSBAR_SECONDARY_PATHS.has(currentPath.value)
-    ? "bg-secondary"
-    : "bg-[#29292DCC] backdrop-blur-lg",
-);
+// 先判斷透明，其次 secondary，最後預設半透+模糊
+const statusBarBgClass = computed(() => {
+  const p = currentPath.value;
+  if (STATUSBAR_TRANSPARENT_PATHS.has(p)) return "bg-transparent";
+  if (STATUSBAR_SECONDARY_PATHS.has(p)) return "bg-secondary";
+  return "bg-[#29292DCC] backdrop-blur-lg";
+});
 </script>
 
 <template>
@@ -174,11 +182,11 @@ const statusBarBgClass = computed(() =>
         <!--
           頂部狀態列（僅桌面顯示，用來模擬動態島與系統狀態）
           - sticky top-0：捲動時固定在頂
-          - z-10：壓在內容之上
+          - z-40：壓在內容之上
           - 背景色根據 statusBarBgClass 白名單切換
         -->
         <div
-          class="sticky top-0 z-10 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
+          class="sticky top-0 z-40 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
           :class="statusBarBgClass"
         >
           <span>{{ currentTime }}</span>

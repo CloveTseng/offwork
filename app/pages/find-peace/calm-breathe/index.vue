@@ -29,7 +29,7 @@ const breathingMinutes = ref("3");
     />
     <!-- 漸層裝飾色塊 -->
     <div
-      class="absolute bottom-[255px] left-0 z-10 h-[200px] w-full bg-gradient-to-t from-[#5AB3D2] to-[#5AB3D200] sm:bottom-[279px]"
+      class="absolute bottom-[255px] left-0 z-10 h-[200px] w-full bg-gradient-to-t from-secondary to-[#5AB3D200] sm:bottom-[279px]"
     ></div>
     <!-- 平穩呼吸法介紹&時間設定 -->
     <div
