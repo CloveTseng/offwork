@@ -289,17 +289,18 @@ onUnmounted(() => {
 <style scoped>
 /* 火山君 */
 .volcano-animation {
-  animation: volcano-animation 2s infinite alternate ease-in-out;
+  animation: volcano-animation 2s infinite alternate
+    cubic-bezier(0.6, 0, 0.4, 1);
 }
 
 /* 背景呼吸圓圈 */
 .breathing-circle {
-  animation: breathing-circle 2s infinite alternate ease-in-out;
+  animation: breathing-circle 2s infinite alternate cubic-bezier(0.6, 0, 0.4, 1);
 }
 
 /* 吸氣吐氣白色條 */
 .breathing-bar {
-  animation: breathing-bar 2s infinite alternate ease-in-out;
+  animation: breathing-bar 2s infinite alternate cubic-bezier(0.6, 0, 0.4, 1);
 }
 
 /* 火山君動畫 */
