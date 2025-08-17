@@ -200,13 +200,13 @@ onUnmounted(() => {
     @click="triggerHover"
   >
     <h1
-      class="relative z-10 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition"
+      class="relative z-20 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition"
       :class="{ 'opacity-100': isGroupHover }"
     >
       平穩呼吸法
     </h1>
     <!-- 倒數分鐘數 -->
-    <p class="relative z-10 text-center text-h2 font-bold text-white">
+    <p class="relative z-20 text-center text-h2 font-bold text-white">
       {{ displayTime }}
     </p>
     <main>
