@@ -153,6 +153,37 @@ function togglePause() {
   }
 }
 
+// 前置倒數（3 → 2 → 1 → 揭露 → 開始）
+const showReveal = ref(true); // 是否顯示遮罩＋文案
+const preSec = ref(3); // 倒數數字
+const expandMask = ref(false); // 最後 1 秒啟動擴張動畫
+let preTimer = null;
+
+function startPreRoll() {
+  // 讓主畫面動畫先停在第一幀
+  snapAnimationsToStart();
+
+  preTimer = setInterval(() => {
+    preSec.value -= 1;
+
+    // 剩 1 秒：放大圓洞＋文案往下消失（動畫時間 1s）
+    if (preSec.value === 1) {
+      expandMask.value = true;
+    }
+
+    // 結束：關閉遮罩，主畫面動畫與呼吸倒數正式開始
+    if (preSec.value <= 0) {
+      clearInterval(preTimer);
+      preTimer = null;
+      showReveal.value = false;
+
+      // 從頭啟動主動畫、開始分鐘數倒數
+      restartAnimationsFromBeginning();
+      startCountdown();
+    }
+  }, 1000);
+}
+
 /* ──────────────────────────────────────────────
  * 生命週期：掛載/卸載
  * ────────────────────────────────────────────── */
@@ -175,7 +206,7 @@ onMounted(() => {
       : 3;
   remainingSec.value = mins * 60;
   displayTime.value = fmt(remainingSec.value);
-  startCountdown();
+  startPreRoll();
 });
 
 onUnmounted(() => {
@@ -191,12 +222,40 @@ onUnmounted(() => {
     bar.removeEventListener("animationiteration", onAnimIter);
     bar.removeEventListener("animationstart", onAnimStart);
   }
+  if (preTimer) {
+    clearInterval(preTimer);
+    preTimer = null;
+  }
 });
 </script>
 
 <template>
+  <!-- 一開始的倒數、mask 動畫 -->
+  <div
+    v-if="showReveal"
+    class="reveal-mask | pointer-events-none absolute inset-0 z-30 bg-neutral-950"
+    :class="{ 'reveal-expand': expandMask }"
+  ></div>
+  <!-- 標題（準備開始囉） -->
+  <h3
+    v-if="showReveal"
+    class="pointer-events-none absolute left-1/2 top-[592px] z-40 -translate-x-1/2 text-center text-h4 font-bold text-white transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)] sm:top-[542px]"
+    :class="{ 'reveal-slide': expandMask }"
+  >
+    準備開始囉
+  </h3>
+  <!-- 倒數數字（3/2/1） -->
+  <p
+    v-if="showReveal"
+    class="pointer-events-none absolute left-1/2 top-[671px] z-40 -translate-x-1/2 text-center text-h1 font-bold text-alert-success transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)] sm:top-[621px]"
+    :class="{ 'reveal-slide': expandMask }"
+  >
+    {{ preSec }}
+  </p>
+  <!-- 呼吸中內容 -->
   <section
-    :class="['h-full bg-secondary sm:-mt-14 sm:pt-14']"
+    class="h-full origin-[50%_380px] transform-gpu bg-secondary transition-transform duration-500 ease-[cubic-bezier(0.6,0,0.4,1)] sm:-mt-14 sm:pt-14"
+    :class="[expandMask ? 'scale-100' : 'scale-75']"
     @click="triggerHover"
   >
     <h1
@@ -287,6 +346,59 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* 讓自訂屬性可動畫（Chromium / Safari 皆支援；Firefox 不支援時會跳變但仍正確） */
+@property --hole {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 120px;
+}
+
+/* 遮罩：洞口定位在 50% 430px，半徑由 --hole 控制 */
+.reveal-mask {
+  --hole: 120px; /* 初始洞半徑 */
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 430px,
+    transparent var(--hole),
+    #000 calc(var(--hole) + 1px)
+  );
+  mask-image: radial-gradient(
+    circle at 50% 430px,
+    transparent var(--hole),
+    #000 calc(var(--hole) + 1px)
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  /* 洞半徑平滑放大 */
+  transition: --hole 1s cubic-bezier(0.6, 0, 0.4, 1);
+}
+
+@media (min-width: 640px) {
+  /* 遮罩：洞口定位在 50% 380px，半徑由 --hole 控制 */
+  .reveal-mask {
+    -webkit-mask-image: radial-gradient(
+      circle at 50% 380px,
+      transparent var(--hole),
+      #000 calc(var(--hole) + 1px)
+    );
+    mask-image: radial-gradient(
+      circle at 50% 380px,
+      transparent var(--hole),
+      #000 calc(var(--hole) + 1px)
+    );
+  }
+}
+
+/* 倒數到 1 秒時放大：把洞半徑變超大，會從自己的中心點向外擴張 */
+.reveal-expand {
+  --hole: 650px;
+}
+
+/* 標題與數字往下消失 */
+.reveal-slide {
+  transform: translate(-50%, 500px); /* Y 位移量可調 */
+}
+
 /* 火山君 */
 .volcano-animation {
   animation: volcano-animation 2s infinite alternate
