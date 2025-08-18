@@ -160,7 +160,15 @@ const expandMask = ref(false); // 最後 1 秒啟動擴張動畫
 let preTimer = null;
 
 function startPreRoll() {
-  // 讓主畫面動畫先停在第一幀
+  // 若已經在跑，避免重複啟動
+  if (preTimer) return;
+
+  // 明確重置前置狀態
+  preSec.value = 3;
+  expandMask.value = false;
+  showReveal.value = true;
+
+  // 主畫面動畫停在第一幀
   snapAnimationsToStart();
 
   preTimer = setInterval(() => {
@@ -175,6 +183,8 @@ function startPreRoll() {
     if (preSec.value <= 0) {
       clearInterval(preTimer);
       preTimer = null;
+
+      preSec.value = 0; // 夾住，避免負數閃爍
       showReveal.value = false;
 
       // 從頭啟動主動畫、開始分鐘數倒數
@@ -368,7 +378,6 @@ onUnmounted(() => {
   );
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-
   /* 洞半徑平滑放大 */
   transition: --hole 1s cubic-bezier(0.6, 0, 0.4, 1);
 }
