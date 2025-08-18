@@ -192,7 +192,7 @@ onMounted(() => {
     </div>
     <ul class="space-y-4">
       <li>
-        <NuxtLink to="/yelling" class="gradient-border-1px">
+        <NuxtLink to="/yelling" class="gradient-border-1px rounded-[32px]">
           <article
             class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
           >
@@ -212,7 +212,7 @@ onMounted(() => {
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink to="/find-peace" class="gradient-border-1px">
+        <NuxtLink to="/find-peace" class="gradient-border-1px rounded-[32px]">
           <article
             class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
           >

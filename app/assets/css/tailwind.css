@@ -4,7 +4,7 @@
 
 @layer utilities {
   .gradient-border-1px {
-    @apply block rounded-[32px] p-[1px];
+    @apply block p-[1px];
     background-image: linear-gradient(
       135deg,
       #c0c7dc33 0%,
