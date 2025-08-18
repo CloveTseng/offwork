@@ -235,6 +235,7 @@ const statusBarBgClass = computed(() => {
 
   /* 內容區（桌面）隱藏滾動條外觀（仍可捲動） */
   .app-content {
+    font-family: "Noto Sans TC", sans-serif;
     scrollbar-width: none;
   }
 }

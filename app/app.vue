@@ -9,7 +9,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="font-sans">
+  <div>
     <NuxtLayout>
       <NuxtRouteAnnouncer />
       <NuxtPage />
