@@ -153,6 +153,10 @@ function togglePause() {
   }
 }
 
+// 遮罩中心的偏移（相對於畫面中央 50%/50%）
+const revealOffsetX = ref("0px"); // 例：'16px' 或 '2vw'
+const revealOffsetY = ref("0px"); // 例：'24px' 或 '10vh'
+
 // 前置倒數（3 → 2 → 1 → 揭露 → 開始）
 const showReveal = ref(true); // 是否顯示遮罩＋文案
 const preSec = ref(3); // 倒數數字
@@ -245,27 +249,31 @@ onUnmounted(() => {
     v-if="showReveal"
     class="reveal-mask | pointer-events-none absolute inset-0 z-30 bg-neutral-950"
     :class="{ 'reveal-expand': expandMask }"
+    :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
   ></div>
-  <!-- 標題（準備開始囉） -->
+  <!-- 標題（永遠在洞口下方 40px） -->
   <h3
     v-if="showReveal"
-    class="pointer-events-none absolute left-1/2 top-[592px] z-40 -translate-x-1/2 text-center text-h4 font-bold text-white transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)] sm:top-[542px]"
+    class="reveal-title pointer-events-none absolute left-1/2 z-40 -translate-x-1/2 text-center text-h4 font-bold text-white transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)]"
     :class="{ 'reveal-slide': expandMask }"
+    :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
   >
     準備開始囉
   </h3>
-  <!-- 倒數數字（3/2/1） -->
+  <!-- 倒數數字（永遠在 h3 下方 40px） -->
   <p
     v-if="showReveal"
-    class="pointer-events-none absolute left-1/2 top-[671px] z-40 -translate-x-1/2 text-center text-h1 font-bold text-alert-success transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)] sm:top-[621px]"
+    class="reveal-count pointer-events-none absolute left-1/2 z-40 -translate-x-1/2 text-center text-h1 font-bold text-alert-success transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)]"
     :class="{ 'reveal-slide': expandMask }"
+    :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
   >
     {{ preSec }}
   </p>
   <!-- 呼吸中內容 -->
   <section
-    class="h-full origin-[50%_380px] transform-gpu bg-secondary transition-transform duration-500 ease-[cubic-bezier(0.6,0,0.4,1)] sm:-mt-14 sm:pt-14"
+    class="content-origin h-full transform-gpu bg-secondary transition-transform duration-500 ease-[cubic-bezier(0.6,0,0.4,1)] sm:-mt-14 sm:pt-14"
     :class="[expandMask ? 'scale-100' : 'scale-75']"
+    :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
     @click="triggerHover"
   >
     <h1
@@ -363,49 +371,55 @@ onUnmounted(() => {
   initial-value: 120px;
 }
 
-/* 遮罩：洞口定位在 50% 430px，半徑由 --hole 控制 */
+/* ===== 位置統一：以畫面中心為基準，允許偏移 =====
+   --dx / --dy：洞口中心相對「畫面正中央(50%/50%)」的偏移量
+   預設 0px；可在 template 的 :style 綁定自由調整。 */
 .reveal-mask {
-  --hole: 120px; /* 初始洞半徑 */
+  --hole: 120px;
+  --dx: 0px;
+  --dy: 0px;
+
   -webkit-mask-image: radial-gradient(
-    circle at 50% 430px,
+    circle at calc(50% + var(--dx)) calc(50% + var(--dy)),
     transparent var(--hole),
     #000 calc(var(--hole) + 1px)
   );
   mask-image: radial-gradient(
-    circle at 50% 430px,
+    circle at calc(50% + var(--dx)) calc(50% + var(--dy)),
     transparent var(--hole),
     #000 calc(var(--hole) + 1px)
   );
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  /* 洞半徑平滑放大 */
   transition: --hole 1s cubic-bezier(0.6, 0, 0.4, 1);
 }
 
-@media (min-width: 640px) {
-  /* 遮罩：洞口定位在 50% 380px，半徑由 --hole 控制 */
-  .reveal-mask {
-    -webkit-mask-image: radial-gradient(
-      circle at 50% 380px,
-      transparent var(--hole),
-      #000 calc(var(--hole) + 1px)
-    );
-    mask-image: radial-gradient(
-      circle at 50% 380px,
-      transparent var(--hole),
-      #000 calc(var(--hole) + 1px)
-    );
-  }
-}
-
-/* 倒數到 1 秒時放大：把洞半徑變超大，會從自己的中心點向外擴張 */
+/* 洞口擴張（你原本的數值可依需求微調） */
 .reveal-expand {
   --hole: 650px;
 }
 
-/* 標題與數字往下消失 */
+/* ===== 內容縮放的原點：跟洞口中心一致 ===== */
+.content-origin {
+  --dx: 0px;
+  --dy: 0px;
+  transform-origin: calc(50% + var(--dx)) calc(50% + var(--dy));
+}
+
+/* ===== 兩段文字：永遠相對於洞口定位 ===== */
+.reveal-title {
+  left: calc(50% + var(--dx));
+  top: calc(50% + var(--dy) + 160px);
+}
+
+.reveal-count {
+  left: calc(50% + var(--dx));
+  top: calc(50% + var(--dy) + 220px);
+}
+
+/* 文字的滑出動畫（保留你原來的 transform 視覺效果） */
 .reveal-slide {
-  transform: translate(-50%, 500px); /* Y 位移量可調 */
+  transform: translate(-50%, 550px); /* 僅作離場位移，不影響定位邏輯 */
 }
 
 /* 火山君 */
