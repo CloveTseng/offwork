@@ -272,7 +272,7 @@ onUnmounted(() => {
   <!-- 呼吸中內容 -->
   <section
     class="content-origin h-full transform-gpu bg-secondary transition-transform duration-500 ease-[cubic-bezier(0.6,0,0.4,1)] sm:-mt-14 sm:pt-14"
-    :class="[expandMask ? 'scale-100' : 'scale-75']"
+    :class="[expandMask ? 'scale-100' : 'scale-[0.7]']"
     :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
     @click="triggerHover"
   >
@@ -306,7 +306,7 @@ onUnmounted(() => {
         <!-- 吸氣吐氣容器 -->
         <div
           class="absolute left-1/2 top-[131px] w-full max-w-[200px] -translate-x-1/2 text-center transition-all duration-300"
-          :class="{ 'top-[46px]': isGroupHover }"
+          :class="{ 'top-[46px]': isGroupHover && expandMask }"
         >
           <!-- 吸氣吐氣 -->
           <div class="mb-6 h-6 rounded-full bg-white/20">
@@ -326,7 +326,9 @@ onUnmounted(() => {
         <!-- 暫停、停止容器 -->
         <div
           class="pointer-events-none absolute top-40 flex w-full items-center justify-center gap-8 opacity-0 transition duration-300"
-          :class="{ 'pointer-events-auto opacity-100': isGroupHover }"
+          :class="{
+            'pointer-events-auto opacity-100': isGroupHover && expandMask,
+          }"
         >
           <img src="/icons/find-peace/calm-breathe/music.svg" alt="音樂開關" />
           <!-- 暫停按鈕 -->
