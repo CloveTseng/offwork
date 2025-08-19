@@ -174,7 +174,7 @@ function startPreRoll() {
   preTimer = setInterval(() => {
     preSec.value -= 1;
 
-    // 剩 1 秒：放大圓洞＋文案往下消失（動畫時間 1s）
+    // 剩 1 秒：標題淡出+放大圓洞＋文案往下消失（動畫時間 1s）
     if (preSec.value === 1) {
       expandMask.value = true;
     }
@@ -293,6 +293,20 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <!-- 倒數時顯示的呼吸法標題，會隨著 expandMask 淡出 -->
+  <NuxtLink
+    to="/find-peace/calm-breathe"
+    class="absolute top-0 z-40 block w-full py-2.5 text-center text-xl font-bold text-white transition duration-1000 sm:top-14"
+    :class="{ 'pointer-events-none opacity-0': expandMask }"
+  >
+    <button
+      type="button"
+      class="absolute left-0 top-1/2 block -translate-y-1/2 py-2 pl-4 pr-2"
+    >
+      <img src="/icons/white-left-arrow.svg" alt="返回箭頭" />
+    </button>
+    平穩呼吸法
+  </NuxtLink>
   <!-- 一開始的倒數、mask 動畫 -->
   <div
     v-if="showReveal"
