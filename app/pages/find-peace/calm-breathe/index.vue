@@ -80,7 +80,10 @@ const breathingMinutes = ref("3");
         :class="{
           'bg-neutral-900 text-alert-success': breathingMinutes === '1',
         }"
-        @click="breathingMinutes = '1'"
+        @click="
+          breathingMinutes = '1';
+          showTimeSetting = false;
+        "
       >
         1 分鐘
       </li>
@@ -89,7 +92,10 @@ const breathingMinutes = ref("3");
         :class="{
           'bg-neutral-900 text-alert-success': breathingMinutes === '3',
         }"
-        @click="breathingMinutes = '3'"
+        @click="
+          breathingMinutes = '3';
+          showTimeSetting = false;
+        "
       >
         3 分鐘
       </li>
@@ -98,7 +104,10 @@ const breathingMinutes = ref("3");
         :class="{
           'bg-neutral-900 text-alert-success': breathingMinutes === '5',
         }"
-        @click="breathingMinutes = '5'"
+        @click="
+          breathingMinutes = '5';
+          showTimeSetting = false;
+        "
       >
         5 分鐘
       </li>
@@ -107,7 +116,10 @@ const breathingMinutes = ref("3");
         :class="{
           'bg-neutral-900 text-alert-success': breathingMinutes === '10',
         }"
-        @click="breathingMinutes = '10'"
+        @click="
+          breathingMinutes = '10';
+          showTimeSetting = false;
+        "
       >
         10 分鐘
       </li>
@@ -116,7 +128,10 @@ const breathingMinutes = ref("3");
         :class="{
           'bg-neutral-900 text-alert-success': breathingMinutes === '15',
         }"
-        @click="breathingMinutes = '15'"
+        @click="
+          breathingMinutes = '15';
+          showTimeSetting = false;
+        "
       >
         15 分鐘
       </li>
