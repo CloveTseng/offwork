@@ -6,11 +6,44 @@ useSeoMeta({
 
 const isYelling = ref(false);
 
+// 新增：大吼開始時間與計時器
+const yellingStartMs = ref(null);
+let yellingTimer = null;
+
+// 把「已經過秒數」寫入 sessionStorage
+function writeYellingElapsed() {
+  if (!import.meta.client || yellingStartMs.value === null) return;
+  const elapsed = Math.max(
+    0,
+    Math.floor((Date.now() - yellingStartMs.value) / 1000),
+  );
+  sessionStorage.setItem("yellingTimeElapsed", String(elapsed));
+}
+
 const startYelling = () => {
   isYelling.value = true;
   if (!import.meta.client) return;
+
+  // 標記已放鬆
   sessionStorage.setItem("isRelieved", "true");
+
+  // 初始化大吼計時
+  yellingStartMs.value = Date.now();
+  sessionStorage.setItem("yellingTimeElapsed", "0"); // 先清成 0
+
+  // 每秒更新一次
+  if (yellingTimer) clearInterval(yellingTimer);
+  yellingTimer = window.setInterval(writeYellingElapsed, 1000);
 };
+
+// 若使用者在 1 秒內就跳轉，unmount 時再補記一次
+onUnmounted(() => {
+  if (yellingTimer) {
+    clearInterval(yellingTimer);
+    yellingTimer = null;
+  }
+  writeYellingElapsed();
+});
 </script>
 
 <template>
@@ -43,6 +76,7 @@ const startYelling = () => {
         <NuxtLink
           :to="{ path: '/', query: { openFeelingBetter: 'true' } }"
           class="block rounded-full bg-neutral-950 p-6"
+          @click="writeYellingElapsed()"
         >
           <img src="/icons/yelling/stop-fill.svg" alt="停止 icon" />
         </NuxtLink>

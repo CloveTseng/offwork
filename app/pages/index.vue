@@ -89,15 +89,46 @@ watch(showFeelingCalm, (open) => {
   }
 });
 
-// 首次進入頁面：若有參數就打開對應的 bottom sheet
+// 大吼經過秒數（讀取 sessionStorage）
+const yellingElapsedSec = ref(0);
+const yellingMin = computed(() => Math.floor(yellingElapsedSec.value / 60));
+const yellingSec = computed(() => yellingElapsedSec.value % 60);
+
+function readYellingElapsed() {
+  if (!import.meta.client) return;
+  const raw = sessionStorage.getItem("yellingTimeElapsed");
+  yellingElapsedSec.value = raw ? Math.max(0, parseInt(raw, 10) || 0) : 0;
+}
+
+// 首次進入頁面：若有參數就打開對應的 bottom sheet；並讀 isRelieved
 onMounted(() => {
   if (hasOpenParam.value) showCeremonyNav.value = true;
   if (hasFeelingParam.value) showFeelingBetter.value = true;
   if (hasCalmParam.value) showFeelingCalm.value = true;
-  // 讀取 sessionStorage 的 isRelieved
+
   if (import.meta.client) {
     const raw = sessionStorage.getItem("isRelieved");
     if (raw !== null) isRelieved.value = raw === "true";
+  }
+
+  // 一進頁面先讀一次（避免使用者直接開了舒服點了嗎）
+  readYellingElapsed();
+});
+
+// 當「舒服點了嗎？」打開時再讀一次，確保顯示最新值
+watch(showFeelingBetter, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openFeelingBetter" in q)) {
+      router.replace({ query: { ...q, openFeelingBetter: "true" } });
+    }
+    readYellingElapsed(); // <── 開啟當下更新
+  } else {
+    if ("openFeelingBetter" in q) {
+      delete q.openFeelingBetter;
+      router.replace({ query: q });
+    }
   }
 });
 </script>
@@ -273,11 +304,13 @@ onMounted(() => {
           <div>
             <h4 class="mb-0.5 text-sm text-neutral-300">你釋放了</h4>
             <p class="flex gap-1 text-h5 font-bold text-alert-success">
-              <span class="flex items-end gap-0.5"
-                >3<span class="pb-0.5 text-xs font-normal">分</span>
+              <span class="flex items-end gap-0.5">
+                {{ yellingMin }}
+                <span class="pb-0.5 text-xs font-normal">分</span>
               </span>
-              <span class="flex items-end gap-0.5"
-                >24<span class="pb-0.5 text-xs font-normal">秒</span>
+              <span class="flex items-end gap-0.5">
+                {{ yellingSec }}
+                <span class="pb-0.5 text-xs font-normal">秒</span>
               </span>
             </p>
           </div>
