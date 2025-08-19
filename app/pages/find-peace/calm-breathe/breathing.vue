@@ -214,12 +214,8 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  // 倒數＆hover 計時器
+  // 停止倒數
   stopCountdown();
-  if (hoverTimer) {
-    clearTimeout(hoverTimer);
-    hoverTimer = null;
-  }
   // 動畫事件
   const bar = breathingBarRef.value;
   if (bar) {
