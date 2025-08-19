@@ -10,19 +10,9 @@ const route = useRoute();
 const router = useRouter();
 
 /* ──────────────────────────────────────────────
- * ② UI 互動（行為層）：模擬 group-hover（行動裝置）
- *  - 點擊畫面觸發 2 秒的 UI 呈現（標題與控制列淡入/位移）
+ * ② UI 互動（行為層）：模擬 group-hover，點下畫面顯示標題、操作按鈕
  * ────────────────────────────────────────────── */
 const isGroupHover = ref(false);
-let hoverTimer = null;
-function triggerHover() {
-  isGroupHover.value = true;
-  if (hoverTimer) clearTimeout(hoverTimer);
-  hoverTimer = setTimeout(() => {
-    isGroupHover.value = false;
-    hoverTimer = null;
-  }, 2000);
-}
 
 /* ──────────────────────────────────────────────
  * 呼吸分鐘數（query）
@@ -274,16 +264,18 @@ onUnmounted(() => {
     class="content-origin h-full transform-gpu bg-secondary transition-transform duration-500 ease-[cubic-bezier(0.6,0,0.4,1)] sm:-mt-14 sm:pt-14"
     :class="[expandMask ? 'scale-100' : 'scale-[0.7]']"
     :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
-    @click="triggerHover"
+    @click.self="isGroupHover = !isGroupHover"
   >
     <h1
-      class="relative z-20 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition"
+      class="pointer-events-none relative z-20 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition"
       :class="{ 'opacity-100': isGroupHover }"
     >
       平穩呼吸法
     </h1>
     <!-- 倒數分鐘數 -->
-    <p class="relative z-20 text-center text-h2 font-bold text-white">
+    <p
+      class="pointer-events-none relative z-20 text-center text-h2 font-bold text-white"
+    >
       {{ displayTime }}
     </p>
     <main>
@@ -301,11 +293,11 @@ onUnmounted(() => {
       ></div>
       <!-- 漸層色塊容器 -->
       <div
-        class="absolute bottom-0 z-10 h-[320px] w-full bg-gradient-to-t from-secondary from-50% to-[#5AB3D200] sm:rounded-b-[50px]"
+        class="pointer-events-none absolute bottom-0 z-10 h-[320px] w-full bg-gradient-to-t from-secondary from-50% to-[#5AB3D200] sm:rounded-b-[50px]"
       >
         <!-- 吸氣吐氣容器 -->
         <div
-          class="absolute left-1/2 top-[131px] w-full max-w-[200px] -translate-x-1/2 text-center transition-all duration-300"
+          class="pointer-events-none absolute left-1/2 top-[131px] w-full max-w-[200px] -translate-x-1/2 text-center transition-all duration-300"
           :class="{ 'top-[46px]': isGroupHover && expandMask }"
         >
           <!-- 吸氣吐氣 -->
