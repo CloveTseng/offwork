@@ -100,6 +100,19 @@ function readYellingElapsed() {
   yellingElapsedSec.value = raw ? Math.max(0, parseInt(raw, 10) || 0) : 0;
 }
 
+// ──────────────────────────────────────────────
+// 平穩呼吸：讀取 breathingTimeElapsed（秒）
+// ──────────────────────────────────────────────
+const breathingElapsedSec = ref(0);
+const breathingMin = computed(() => Math.floor(breathingElapsedSec.value / 60));
+const breathingSec = computed(() => breathingElapsedSec.value % 60);
+
+function readBreathingElapsed() {
+  if (!import.meta.client) return;
+  const raw = sessionStorage.getItem("breathingTimeElapsed");
+  breathingElapsedSec.value = raw ? Math.max(0, parseInt(raw, 10) || 0) : 0;
+}
+
 // 首次進入頁面：若有參數就打開對應的 bottom sheet；並讀 isRelieved
 onMounted(() => {
   if (hasOpenParam.value) showCeremonyNav.value = true;
@@ -111,8 +124,9 @@ onMounted(() => {
     if (raw !== null) isRelieved.value = raw === "true";
   }
 
-  // 一進頁面先讀一次（避免使用者直接開了舒服點了嗎）
+  // 一進頁面先讀一次（避免直接開 bottom sheet 時顯示不到）
   readYellingElapsed();
+  readBreathingElapsed();
 });
 
 // 當「舒服點了嗎？」打開時再讀一次，確保顯示最新值
@@ -127,6 +141,23 @@ watch(showFeelingBetter, (open) => {
   } else {
     if ("openFeelingBetter" in q) {
       delete q.openFeelingBetter;
+      router.replace({ query: q });
+    }
+  }
+});
+
+// 打開「平靜點了嗎？」當下再讀一次，確保是最新
+watch(showFeelingCalm, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openFeelingCalm" in q)) {
+      router.replace({ query: { ...q, openFeelingCalm: "true" } });
+    }
+    readBreathingElapsed();
+  } else {
+    if ("openFeelingCalm" in q) {
+      delete q.openFeelingCalm;
       router.replace({ query: q });
     }
   }
@@ -375,11 +406,13 @@ watch(showFeelingBetter, (open) => {
       <div>
         <h4 class="mb-0.5 text-sm text-neutral-300">你呼吸了</h4>
         <p class="flex gap-1 text-h5 font-bold text-alert-success">
-          <span class="flex items-end gap-0.5"
-            >3<span class="pb-0.5 text-xs font-normal">分鐘</span>
+          <span class="flex items-end gap-0.5">
+            {{ breathingMin }}
+            <span class="pb-0.5 text-xs font-normal">分鐘</span>
           </span>
-          <span class="flex items-end gap-0.5"
-            >24<span class="pb-0.5 text-xs font-normal">秒</span>
+          <span class="flex items-end gap-0.5">
+            {{ String(breathingSec).padStart(2, "0") }}
+            <span class="pb-0.5 text-xs font-normal">秒</span>
           </span>
         </p>
       </div>

@@ -81,6 +81,8 @@ function startCountdown() {
     if (remainingSec.value <= 0) {
       clearInterval(countdownTimer);
       countdownTimer = null;
+      // 導頁前先把呼吸時長寫入
+      stopBreathingElapsed();
       router.replace("/?openFeelingCalm");
     }
   }, 1000);
@@ -136,10 +138,14 @@ function togglePause() {
     stopCountdown();
     isBreathingIn.value = false;
     snapAnimationsToStart();
+    // 呼吸時長：暫停
+    pauseBreathingElapsed();
   } else {
     // 繼續：動畫從頭開始、倒數繼續
     restartAnimationsFromBeginning();
     startCountdown();
+    // 呼吸時長：恢復
+    startBreathingElapsed();
   }
 }
 
@@ -181,11 +187,66 @@ function startPreRoll() {
       preSec.value = 0; // 夾住，避免負數閃爍
       showReveal.value = false;
 
+      // 開始呼吸計時：先清零、立刻開始
+      breathingAccumSec.value = 0;
+      if (import.meta.client)
+        sessionStorage.setItem("breathingTimeElapsed", "0");
+      startBreathingElapsed();
+
       // 從頭啟動主動畫、開始分鐘數倒數
       restartAnimationsFromBeginning();
       startCountdown();
     }
   }, 1000);
+}
+
+// ──────────────────────────────────────────────
+// 呼吸時長記錄：breathingTimeElapsed（秒）
+//  - 倒數結束才開始計時
+//  - 暫停時停表、恢復時續算
+//  - 每秒寫入 sessionStorage，unmount 前、導頁前再補寫一次
+// ──────────────────────────────────────────────
+const breathingAccumSec = ref(0); // 已累積的秒數（含多次暫停/恢復）
+const breathingStartMs = ref(null); // 目前這一段開始的時間戳（ms）
+let breathingTimer = null; // setInterval id
+
+function writeBreathingElapsed() {
+  if (!import.meta.client) return;
+  const extra = breathingStartMs.value
+    ? Math.max(0, Math.floor((Date.now() - breathingStartMs.value) / 1000))
+    : 0;
+  const total = Math.max(0, breathingAccumSec.value + extra);
+  sessionStorage.setItem("breathingTimeElapsed", String(total));
+}
+
+function startBreathingElapsed() {
+  if (!import.meta.client) return;
+  if (breathingStartMs.value !== null) return; // 已在跑
+  breathingStartMs.value = Date.now();
+  if (!breathingTimer) {
+    breathingTimer = setInterval(writeBreathingElapsed, 1000);
+  }
+}
+
+function pauseBreathingElapsed() {
+  // 暫停用：把目前區間累加進去、停表但不清 interval（由 stop 控）
+  if (breathingStartMs.value !== null) {
+    breathingAccumSec.value += Math.max(
+      0,
+      Math.floor((Date.now() - breathingStartMs.value) / 1000),
+    );
+    breathingStartMs.value = null;
+  }
+  writeBreathingElapsed();
+}
+
+function stopBreathingElapsed() {
+  // 結束用：累加 + 最後寫入 + 清 interval
+  pauseBreathingElapsed();
+  if (breathingTimer) {
+    clearInterval(breathingTimer);
+    breathingTimer = null;
+  }
 }
 
 /* ──────────────────────────────────────────────
@@ -226,6 +287,8 @@ onUnmounted(() => {
     clearInterval(preTimer);
     preTimer = null;
   }
+  // 最後收斂一次呼吸時長
+  stopBreathingElapsed();
 });
 </script>
 
@@ -339,7 +402,7 @@ onUnmounted(() => {
             </button>
           </div>
           <!-- 停止（直接結束並回到首頁） -->
-          <NuxtLink to="/?openFeelingCalm">
+          <NuxtLink to="/?openFeelingCalm" @click="stopBreathingElapsed()">
             <img
               src="/icons/find-peace/calm-breathe/stop.svg"
               alt="停止 icon"
