@@ -285,7 +285,8 @@ onUnmounted(() => {
       <!-- 背景呼吸圓圈 -->
       <div
         ref="circleRef"
-        class="breathing-circle | pointer-events-none absolute bottom-[290px] left-1/2 z-0 size-[231px] rounded-full bg-secondary-300"
+        class="breathing-circle | pointer-events-none absolute bottom-[290px] left-1/2 z-0 rounded-full bg-secondary-300 transition-all duration-500 ease-[cubic-bezier(0.6,0,0.4,1)]"
+        :class="expandMask ? 'size-[231px]' : 'size-0'"
       ></div>
       <!-- 漸層色塊容器 -->
       <div
