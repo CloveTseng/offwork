@@ -274,10 +274,10 @@ onMounted(() => {
             <h4 class="mb-0.5 text-sm text-neutral-300">你釋放了</h4>
             <p class="flex gap-1 text-h5 font-bold text-alert-success">
               <span class="flex items-end gap-0.5"
-                >3<span class="text-xs font-normal">分</span>
+                >3<span class="pb-0.5 text-xs font-normal">分</span>
               </span>
               <span class="flex items-end gap-0.5"
-                >24<span class="text-xs font-normal">秒</span>
+                >24<span class="pb-0.5 text-xs font-normal">秒</span>
               </span>
             </p>
           </div>
@@ -296,7 +296,7 @@ onMounted(() => {
             <p
               class="flex items-end gap-0.5 text-h5 font-bold text-alert-success"
             >
-              80<span class="text-xs font-normal">dB</span>
+              80<span class="pb-0.5 text-xs font-normal">dB</span>
             </p>
           </div>
         </article>
@@ -343,10 +343,10 @@ onMounted(() => {
         <h4 class="mb-0.5 text-sm text-neutral-300">你呼吸了</h4>
         <p class="flex gap-1 text-h5 font-bold text-alert-success">
           <span class="flex items-end gap-0.5"
-            >3<span class="text-xs font-normal">分鐘</span>
+            >3<span class="pb-0.5 text-xs font-normal">分鐘</span>
           </span>
           <span class="flex items-end gap-0.5"
-            >24<span class="text-xs font-normal">秒</span>
+            >24<span class="pb-0.5 text-xs font-normal">秒</span>
           </span>
         </p>
       </div>
