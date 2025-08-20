@@ -335,7 +335,7 @@ watch(showFeelingCalm, (open) => {
           <div>
             <h4 class="mb-0.5 text-sm text-neutral-300">你釋放了</h4>
             <p class="flex gap-1 text-h5 font-bold text-alert-success">
-              <span class="flex items-end gap-0.5">
+              <span v-if="yellingMin" class="flex items-end gap-0.5">
                 {{ yellingMin }}
                 <span class="pb-0.5 text-xs font-normal">分</span>
               </span>
@@ -406,9 +406,9 @@ watch(showFeelingCalm, (open) => {
       <div>
         <h4 class="mb-0.5 text-sm text-neutral-300">你呼吸了</h4>
         <p class="flex gap-1 text-h5 font-bold text-alert-success">
-          <span class="flex items-end gap-0.5">
+          <span v-if="breathingMin" class="flex items-end gap-0.5">
             {{ breathingMin }}
-            <span class="pb-0.5 text-xs font-normal">分鐘</span>
+            <span class="pb-0.5 text-xs font-normal">分</span>
           </span>
           <span class="flex items-end gap-0.5">
             {{ String(breathingSec).padStart(2, "0") }}
