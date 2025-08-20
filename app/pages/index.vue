@@ -176,7 +176,7 @@ watch(showFeelingCalm, (open) => {
         }}
       </h2>
       <h1 class="text-h2 font-bold text-neutral-900">啟動下班人生</h1>
-      <span class="flex items-center gap-1 font-medium">
+      <span class="flex items-center gap-1 font-bold">
         <img src="/icons/clock.svg" alt="鬧鐘 icon" />下班儀式｜下午 06:30
       </span>
     </div>
