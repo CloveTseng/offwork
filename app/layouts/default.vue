@@ -201,6 +201,11 @@ const statusBarBgClass = computed(() => {
 </template>
 
 <style scoped>
+/* 設定 app 內容容器的字型為思源黑體 */
+.app-content {
+  font-family: "Noto Sans TC", sans-serif;
+}
+
 @media (min-width: 640px) {
   /* iPhone 外框 */
   .app-wrapper:before {
@@ -235,7 +240,6 @@ const statusBarBgClass = computed(() => {
 
   /* 內容區（桌面）隱藏滾動條外觀（仍可捲動） */
   .app-content {
-    font-family: "Noto Sans TC", sans-serif;
     scrollbar-width: none;
   }
 }
