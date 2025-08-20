@@ -5,6 +5,7 @@
  *  - 手機/小螢幕時，可能是 window 在捲動
  * ────────────────────────────────────────────── */
 const route = useRoute();
+const router = useRouter();
 const appContentRef = ref(null);
 
 /** 將 .app-content 與 window 都捲回頂端（雙保險） */
@@ -114,6 +115,19 @@ if (import.meta.hot) {
   });
 }
 
+const headerMeta = computed(() => route.meta?.header || null);
+
+function onHeaderRight() {
+  const m = headerMeta.value;
+  if (!m) return;
+  // 允許兩種右側行為：1) 導頁（返回上一頁） 2) 注入 query 來打開某個 Bottom Sheet
+  if (m.right?.to) return router.push(m.right.to);
+  if (m.right?.openParam) {
+    const q = { ...route.query, ...m.right.openParam };
+    return router.replace({ query: q });
+  }
+}
+
 /* ──────────────────────────────────────────────
  * A) 路徑白名單：完全相符才生效（不吃父層/包含）
  * ────────────────────────────────────────────── */
@@ -180,19 +194,29 @@ const statusBarBgClass = computed(() => {
         :class="appContentScrollClass"
       >
         <!--
-          頂部狀態列（僅桌面顯示，用來模擬動態島與系統狀態）
+          頂部狀態列
           - sticky top-0：捲動時固定在頂
           - z-40：壓在內容之上
           - 背景色根據 statusBarBgClass 白名單切換
         -->
-        <div
-          class="sticky top-0 z-40 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
-          :class="statusBarBgClass"
-        >
-          <span>{{ currentTime }}</span>
-          <img src="/dynamic-island.svg" alt="island" />
-          <img src="/status.svg" alt="status" />
-        </div>
+        <header class="sticky top-0 z-40 text-white" :class="statusBarBgClass">
+          <!-- 桌面裝飾狀態列 -->
+          <div
+            class="hidden grid-cols-3 items-center py-2.5 text-center sm:grid"
+          >
+            <span>{{ currentTime }}</span>
+            <img src="/dynamic-island.svg" alt="island" />
+            <img src="/status.svg" alt="status" />
+          </div>
+
+          <!-- 頁面標題列 -->
+          <LayoutHeaderBar
+            v-if="headerMeta"
+            :title="headerMeta.title"
+            :back-to="headerMeta.backTo"
+            v-on="headerMeta.right ? { right: onHeaderRight } : {}"
+          />
+        </header>
         <!-- 子頁面會透過 <slot/> 插進來 -->
         <slot />
       </section>
