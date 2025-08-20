@@ -53,9 +53,10 @@ function onDragMove(e) {
 
   el.style.transform = `translateY(${dy}px)`;
   const progress = Math.min(1, dy / sheetHeight.value);
+  // 1 → 1 - fade；例如 fade=0.6 時，最低 0.4
   backdropOpacity.value = 1 - progress * props.backdropFade;
 
-  e.preventDefault();
+  e.preventDefault(); // 避免頁面捲動
 }
 
 function onDragEnd() {
@@ -105,78 +106,8 @@ function onKeydown(e) {
   if (e.key === "Escape") close();
 }
 
-/* ──────────────────────────────────────────────
- * 🔒 Scroll lock：開啟時鎖捲動，關閉時還原
- *  - 桌面：鎖 .app-content（你的 layout 滾動容器）
- *  - 手機：鎖 body/window（加 position:fixed 防 iOS 反彈）
- * ────────────────────────────────────────────── */
-const LOCK = {
-  count: 0,
-  mode: null, // 'body' | 'app'
-  appEl: null,
-  prevAppOverflow: "",
-  prevBodyOverflow: "",
-  prevBodyPosition: "",
-  prevBodyTop: "",
-  scrollY: 0,
-};
+// 監看開關：派發 open/close，加/移除 ESC 監聽
 
-function lockScroll() {
-  if (!import.meta.client) return;
-  LOCK.count++;
-  if (LOCK.count > 1) return; // 已被其他 BottomSheet 鎖住
-
-  const appEl = document.querySelector(".app-content");
-  const useBody = !appEl || window.matchMedia("(max-width: 639px)").matches;
-
-  if (useBody) {
-    const body = document.body;
-    LOCK.mode = "body";
-    LOCK.scrollY = window.scrollY;
-    LOCK.prevBodyOverflow = body.style.overflow;
-    LOCK.prevBodyPosition = body.style.position;
-    LOCK.prevBodyTop = body.style.top;
-
-    body.style.overflow = "hidden";
-    // 防 iOS：固定視窗並記錄位移
-    body.style.position = "fixed";
-    body.style.top = `-${LOCK.scrollY}px`;
-  } else {
-    LOCK.mode = "app";
-    LOCK.appEl = appEl;
-    LOCK.prevAppOverflow = appEl.style.overflow;
-    appEl.style.overflow = "hidden";
-  }
-}
-
-function unlockScroll() {
-  if (!import.meta.client) return;
-  if (LOCK.count === 0) return;
-  LOCK.count--;
-  if (LOCK.count > 0) return; // 仍有其他 BottomSheet 在開
-
-  if (LOCK.mode === "body") {
-    const body = document.body;
-    body.style.overflow = LOCK.prevBodyOverflow || "";
-    body.style.position = LOCK.prevBodyPosition || "";
-    body.style.top = LOCK.prevBodyTop || "";
-    // 回復原本的捲動位置
-    window.scrollTo({ top: LOCK.scrollY, behavior: "auto" });
-  } else if (LOCK.mode === "app" && LOCK.appEl) {
-    LOCK.appEl.style.overflow = LOCK.prevAppOverflow || "";
-  }
-
-  // reset
-  LOCK.mode = null;
-  LOCK.appEl = null;
-  LOCK.prevAppOverflow = "";
-  LOCK.prevBodyOverflow = "";
-  LOCK.prevBodyPosition = "";
-  LOCK.prevBodyTop = "";
-  LOCK.scrollY = 0;
-}
-
-/* 監看開關：派發 open/close、加/移除 ESC、並鎖/解鎖捲動 */
 watch(
   () => props.modelValue,
   (openNow) => {
@@ -184,11 +115,9 @@ watch(
     if (openNow) {
       emit("open");
       window.addEventListener("keydown", onKeydown);
-      lockScroll(); // 🔒 鎖捲動
     } else {
       emit("close");
       window.removeEventListener("keydown", onKeydown);
-      unlockScroll(); // 🔓 解鎖
     }
   },
   { immediate: true },
@@ -198,8 +127,6 @@ onUnmounted(() => {
   if (import.meta.client) {
     window.removeEventListener("pointermove", onDragMove);
     window.removeEventListener("keydown", onKeydown);
-    // 若元件在開啟狀態下被銷毀，也要解鎖
-    if (props.modelValue) unlockScroll();
   }
 });
 
