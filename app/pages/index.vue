@@ -411,7 +411,7 @@ watch(showFeelingCalm, (open) => {
             <span class="pb-0.5 text-xs font-normal">分</span>
           </span>
           <span class="flex items-end gap-0.5">
-            {{ String(breathingSec).padStart(2, "0") }}
+            {{ breathingSec }}
             <span class="pb-0.5 text-xs font-normal">秒</span>
           </span>
         </p>
