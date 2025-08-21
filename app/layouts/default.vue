@@ -159,7 +159,7 @@ const isNonScrollable = computed(() =>
 const appContentScrollClass = computed(() =>
   isNonScrollable.value
     ? "overflow-hidden"
-    : "sm:overflow-x-hidden sm:overflow-y-scroll",
+    : "overflow-x-hidden overflow-y-scroll",
 );
 
 // 先判斷透明，其次 secondary，最後預設半透+模糊
@@ -175,42 +175,55 @@ const statusBarBgClass = computed(() => {
   <!-- 外層容器：桌面置中，小螢幕滿版 -->
   <div class="h-dvh items-center justify-center sm:flex sm:py-8">
     <div class="app-wrapper | relative h-full sm:h-[812px] sm:w-[375px]">
-      <section
-        ref="appContentRef"
-        class="app-content | relative size-full bg-neutral-950 sm:rounded-[50px]"
-        :class="appContentScrollClass"
+      <div
+        class="app-viewport | relative size-full bg-neutral-950 sm:overflow-hidden sm:rounded-[50px]"
       >
-        <!-- 狀態列（背景 class 由白名單切換） -->
-        <header class="sticky top-0 z-40 text-white" :class="statusBarBgClass">
-          <!-- 桌面裝飾狀態列 -->
-          <div
-            class="hidden grid-cols-3 items-center py-2.5 text-center sm:grid"
+        <section
+          ref="appContentRef"
+          class="app-content | relative size-full"
+          :class="appContentScrollClass"
+        >
+          <!-- 狀態列（背景 class 由白名單切換） -->
+          <header
+            class="sticky top-0 z-40 text-white"
+            :class="statusBarBgClass"
           >
-            <span>{{ currentTime }}</span>
-            <img src="/dynamic-island.svg" alt="island" />
-            <img src="/status.svg" alt="status" />
-          </div>
+            <div
+              class="hidden grid-cols-3 items-center py-2.5 text-center sm:grid"
+            >
+              <span>{{ currentTime }}</span>
+              <img src="/dynamic-island.svg" alt="island" />
+              <img src="/status.svg" alt="status" />
+            </div>
+            <LayoutHeaderBar
+              v-if="hasHeaderMeta"
+              :title="headerMeta.title"
+              :back-to="headerMeta.backTo"
+              v-on="headerMeta.right ? { right: handleHeaderRight } : {}"
+            />
+          </header>
 
-          <!-- 頁面標題列（有 header meta 才呈現；有 right 才綁 listener） -->
-          <LayoutHeaderBar
-            v-if="hasHeaderMeta"
-            :title="headerMeta.title"
-            :back-to="headerMeta.backTo"
-            v-on="headerMeta.right ? { right: handleHeaderRight } : {}"
-          />
-        </header>
+          <!-- 子頁面插入點 -->
+          <slot />
+        </section>
 
-        <!-- 子頁面插入點 -->
-        <slot />
-      </section>
+        <!-- Teleport 目標：在視窗容器內，會被 overflow-hidden 裁切 -->
+        <div
+          id="app-overlay-root"
+          class="pointer-events-none absolute inset-0"
+        ></div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* 設定 app 內容容器的字型為思源黑體 */
+/* 設定 app 內容容器的字型為思源黑體、捲動行為、拿掉卷軸寬度 */
 .app-content {
   font-family: "Noto Sans TC", sans-serif;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 @media (min-width: 640px) {
@@ -222,6 +235,7 @@ const statusBarBgClass = computed(() => {
     position: absolute;
     bottom: calc(0% - 10px);
     left: 50%;
+    z-index: 90;
     transform: translate(-50%);
     background-image: url(/iphone.svg);
     background-repeat: no-repeat;
@@ -237,17 +251,13 @@ const statusBarBgClass = computed(() => {
     position: absolute;
     top: calc(0% - 10px);
     left: 50%;
+    z-index: 90;
     transform: translate(-50%);
     background-image: url(/iphone.svg);
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: top center;
     pointer-events: none;
-  }
-
-  /* 內容區（桌面）隱藏滾動條外觀（仍可捲動） */
-  .app-content {
-    scrollbar-width: none;
   }
 }
 </style>
