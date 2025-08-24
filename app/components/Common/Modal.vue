@@ -35,7 +35,7 @@ const close = () => {
       <Transition name="fade">
         <div
           v-if="show"
-          class="Noto-Fonts | absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
+          class="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
           :class="show ? 'pointer-events-auto' : 'pointer-events-none'"
         >
           <slot />
@@ -46,10 +46,6 @@ const close = () => {
 </template>
 
 <style scoped>
-.Noto-Fonts {
-  font-family: "Noto Sans TC", sans-serif;
-}
-
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;

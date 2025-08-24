@@ -137,7 +137,7 @@ defineExpose({ open, close, sheetRef, backdropRef, handleRef });
     <Teleport to="#app-overlay-root">
       <!-- 外層鋪滿 app-wrapper；關閉時預設就不吃事件 -->
       <div
-        class="Noto-Fonts | pointer-events-none absolute inset-0"
+        class="pointer-events-none absolute inset-0"
         :class="{ 'pointer-events-auto': modelValue }"
       >
         <!-- Backdrop -->
@@ -178,10 +178,6 @@ defineExpose({ open, close, sheetRef, backdropRef, handleRef });
 </template>
 
 <style scoped>
-.Noto-Fonts {
-  font-family: "Noto Sans TC", sans-serif;
-}
-
 /* 讓 backdrop 的最終不透明度 = var(--drag)（拖曳時會變）*/
 .backdrop-layer {
   opacity: var(--drag, 1);

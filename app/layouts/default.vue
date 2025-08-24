@@ -218,9 +218,13 @@ const statusBarBgClass = computed(() => {
 </template>
 
 <style scoped>
-/* 設定 app 內容容器的字型為思源黑體、捲動行為、拿掉卷軸寬度 */
-.app-content {
+/* 設定字型為思源黑體 */
+.app-viewport {
   font-family: "Noto Sans TC", sans-serif;
+}
+
+/* 設定 app 內容容器的捲動行為、拿掉卷軸寬度 */
+.app-content {
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
