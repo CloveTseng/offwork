@@ -133,46 +133,48 @@ defineExpose({ open, close, sheetRef, backdropRef, handleRef });
 </script>
 
 <template>
-  <!-- root 容器不定位，讓內部 absolute 仍相對父層（如 .app-content）定位 -->
-  <div
-    class="bottom-sheet-root"
-    :class="modelValue ? 'pointer-events-auto' : 'pointer-events-none'"
-  >
-    <!-- Backdrop -->
-    <transition name="backdrop" appear>
+  <ClientOnly>
+    <Teleport to="#app-overlay-root">
+      <!-- 外層鋪滿 app-wrapper；關閉時預設就不吃事件 -->
       <div
-        v-if="modelValue"
-        ref="backdropRef"
-        class="backdrop-layer absolute inset-0 z-40 bg-[#16161699]"
-        :style="{ '--drag': String(backdropOpacity) }"
-        @click="close"
-      ></div>
-    </transition>
-
-    <!-- Sheet -->
-    <transition name="bottomsheets" appear>
-      <nav
-        v-if="modelValue"
-        ref="sheetRef"
-        class="absolute inset-x-0 bottom-0 z-50 block overflow-y-auto rounded-t-[32px] bg-neutral-950"
-        :class="hasBottomBar ? 'px-6 pt-5' : 'px-6 pb-10 pt-5'"
-        role="dialog"
-        aria-modal="true"
+        class="pointer-events-none absolute inset-0"
+        :class="{ 'pointer-events-auto': modelValue }"
       >
-        <!-- 手把區（可拖曳） -->
-        <LayoutBottomBar
-          isInBottomSheet
-          ref="handleRef"
-          class="cursor-grab touch-none select-none active:cursor-grabbing"
-          :class="handleMarginBottom"
-          @pointerdown="onDragStart"
-        />
+        <!-- Backdrop -->
+        <transition name="backdrop" appear>
+          <div
+            v-if="modelValue"
+            ref="backdropRef"
+            class="backdrop-layer absolute inset-0 z-40 bg-[#16161699]"
+            :style="{ '--drag': String(backdropOpacity) }"
+            @click="close"
+          ></div>
+        </transition>
 
-        <!-- 內容插槽 -->
-        <slot />
-      </nav>
-    </transition>
-  </div>
+        <!-- Sheet -->
+        <transition name="bottomsheets" appear>
+          <nav
+            v-if="modelValue"
+            ref="sheetRef"
+            class="absolute inset-x-0 bottom-0 z-50 overflow-y-auto rounded-t-[32px] bg-neutral-950"
+            style="will-change: transform"
+            :class="hasBottomBar ? 'px-6 pt-5' : 'px-6 pb-10 pt-5'"
+            role="dialog"
+            aria-modal="true"
+          >
+            <LayoutBottomBar
+              isInBottomSheet
+              ref="handleRef"
+              class="cursor-grab touch-none select-none active:cursor-grabbing"
+              :class="handleMarginBottom"
+              @pointerdown="onDragStart"
+            />
+            <slot />
+          </nav>
+        </transition>
+      </div>
+    </Teleport>
+  </ClientOnly>
 </template>
 
 <style scoped>

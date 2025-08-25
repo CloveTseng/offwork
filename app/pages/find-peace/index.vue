@@ -3,20 +3,16 @@ useSeoMeta({
   title: "找回平靜 | 健康生活 OFFWORK APP",
   ogTitle: "找回平靜 | 健康生活 OFFWORK APP",
 });
+
+definePageMeta({
+  header: {
+    backTo: { path: "/", query: { openCeremony: "true" } },
+    title: "找回平靜",
+  },
+});
 </script>
 
 <template>
-  <h1
-    class="sticky top-0 bg-[#29292DCC] py-2.5 text-center text-xl font-bold text-white backdrop-blur-lg sm:top-14"
-  >
-    <NuxtLink
-      :to="{ path: '/', query: { openCeremony: 'true' } }"
-      class="absolute left-0 top-1/2 block -translate-y-1/2 py-2 pl-4 pr-2"
-    >
-      <img src="/icons/white-left-arrow.svg" alt="返回箭頭" />
-    </NuxtLink>
-    找回平靜
-  </h1>
   <main class="bg-neutral-950 px-4 pt-4">
     <!-- Tab -->
     <nav

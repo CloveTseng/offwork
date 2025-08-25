@@ -1,121 +1,135 @@
 <script setup>
 /* ──────────────────────────────────────────────
- * ① 路由 & 滾動狀態：換頁時把內容區捲回頂端
- *  - 桌面預覽時，真正捲動的是 .app-content（不是 window）
- *  - 手機/小螢幕時，可能是 window 在捲動
+ * ① 路由 / 滾動復位
+ *  - 桌面預覽真正捲動的是 .app-content
+ *  - 小螢幕有可能是 window 在捲動
  * ────────────────────────────────────────────── */
 const route = useRoute();
+const router = useRouter();
 const appContentRef = ref(null);
+const isClient = import.meta.client;
 
 /** 將 .app-content 與 window 都捲回頂端（雙保險） */
 function resetScroll() {
-  if (!import.meta.client) return;
+  if (!isClient) return;
   const el = appContentRef?.value;
   if (el) el.scrollTop = 0;
   window.scrollTo({ top: 0, behavior: "auto" });
 }
 
-/** 只有「路徑(path)」改變才重置（query 改變不會觸發） */
+/** 路徑(path)改變才復位（query 變更不處理） */
 watch(
   () => route.path,
   async () => {
-    // 等 DOM/class 切換完成（例如 overflow-hidden ↔︎ overflow-y-scroll）
-    await nextTick();
+    await nextTick(); // 等 overflow 類 class 切換完成
     resetScroll();
   },
 );
 
 /* ──────────────────────────────────────────────
- * ② 客戶端判斷：避免 SSR / hydration 在伺服器端動到 DOM
- * ────────────────────────────────────────────── */
-const isClient = import.meta.client;
-
-/* ──────────────────────────────────────────────
- * ③ 顯示當下時間：每分鐘整點校時，避免「越跑越飄」
+ * ② 狀態列時間（每分鐘整點校時）
  * ────────────────────────────────────────────── */
 const currentTime = ref("");
-let timer = null;
+let minuteTimerId = null;
 
-/** 以 HH:MM 方式渲染現在時間（手動補零） */
-function renderNow() {
+function renderNowHHMM() {
   const n = new Date();
-  currentTime.value = `${String(n.getHours()).padStart(2, "0")}:${String(n.getMinutes()).padStart(2, "0")}`;
+  currentTime.value =
+    `${String(n.getHours()).padStart(2, "0")}:` +
+    `${String(n.getMinutes()).padStart(2, "0")}`;
 }
 
-/** 排到「下一個整分」再觸發，維持長時間精準 */
-function scheduleNextMinute() {
+/** 排到下一個整分觸發，長時間仍準 */
+function scheduleNextMinuteTick() {
   const n = new Date();
   const ms = 60000 - (n.getSeconds() * 1000 + n.getMilliseconds());
-  timer = setTimeout(() => {
-    renderNow();
-    scheduleNextMinute(); // 重新排下一個整分
+  minuteTimerId = setTimeout(() => {
+    renderNowHHMM();
+    scheduleNextMinuteTick(); // 迭代下一個整分
   }, ms);
 }
 
-/** 清掉計時器（避免記憶體外洩或重複排程） */
-function clearTimer() {
-  if (timer) {
-    clearTimeout(timer);
-    timer = null;
+function clearMinuteTimer() {
+  if (minuteTimerId) {
+    clearTimeout(minuteTimerId);
+    minuteTimerId = null;
   }
 }
 
-/** 重新校時：先清舊計時器，再立刻渲染、重排下一個整分 */
-function resync() {
-  clearTimer();
-  renderNow();
-  scheduleNextMinute();
+/** 立即校時 + 重排下一個整分 */
+function resyncClock() {
+  clearMinuteTimer();
+  renderNowHHMM();
+  scheduleNextMinuteTick();
 }
 
 /* ──────────────────────────────────────────────
- * ④ 頁面可見性/焦點：回到分頁時重新校時（時間不會落後）
+ * ③ 全域事件（可見性 / 視窗焦點）
+ *  - 回到分頁或重新聚焦時重新校時，避免落後
  * ────────────────────────────────────────────── */
-const onVisibility = () => {
-  if (!document.hidden) resync();
-};
-const onFocus = () => resync();
+function onVisibility() {
+  if (!document.hidden) resyncClock();
+}
+function onFocus() {
+  resyncClock();
+}
 
-/* ──────────────────────────────────────────────
- * ⑤ 生命週期：掛載/卸載
- * ────────────────────────────────────────────── */
-onMounted(() => {
-  // 首次載入就把內容區捲回頂端（避免從其他頁帶著捲動位置回來）
-  resetScroll();
-
+function addGlobalListeners() {
   if (!isClient) return;
-  // 啟動時間顯示與精準排程
-  resync();
-  // 只綁一次全域事件，且使用具名 handler，卸載時才能正確移除
   document.addEventListener("visibilitychange", onVisibility, {
     passive: true,
   });
   window.addEventListener("focus", onFocus, { passive: true });
+}
+function removeGlobalListeners() {
+  if (!isClient) return;
+  document.removeEventListener("visibilitychange", onVisibility);
+  window.removeEventListener("focus", onFocus);
+}
+
+/* ──────────────────────────────────────────────
+ * ④ Header Meta（每頁透過 definePageMeta 注入）
+ *  - 右側按鈕：有宣告 header.right 才會在 template 綁 @right
+ * ────────────────────────────────────────────── */
+const headerMeta = computed(() => route.meta?.header || null);
+const hasHeaderMeta = computed(() => !!headerMeta.value);
+
+/** 右側按鈕點擊：支援 to 或 openParam（合併進 query） */
+function handleHeaderRight() {
+  const m = headerMeta.value;
+  if (!m) return;
+  if (m.right?.to) return router.push(m.right.to);
+  if (m.right?.openParam) {
+    const q = { ...route.query, ...m.right.openParam };
+    return router.replace({ query: q });
+  }
+}
+
+/* ──────────────────────────────────────────────
+ * ⑤ 生命週期 / HMR 清理
+ * ────────────────────────────────────────────── */
+onMounted(() => {
+  resetScroll(); // 初次載入也把內容區捲到頂
+  if (!isClient) return;
+  resyncClock(); // 啟動狀態列時間
+  addGlobalListeners(); // 綁一次全域事件
 });
 
 onUnmounted(() => {
-  // 清理計時器與事件監聽，保持乾淨
-  clearTimer();
-  if (isClient) {
-    document.removeEventListener("visibilitychange", onVisibility);
-    window.removeEventListener("focus", onFocus);
-  }
+  clearMinuteTimer();
+  removeGlobalListeners();
 });
 
-/* ──────────────────────────────────────────────
- * ⑥ HMR（開發模式熱更新）：重新載入前也要確實清理
- * ────────────────────────────────────────────── */
+/** HMR（開發模式）熱替換時也清乾淨，避免累積 */
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
-    clearTimer();
-    if (isClient) {
-      document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("focus", onFocus);
-    }
+    clearMinuteTimer();
+    removeGlobalListeners();
   });
 }
 
 /* ──────────────────────────────────────────────
- * A) 路徑白名單：完全相符才生效（不吃父層/包含）
+ * A) 路徑白名單（完全相符才生效）
  * ────────────────────────────────────────────── */
 // 1) 內容區「不可捲動」的路徑
 const NON_SCROLLABLE_PATHS = new Set([
@@ -136,7 +150,7 @@ const STATUSBAR_TRANSPARENT_PATHS = new Set([
 const currentPath = computed(() => route.path);
 
 /* ──────────────────────────────────────────────
- * B) 視覺與互動邏輯：由 computed 輸出 class
+ * B) 視覺 class（由白名單決定）
  * ────────────────────────────────────────────── */
 const isNonScrollable = computed(() =>
   NON_SCROLLABLE_PATHS.has(currentPath.value),
@@ -145,7 +159,7 @@ const isNonScrollable = computed(() =>
 const appContentScrollClass = computed(() =>
   isNonScrollable.value
     ? "overflow-hidden"
-    : "sm:overflow-x-hidden sm:overflow-y-scroll",
+    : "overflow-x-hidden overflow-y-scroll",
 );
 
 // 先判斷透明，其次 secondary，最後預設半透+模糊
@@ -158,52 +172,62 @@ const statusBarBgClass = computed(() => {
 </script>
 
 <template>
-  <!--
-    最外層：讓「手機殼」在桌面置中顯示；小螢幕直接滿版
-    - h-dvh：滿高（支援動態瀏覽器工具列高度）
-    - sm:flex：桌面才置中
-  -->
+  <!-- 外層容器：桌面置中，小螢幕滿版 -->
   <div class="h-dvh items-center justify-center sm:flex sm:py-8">
-    <!--
-      模擬手機容器：負責放 iPhone 外框（用 ::before / ::after 畫）
-      - relative：提供定位參考給外框與內部絕對定位元素
-    -->
     <div class="app-wrapper | relative h-full sm:h-[812px] sm:w-[375px]">
-      <!--
-        APP 內容：實際顯示頁面的地方
-        - ref=appContentRef：桌面預覽時「真正的滾動容器」
-        - :class="appContentScrollClass"：「不可捲動」的白名單
-      -->
-      <section
-        ref="appContentRef"
-        class="app-content | relative size-full bg-neutral-950 sm:rounded-[50px]"
-        :class="appContentScrollClass"
+      <div
+        class="app-viewport | relative size-full bg-neutral-950 sm:overflow-hidden sm:rounded-[50px]"
       >
-        <!--
-          頂部狀態列（僅桌面顯示，用來模擬動態島與系統狀態）
-          - sticky top-0：捲動時固定在頂
-          - z-40：壓在內容之上
-          - 背景色根據 statusBarBgClass 白名單切換
-        -->
-        <div
-          class="sticky top-0 z-40 hidden grid-cols-3 items-center py-2.5 text-center text-white sm:grid"
-          :class="statusBarBgClass"
+        <section
+          ref="appContentRef"
+          class="app-content | relative size-full"
+          :class="appContentScrollClass"
         >
-          <span>{{ currentTime }}</span>
-          <img src="/dynamic-island.svg" alt="island" />
-          <img src="/status.svg" alt="status" />
-        </div>
-        <!-- 子頁面會透過 <slot/> 插進來 -->
-        <slot />
-      </section>
+          <!-- 狀態列（背景 class 由白名單切換） -->
+          <header
+            class="sticky top-0 z-40 text-white"
+            :class="statusBarBgClass"
+          >
+            <div
+              class="hidden grid-cols-3 items-center py-2.5 text-center sm:grid"
+            >
+              <span>{{ currentTime }}</span>
+              <img src="/dynamic-island.svg" alt="island" />
+              <img src="/status.svg" alt="status" />
+            </div>
+            <LayoutHeaderBar
+              v-if="hasHeaderMeta"
+              :title="headerMeta.title"
+              :back-to="headerMeta.backTo"
+              v-on="headerMeta.right ? { right: handleHeaderRight } : {}"
+            />
+          </header>
+
+          <!-- 子頁面插入點 -->
+          <slot />
+        </section>
+
+        <!-- Teleport 目標：在視窗容器內，會被 overflow-hidden 裁切 -->
+        <div
+          id="app-overlay-root"
+          class="pointer-events-none absolute inset-0"
+        ></div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-/* 設定 app 內容容器的字型為思源黑體 */
-.app-content {
+/* 設定字型為思源黑體 */
+.app-viewport {
   font-family: "Noto Sans TC", sans-serif;
+}
+
+/* 設定 app 內容容器的捲動行為、拿掉卷軸寬度 */
+.app-content {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 @media (min-width: 640px) {
@@ -215,6 +239,7 @@ const statusBarBgClass = computed(() => {
     position: absolute;
     bottom: calc(0% - 10px);
     left: 50%;
+    z-index: 90;
     transform: translate(-50%);
     background-image: url(/iphone.svg);
     background-repeat: no-repeat;
@@ -230,17 +255,13 @@ const statusBarBgClass = computed(() => {
     position: absolute;
     top: calc(0% - 10px);
     left: 50%;
+    z-index: 90;
     transform: translate(-50%);
     background-image: url(/iphone.svg);
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: top center;
     pointer-events: none;
-  }
-
-  /* 內容區（桌面）隱藏滾動條外觀（仍可捲動） */
-  .app-content {
-    scrollbar-width: none;
   }
 }
 </style>

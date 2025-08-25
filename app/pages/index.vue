@@ -170,7 +170,7 @@ watch(showFeelingCalm, (open) => {
     <div
       class="relative z-10 mx-auto mb-11 flex flex-col items-center gap-2 text-center text-md text-neutral"
     >
-      <h2 class="font-medium">
+      <h2>
         {{
           isRelieved ? "讓火山降溫，從下班開始" : "火山悶燒中，你還不下班嗎？"
         }}
