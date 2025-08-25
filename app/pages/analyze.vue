@@ -11,8 +11,8 @@ definePageMeta({
 });
 </script>
 <template>
-  <main class="bg-neutral-950 px-4 grid gap-4">
-    <div class=" text-white">
+  <main class="bg-neutral-950 px-4 ">
+    <div class=" text-white grid gap-4 py-4">
       <!-- 日期及日曆 -->
       <section class="flex justify-between items-center">
         <NuxtLink to="/" class="bg-[#333339] rounded-full p-2 text-center transition">
@@ -26,8 +26,9 @@ definePageMeta({
         </NuxtLink>
       </section>
       <!-- 爆發指數 -->
-      <section></section>
-      <div></div>
+      <section>
+        <ChartsHalfCircleBar />
+      </section>
     </div>
     <!-- nav -->
     <div class="sticky inset-x-0 bottom-2">
