@@ -373,7 +373,7 @@ watch(showFeelingCalm, (open) => {
       <NuxtLink to="/yelling" class="block flex-1 rounded-full bg-white py-3">
         繼續大吼
       </NuxtLink>
-      <NuxtLink to="#" class="block flex-1 rounded-full bg-alert-success py-3">
+      <NuxtLink to="/analyze" class="block flex-1 rounded-full bg-alert-success py-3">
         前往分析
       </NuxtLink>
     </div>
@@ -427,7 +427,7 @@ watch(showFeelingCalm, (open) => {
       >
         繼續呼吸
       </NuxtLink>
-      <NuxtLink to="#" class="block flex-1 rounded-full bg-alert-success py-3">
+      <NuxtLink to="/analyze" class="block flex-1 rounded-full bg-alert-success py-3">
         前往分析
       </NuxtLink>
     </div>
