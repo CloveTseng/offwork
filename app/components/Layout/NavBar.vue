@@ -56,10 +56,10 @@
       <!-- 分析 -->
       <li>
         <NuxtLink
-          to="#"
+          to="/analyze"
           class="flex flex-col items-center rounded-full py-1 transition hover:text-white"
           :class="
-            $route.path === '#'
+            $route.path === '/analyze'
               ? 'bg-neutral-900 text-white'
               : 'text-neutral-500'
           "
