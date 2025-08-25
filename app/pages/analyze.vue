@@ -29,6 +29,24 @@ definePageMeta({
       <section>
         <ChartsHalfCircleBar />
       </section>
+      <!-- 火山君關心你 -->
+      <section>
+        <div class="grid grid-cols-4 pb-4 gap-2">
+          <div class="size-[80px] rounded-full p-1">
+            <div class="h-full w-full overflow-hidden rounded-full bg-secondary">
+              <img
+                src="/images/home/normal-circle.webp"
+                alt="綠色火山君"
+                class="scale-100 object-top"
+              />
+            </div>
+          </div>
+          <div class="bg-[#A4CD44] rounded-3xl col-span-3">
+            <p class="py-4 px-5 font-medium text-[#27292B] relative before:absolute before:top-1/3 before:-translate-y-1/2 before:right-[calc(100%-2px)] before:border-b-[10px] before:border-t-[10px] before:border-r-[20px] before:border-b-transparent before:border-t-transparent before:border-r-[#A4CD44]
+            ">還好嗎？你似乎壓力很大，吼一吼有沒有比較舒服啊～</p>
+          </div>
+        </div>
+      </section>
     </div>
     <!-- nav -->
     <div class="sticky inset-x-0 bottom-2">
