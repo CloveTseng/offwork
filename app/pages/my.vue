@@ -7,19 +7,13 @@ useSeoMeta({
 
 <template>
   <main class="bg-neutral-950">
-    <div class="px-4 pt-4 text-white">
+    <div class="p-4 text-white">
       <!-- 使用者區塊 -->
       <section class="mb-3 flex items-center py-4">
         <div class="me-3">
           <div class="size-[72px] rounded-full border border-primary p-1">
-            <div
-              class="h-full w-full overflow-hidden rounded-full bg-secondary"
-            >
-              <img
-                src="/images/home/green-volcano.svg"
-                alt="綠色火山君"
-                class="mt-0.5 scale-125 object-top"
-              />
+            <div class="h-full w-full overflow-hidden rounded-full">
+              <img src="/images/home/normal-circle.webp" alt="綠色火山君" />
             </div>
           </div>
         </div>
@@ -100,7 +94,7 @@ useSeoMeta({
               unit: '分',
               color: 'text-alert-success',
               url: '/',
-              icon: '/images/home/volcano-image-breathing.svg',
+              icon: '/images/home/feeling-calm.webp',
               iconBg: 'bg-secondary',
             }"
           />
@@ -111,14 +105,14 @@ useSeoMeta({
               unit: '時',
               color: 'text-alert-success',
               url: '/',
-              icon: '/images/home/volcano-sleep.svg',
+              icon: '/images/home/sleep-circle.webp',
               iconBg: 'bg-secondary-800',
             }"
           />
         </div>
       </section>
       <!-- notify -->
-      <section class="mb-4 rounded-3xl bg-neutral-900 px-6 py-7">
+      <section class="mb-3 rounded-3xl bg-neutral-900 px-6 py-7">
         <div class="mb-5 flex items-center">
           <div class="me-2">
             <img src="/icons/my/alarm-add-fill.svg" alt="通知" />
@@ -145,7 +139,7 @@ useSeoMeta({
         </div>
       </section>
       <!-- nav -->
-      <div class="sticky inset-x-0 bottom-2">
+      <div class="sticky inset-x-0 bottom-3">
         <LayoutNavBar />
         <LayoutBottomBar class="mb-2 mt-[27px]" />
       </div>

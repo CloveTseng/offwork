@@ -9,13 +9,13 @@
           <div
             :class="`rounded-full ${cardButton.iconBg} size-12 overflow-hidden`"
           >
-            <img :src="cardButton.icon" alt="頭像" class="-mt-1" />
+            <img :src="cardButton.icon" alt="頭像" />
           </div>
         </div>
         <div>
           <div>
             <div class="flex">
-              <p class="text-xs leading-[1rem] text-neutral-300">
+              <p class="min-h-5 text-xs leading-[1rem] text-neutral-300">
                 {{ cardButton.title }}
               </p>
               <div
