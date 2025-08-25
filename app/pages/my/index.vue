@@ -25,7 +25,7 @@ useSeoMeta({
         </div>
         <div class="ms-auto p-2">
           <NuxtLink to="/">
-            <img src="/icons/my/setting.svg" alt="" />
+            <img src="/icons/my/setting.svg" alt="設定按鈕" />
           </NuxtLink>
         </div>
       </section>
@@ -93,7 +93,7 @@ useSeoMeta({
               data: '3',
               unit: '分',
               color: 'text-alert-success',
-              url: '/',
+              url: '/my/target',
               icon: '/images/home/feeling-calm.webp',
               iconBg: 'bg-secondary',
             }"
@@ -104,7 +104,7 @@ useSeoMeta({
               data: '8',
               unit: '時',
               color: 'text-alert-success',
-              url: '/',
+              url: '/my/target',
               icon: '/images/home/sleep-circle.webp',
               iconBg: 'bg-secondary-800',
             }"
