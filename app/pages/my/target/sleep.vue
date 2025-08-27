@@ -2,6 +2,8 @@
 const isOpen = ref(false);
 const currentMin = ref(0);
 const currentHour = ref(8);
+const tempMin = ref(0);
+const tempHour = ref(0);
 const hourScrollbar = useTemplateRef("hourRef");
 const minScrollbar = useTemplateRef("minRef");
 
@@ -15,20 +17,30 @@ const anchor = async () => {
     (hourScrollbar.value.scrollHeight - 152 - 23 * 4) / 24 + 4;
   // 安全訪問 ref
   if (hourScrollbar.value && minScrollbar.value) {
+    tempHour.value = currentHour.value;
+    tempMin.value = currentMin.value;
     hourScrollbar.value.scrollTop = hourInterval * currentHour.value;
     minScrollbar.value.scrollTop = minInterval * currentMin.value;
   }
+};
+
+const handleHourScroll = () => {
+  const hourInterval =
+    (hourScrollbar.value.scrollHeight - 152 - 23 * 4) / 24 + 4;
+  tempHour.value = Math.floor(hourScrollbar.value.scrollTop / hourInterval);
+};
+
+const handleMinScroll = () => {
+  const minInterval = (minScrollbar.value.scrollHeight - 152 - 59 * 4) / 60 + 4;
+  tempMin.value = Math.floor(minScrollbar.value.scrollTop / minInterval);
 };
 
 const cancleHandler = () => {
   isOpen.value = false;
 };
 const submitHandler = () => {
-  const minInterval = (minScrollbar.value.scrollHeight - 152 - 59 * 4) / 60 + 4;
-  const hourInterval =
-    (hourScrollbar.value.scrollHeight - 152 - 23 * 4) / 24 + 4;
-  currentHour.value = Math.floor(hourScrollbar.value.scrollTop / hourInterval);
-  currentMin.value = Math.floor(minScrollbar.value.scrollTop / minInterval);
+  currentHour.value = tempHour.value;
+  currentMin.value = tempMin.value;
   isOpen.value = false;
 };
 
@@ -81,11 +93,12 @@ useSeoMeta({
         <div class="flex w-full justify-between text-md">
           <ul
             ref="hourRef"
+            @scroll="handleHourScroll"
             class="scrollbar-hide gradient-background flex snap-y flex-col gap-1 overflow-scroll py-[76px] text-[#B2B2B2]"
           >
             <li
               v-for="value in 24"
-              class="block min-h-[34px] snap-center text-h5 font-medium"
+              :class="`block min-h-[34px] snap-center text-h5 font-medium ${tempHour == value - 1 ? 'text-primary' : ''}`"
             >
               {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
             </li>
@@ -94,10 +107,11 @@ useSeoMeta({
           <ul
             ref="minRef"
             class="scrollbar-hide gradient-background relative flex snap-y flex-col gap-1 overflow-scroll py-[76px] text-[#B2B2B2]"
+            @scroll="handleMinScroll"
           >
             <li
               v-for="value in 60"
-              class="block min-h-[34px] snap-center text-h5 font-medium"
+              :class="`block min-h-[34px] snap-center text-h5 font-medium ${tempMin == value - 1 ? 'text-primary' : ''}`"
             >
               {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
             </li>
