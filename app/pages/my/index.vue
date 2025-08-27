@@ -93,7 +93,7 @@ useSeoMeta({
               data: '3',
               unit: '分',
               color: 'text-alert-success',
-              url: '/my/target',
+              url: '/my/target/breath',
               icon: '/images/home/feeling-calm.webp',
               iconBg: 'bg-secondary',
             }"
@@ -104,7 +104,7 @@ useSeoMeta({
               data: '8',
               unit: '時',
               color: 'text-alert-success',
-              url: '/my/target',
+              url: '/my/target/sleep',
               icon: '/images/home/sleep-circle.webp',
               iconBg: 'bg-secondary-800',
             }"

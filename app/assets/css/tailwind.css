@@ -36,4 +36,11 @@
       -webkit-mask-composite: xor; /* Safari 相容 */
     }
   }
+
+  /* 隱藏 scrollbar */
+  .scrollbar-hide {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
