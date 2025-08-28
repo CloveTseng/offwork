@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="cardButton.url"
-    class="border-gradient block rounded-2xl bg-neutral-950 p-4"
+    class="border-gradient gradient-card-border block min-w-[136px] rounded-2xl bg-neutral-950 p-4 active:bg-neutral-1000"
   >
     <div class="flex items-end">
       <div class="flex grow items-center">

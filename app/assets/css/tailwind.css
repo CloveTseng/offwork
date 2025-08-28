@@ -13,4 +13,34 @@
       #adacc529 100%
     );
   }
+
+  .gradient-card-border {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 1px; /* 邊框寬度 */
+      background: linear-gradient(
+        95.38deg,
+        rgba(192, 199, 220, 0.12) 1.53%,
+        rgba(57, 57, 63, 0.09) 30.18%,
+        rgba(173, 172, 197, 0.096) 97.66%
+      );
+      border-radius: inherit; /* 繼承圓角 */
+
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor; /* Safari 相容 */
+    }
+  }
+
+  /* 隱藏 scrollbar */
+  .scrollbar-hide {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
