@@ -48,7 +48,7 @@ definePageMeta({
         <li>
           <NuxtLink
             to="/find-peace/calm-breathe"
-            class="gradient-border-1px rounded-[32px]"
+            class="gradient-card-border rounded-[32px]"
           >
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
@@ -71,7 +71,7 @@ definePageMeta({
         <li>
           <NuxtLink
             to="/find-peace/calm-breathe"
-            class="gradient-border-1px rounded-[32px]"
+            class="gradient-card-border rounded-[32px]"
           >
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
@@ -94,7 +94,7 @@ definePageMeta({
         <li>
           <NuxtLink
             to="/find-peace/calm-breathe"
-            class="gradient-border-1px rounded-[32px]"
+            class="gradient-card-border rounded-[32px]"
           >
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
@@ -117,7 +117,7 @@ definePageMeta({
         <li>
           <NuxtLink
             to="/find-peace/calm-breathe"
-            class="gradient-border-1px rounded-[32px]"
+            class="gradient-card-border rounded-[32px]"
           >
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"
@@ -142,7 +142,7 @@ definePageMeta({
         <li>
           <NuxtLink
             to="/find-peace/calm-breathe"
-            class="gradient-border-1px rounded-[32px]"
+            class="gradient-card-border rounded-[32px]"
           >
             <article
               class="flex items-center gap-5 rounded-[32px] bg-neutral-900 p-5"

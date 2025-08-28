@@ -254,7 +254,7 @@ watch(showFeelingCalm, (open) => {
     </div>
     <ul class="space-y-4">
       <li>
-        <NuxtLink to="/yelling" class="gradient-border-1px rounded-[32px]">
+        <NuxtLink to="/yelling" class="gradient-card-border rounded-[32px]">
           <article
             class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
           >
@@ -274,7 +274,7 @@ watch(showFeelingCalm, (open) => {
         </NuxtLink>
       </li>
       <li>
-        <NuxtLink to="/find-peace" class="gradient-border-1px rounded-[32px]">
+        <NuxtLink to="/find-peace" class="gradient-card-border rounded-[32px]">
           <article
             class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
           >
@@ -373,7 +373,10 @@ watch(showFeelingCalm, (open) => {
       <NuxtLink to="/yelling" class="block flex-1 rounded-full bg-white py-3">
         繼續大吼
       </NuxtLink>
-      <NuxtLink to="/analyze" class="block flex-1 rounded-full bg-alert-success py-3">
+      <NuxtLink
+        to="/analyze"
+        class="block flex-1 rounded-full bg-alert-success py-3"
+      >
         前往分析
       </NuxtLink>
     </div>
@@ -427,7 +430,10 @@ watch(showFeelingCalm, (open) => {
       >
         繼續呼吸
       </NuxtLink>
-      <NuxtLink to="/analyze" class="block flex-1 rounded-full bg-alert-success py-3">
+      <NuxtLink
+        to="/analyze"
+        class="block flex-1 rounded-full bg-alert-success py-3"
+      >
         前往分析
       </NuxtLink>
     </div>
