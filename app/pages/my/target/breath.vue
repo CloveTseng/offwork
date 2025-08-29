@@ -19,7 +19,7 @@ useSeoMeta({
     >
       <div class="mb-3 flex items-center justify-between gap-1">
         <p class="text-h5 font-bold text-alert-success">
-          {{ currentMin }}<span class="ms-0.5 text-sm"> 分</span>
+          {{ currentMin }}<span class="ms-0.5 text-sm font-normal"> 分</span>
         </p>
         <img
           src="/icons/my/arrow-left-s-line.svg"
@@ -27,12 +27,14 @@ useSeoMeta({
           class="rotate-180"
         />
       </div>
-      <p class="text-start text-sm text-neutral-300">呼吸進行時長</p>
+      <p class="text-start text-sm font-normal text-neutral-300">
+        呼吸進行時長
+      </p>
     </button>
   </section>
   <!-- 時間設定bar -->
-  <div class="sticky inset-x-0 bottom-3 mt-auto">
-    <LayoutBottomBar class="mb-2 mt-[27px]" v-if="!isOpen" />
+  <div class="sticky inset-x-0 bottom-2 mt-auto">
+    <LayoutBottomBar class="mt-[27px]" v-if="!isOpen" />
     <LayoutBottomSheet
       handleMarginBottom="mb-5"
       v-model="isOpen"

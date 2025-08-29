@@ -57,11 +57,13 @@ useSeoMeta({
     >
       <div class="mb-3 flex items-center justify-between gap-1">
         <div class="flex items-center text-h5 font-bold text-alert-success">
-          <p>{{ currentHour }}<span class="ms-2 text-sm">時</span></p>
+          <p>
+            {{ currentHour }}<span class="ms-2 text-sm font-normal">時</span>
+          </p>
 
           <p v-if="currentMin > 0" class="ms-2 text-h5">
             {{ currentMin >= 10 ? currentMin : `0${currentMin}`
-            }}<span class="ms-2 text-sm">分</span>
+            }}<span class="ms-2 text-sm font-normal">分</span>
           </p>
         </div>
         <img
@@ -70,12 +72,12 @@ useSeoMeta({
           class="rotate-180"
         />
       </div>
-      <p class="text-start text-sm text-neutral-300">睡眠時長</p>
+      <p class="text-start text-sm font-normal text-neutral-300">睡眠時長</p>
     </button>
   </section>
   <!-- 時間設定bar -->
-  <div class="sticky inset-x-0 bottom-3 mt-auto">
-    <LayoutBottomBar class="mb-2 mt-[27px]" v-if="!isOpen" />
+  <div class="sticky inset-x-0 bottom-2 mt-auto">
+    <LayoutBottomBar class="mt-[27px]" v-if="!isOpen" />
     <LayoutBottomSheet
       handleMarginBottom="mb-5"
       v-model="isOpen"
@@ -146,11 +148,5 @@ useSeoMeta({
     #b2b2b2 75%,
     #b2b2b24d 100%
   );
-}
-
-.test {
-  .gradient-text {
-    mask: red;
-  }
 }
 </style>

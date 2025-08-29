@@ -31,7 +31,9 @@ useSeoMeta({
         class="mb-5 flex items-center justify-between font-bold text-white"
       >
         <h2 class="text-lg">{{ currentPage == "breath" ? "呼吸" : "睡眠" }}</h2>
-        <NuxtLink class="py-[9px] text-md font-bold">通知設定</NuxtLink>
+        <NuxtLink to="/my/notify" class="py-[9px] text-md font-bold"
+          >通知設定</NuxtLink
+        >
       </section>
       <!-- feedback box -->
       <section class="flex gap-2 pb-[2px]">
@@ -64,6 +66,7 @@ useSeoMeta({
     </div>
     <!-- 按鈕 -->
     <NuxtPage />
+
     <LayoutBottomSheet
       handleMarginBottom="mb-5"
       v-model="isOpen"

@@ -13,33 +13,31 @@
           </div>
         </div>
         <div>
-          <div>
-            <div class="flex">
-              <p class="min-h-5 text-xs leading-[1rem] text-neutral-300">
-                {{ cardButton.title }}
-              </p>
+          <div class="flex items-center">
+            <p class="min-h-5 text-xs text-neutral-300">
+              {{ cardButton.title }}
+            </p>
+            <div
+              v-if="cardButton.isUpStandard != undefined"
+              class="ms-2 flex items-center"
+            >
               <div
-                v-if="cardButton.isUpStandard != undefined"
-                class="ms-2 flex items-center"
+                :class="`me-1 ${cardButton.isUpStandard ? 'bg-alert-success' : 'bg-accent'} size-2 rounded-full`"
+              ></div>
+              <p
+                :class="`text-xs font-medium ${cardButton.isUpStandard ? 'text-alert-success' : 'text-accent'} `"
               >
-                <div
-                  :class="`me-1 ${cardButton.isUpStandard ? 'bg-alert-success' : 'bg-accent'} size-2 rounded-full`"
-                ></div>
-                <p
-                  :class="`text-xs font-medium ${cardButton.isUpStandard ? 'text-alert-success' : 'text-accent'} `"
-                >
-                  {{ cardButton.isUpStandard ? "達標" : "未達標" }}
-                </p>
-              </div>
-            </div>
-            <div class="flex">
-              <p :class="`text-h5 font-bold ${cardButton.color}`">
-                {{ cardButton.data }}
-              </p>
-              <p :class="`ms-0.5 mt-3 text-xs ${cardButton.color}`">
-                {{ cardButton.unit }}
+                {{ cardButton.isUpStandard ? "達標" : "未達標" }}
               </p>
             </div>
+          </div>
+          <div class="flex">
+            <p :class="`text-h5 font-bold ${cardButton.color}`">
+              {{ cardButton.data }}
+            </p>
+            <p :class="`ms-0.5 mt-3 text-xs ${cardButton.color}`">
+              {{ cardButton.unit }}
+            </p>
           </div>
         </div>
       </div>
