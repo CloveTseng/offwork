@@ -4,7 +4,9 @@ useSeoMeta({
   ogTitle: "我的 | 健康生活 OFFWORK APP",
 });
 const nav = useTemplateRef("nav");
+const haveData = ref(false);
 const isIntersecting = ref(true);
+const showCeremonyNav = ref(false);
 let observer = null;
 // 因為需要觀察火山君自我介紹頁面是否離開視線
 // IntersectionObserver(callback,[option])
@@ -17,6 +19,9 @@ onMounted(() => {
   observer = createObserver();
   observer.observe(nav.value);
   console.log("建立監聽火山君物件");
+  if (import.meta.client) {
+    haveData.value = sessionStorage.getItem("isRelieved") == "true";
+  }
 });
 onUnmounted(() => {
   observer.disconnect();
@@ -70,7 +75,11 @@ onUnmounted(() => {
       </section>
 
       <!-- 今天做了什麼 -->
-      <section class="mb-3 rounded-3xl bg-neutral-900 px-6 pb-7 pt-4">
+
+      <section
+        v-if="haveData"
+        class="mb-3 rounded-3xl bg-neutral-900 px-6 pb-7 pt-4"
+      >
         <div class="mb-1 flex items-center py-[9.5px]">
           <h2 class="text-lg font-bold">今天做了什麼？</h2>
           <div class="ms-auto">
@@ -118,6 +127,27 @@ onUnmounted(() => {
           />
         </div>
       </section>
+      <button
+        v-else
+        class="gradient-card-border relative mb-3 w-full overflow-hidden rounded-3xl bg-neutral px-6 py-[25.5px] text-start"
+        @click="showCeremonyNav = true"
+      >
+        <div class="max-w-[207px]">
+          <h1 class="mb-1 text-lg font-bold text-alert-success">
+            開始下班儀式
+          </h1>
+          <p class="text-xs text-neutral-300">
+            電腦要關機才不會當機，大腦也要下班才不會炸裂。
+          </p>
+        </div>
+        <div class="absolute -right-[39.49px] -top-5 z-10 w-[182.49px]">
+          <img
+            src="/images/home/green-volcano.webp"
+            alt="火山軍"
+            class="mask-alpha"
+          />
+        </div>
+      </button>
       <!-- 深呼吸＋好好睡 = 情緒不崩潰 -->
       <section class="mb-3 rounded-3xl bg-neutral-900 px-6 py-7">
         <div class="mb-3">
@@ -182,6 +212,86 @@ onUnmounted(() => {
       <div class="sticky inset-x-0 bottom-2">
         <LayoutNavBar />
         <LayoutBottomBar class="mb-2 mt-[27px]" />
+        <!-- 下班了，也讓腦袋收工吧！ -->
+        <LayoutBottomSheet
+          v-model="showCeremonyNav"
+          hasBottomBar
+          :threshold="0.3"
+          :backdrop-fade="0.6"
+        >
+          <div class="mb-6 text-center">
+            <h3 class="mb-2 text-xl font-bold text-white">
+              下班了，也讓腦袋收工吧！
+            </h3>
+            <p class="text-md text-neutral-300">你現在的狀態如何呢？</p>
+          </div>
+          <ul class="space-y-4">
+            <li>
+              <NuxtLink
+                to="/yelling"
+                class="gradient-card-border rounded-[32px]"
+              >
+                <article
+                  class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
+                >
+                  <img
+                    src="/images/home/eruption.webp"
+                    alt="感覺有點煩"
+                    class="w-[120px]"
+                  />
+                  <div>
+                    <h4 class="mb-1 text-md font-bold text-white">
+                      感覺有點煩
+                    </h4>
+                    <p
+                      class="flex items-center gap-0.5 text-md text-neutral-300"
+                    >
+                      讓我吼一吼
+                      <img src="/icons/right-arrow.svg" alt="右箭頭" />
+                    </p>
+                  </div>
+                </article>
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                to="/find-peace"
+                class="gradient-card-border rounded-[32px]"
+              >
+                <article
+                  class="flex items-center gap-5 rounded-[32px] bg-neutral p-5"
+                >
+                  <img
+                    src="/images/home/breath.webp"
+                    alt="想找回平靜"
+                    class="w-[120px]"
+                  />
+                  <div>
+                    <h4 class="mb-1 text-md font-bold text-white">
+                      想找回平靜
+                    </h4>
+                    <p
+                      class="flex items-center gap-0.5 text-md text-neutral-300"
+                    >
+                      來吸幾口氣
+                      <img src="/icons/right-arrow.svg" alt="右箭頭" />
+                    </p>
+                  </div>
+                </article>
+              </NuxtLink>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="w-full rounded-full bg-neutral-900 px-6 py-3 text-center text-md font-bold text-neutral-100"
+                @click="showCeremonyNav = false"
+              >
+                先躺平，晚點再說
+              </button>
+            </li>
+          </ul>
+          <LayoutBottomBar class="mb-2 mt-[27px]" />
+        </LayoutBottomSheet>
       </div>
     </div>
   </main>
