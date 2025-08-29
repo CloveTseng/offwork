@@ -44,9 +44,6 @@ const notifyDayContext = computed(() => {
   if (notify.days.length < 1) {
     return "未排定";
   }
-  if (notify.days.length == 7) {
-    return "每天";
-  }
   if (
     notify.days.length == 5 &&
     notify.days.every((item) =>
@@ -56,9 +53,9 @@ const notifyDayContext = computed(() => {
     return "平日";
   }
   const textList = notify.days.map((item) => {
-    return `週${daysList.value[item].chinese}`;
+    return daysList.value[item].chinese;
   });
-  return textList.join("、");
+  return `週${textList.join("、")}`;
 });
 
 const switchType = (type) => {
