@@ -128,7 +128,7 @@ const switchType = (type) => {
     <div
       :class="`${notify.isOpenDetail ? 'pointer-events-auto z-50 -translate-y-0 opacity-100' : 'pointer-events-none -mb-[120px] -translate-y-6 opacity-0'} mt-6 px-4 transition-all duration-300`"
     >
-      <div class="mb-2 flex items-center gap-[0.5px]">
+      <div class="mb-2 flex items-center justify-between gap-[0.5px]">
         <div
           class="relative p-1 text-xs font-normal"
           v-for="item in daysList"
