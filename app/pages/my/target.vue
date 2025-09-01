@@ -15,7 +15,9 @@ useSeoMeta({
 <template>
   <main class="flex h-full flex-col">
     <!-- 功能列 -->
-    <section class="flex items-center justify-between px-4 py-3">
+    <section
+      class="sticky flex items-center justify-between bg-neutral-950 px-4 py-3 sm:top-[56px]"
+    >
       <NuxtLink to="/my">
         <img src="/icons/my/arrow-left-s-line.svg" alt="返回"
       /></NuxtLink>
@@ -31,7 +33,9 @@ useSeoMeta({
         class="mb-5 flex items-center justify-between font-bold text-white"
       >
         <h2 class="text-lg">{{ currentPage == "breath" ? "呼吸" : "睡眠" }}</h2>
-        <NuxtLink class="py-[9px] text-md font-bold">通知設定</NuxtLink>
+        <NuxtLink to="/my/notify" class="py-[9px] text-md font-bold"
+          >通知設定</NuxtLink
+        >
       </section>
       <!-- feedback box -->
       <section class="flex gap-2 pb-[2px]">
@@ -64,6 +68,7 @@ useSeoMeta({
     </div>
     <!-- 按鈕 -->
     <NuxtPage />
+
     <LayoutBottomSheet
       handleMarginBottom="mb-5"
       v-model="isOpen"

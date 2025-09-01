@@ -4,35 +4,11 @@ const currentMin = ref(0);
 const currentHour = ref(8);
 const tempMin = ref(0);
 const tempHour = ref(0);
-const hourScrollbar = useTemplateRef("hourRef");
-const minScrollbar = useTemplateRef("minRef");
 
 // 定位時間bar
 const anchor = async () => {
   isOpen.value = true; // 先打開 BottomSheet
-
   await nextTick(); // 等待 DOM 更新
-  const minInterval = (minScrollbar.value.scrollHeight - 152 - 59 * 4) / 60 + 4;
-  const hourInterval =
-    (hourScrollbar.value.scrollHeight - 152 - 23 * 4) / 24 + 4;
-  // 安全訪問 ref
-  if (hourScrollbar.value && minScrollbar.value) {
-    tempHour.value = currentHour.value;
-    tempMin.value = currentMin.value;
-    hourScrollbar.value.scrollTop = hourInterval * currentHour.value;
-    minScrollbar.value.scrollTop = minInterval * currentMin.value;
-  }
-};
-
-const handleHourScroll = () => {
-  const hourInterval =
-    (hourScrollbar.value.scrollHeight - 152 - 23 * 4) / 24 + 4;
-  tempHour.value = Math.floor(hourScrollbar.value.scrollTop / hourInterval);
-};
-
-const handleMinScroll = () => {
-  const minInterval = (minScrollbar.value.scrollHeight - 152 - 59 * 4) / 60 + 4;
-  tempMin.value = Math.floor(minScrollbar.value.scrollTop / minInterval);
 };
 
 const cancleHandler = () => {
@@ -56,13 +32,17 @@ useSeoMeta({
       @click.stop="anchor"
     >
       <div class="mb-3 flex items-center justify-between gap-1">
-        <div class="flex items-center text-h5 font-bold text-alert-success">
-          <p>{{ currentHour }}<span class="ms-2 text-sm">時</span></p>
-
-          <p v-if="currentMin > 0" class="ms-2 text-h5">
-            {{ currentMin >= 10 ? currentMin : `0${currentMin}`
-            }}<span class="ms-2 text-sm">分</span>
+        <div
+          class="flex items-baseline gap-1 text-h5 font-bold text-alert-success"
+        >
+          <p>
+            {{ currentHour }}
           </p>
+          <p class="text-sm font-normal">時</p>
+          <p v-if="currentMin > 0" class="text-h5">
+            {{ currentMin >= 10 ? currentMin : `0${currentMin}` }}
+          </p>
+          <p v-if="currentMin > 0" class="text-sm font-normal">分</p>
         </div>
         <img
           src="/icons/my/arrow-left-s-line.svg"
@@ -70,12 +50,12 @@ useSeoMeta({
           class="rotate-180"
         />
       </div>
-      <p class="text-start text-sm text-neutral-300">睡眠時長</p>
+      <p class="text-start text-sm font-normal text-neutral-300">睡眠時長</p>
     </button>
   </section>
   <!-- 時間設定bar -->
-  <div class="sticky inset-x-0 bottom-3 mt-auto">
-    <LayoutBottomBar class="mb-2 mt-[27px]" v-if="!isOpen" />
+  <div class="sticky inset-x-0 bottom-2 mt-auto">
+    <LayoutBottomBar class="mt-[27px]" v-if="!isOpen" />
     <LayoutBottomSheet
       handleMarginBottom="mb-5"
       v-model="isOpen"
@@ -90,32 +70,34 @@ useSeoMeta({
           class="pointer-events-none absolute left-0 right-0 top-[calc(50%-7px)] z-20 h-[35px] -translate-y-1/2 rounded-3xl bg-[#78788014]"
         ></div>
         <!-- 時間區塊 -->
-        <div class="flex w-full justify-between text-md">
-          <ul
-            ref="hourRef"
-            @scroll="handleHourScroll"
-            class="scrollbar-hide gradient-background flex snap-y flex-col gap-1 overflow-scroll py-[76px] text-[#B2B2B2]"
-          >
-            <li
-              v-for="value in 24"
-              :class="`block min-h-[34px] snap-center text-h5 font-medium ${tempHour == value - 1 ? 'text-primary' : ''}`"
-            >
-              {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
-            </li>
-          </ul>
+        <div class="gradient-background flex w-full justify-between text-md">
+          <CommonInfiniteScroll
+            :item-height="38"
+            :item-counts="24"
+            scroll-name="hourScroll"
+            :default-value="currentHour"
+            scrollStyle="text-[#B2B2B2]"
+            item-style="min-h-[38px]"
+            @change-value="
+              (newValue) => {
+                tempHour = newValue;
+              }
+            "
+          />
           <p class="self-center text-h5 font-medium text-primary">時</p>
-          <ul
-            ref="minRef"
-            class="scrollbar-hide gradient-background relative flex snap-y flex-col gap-1 overflow-scroll py-[76px] text-[#B2B2B2]"
-            @scroll="handleMinScroll"
-          >
-            <li
-              v-for="value in 60"
-              :class="`block min-h-[34px] snap-center text-h5 font-medium ${tempMin == value - 1 ? 'text-primary' : ''}`"
-            >
-              {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
-            </li>
-          </ul>
+          <CommonInfiniteScroll
+            :item-height="38"
+            :item-counts="60"
+            scroll-name="hourScroll"
+            :default-value="currentMin"
+            scrollStyle="text-[#B2B2B2]"
+            item-style="min-h-[38px]"
+            @change-value="
+              (newValue) => {
+                tempMin = newValue;
+              }
+            "
+          />
           <p class="self-center text-h5 font-medium text-primary">分</p>
         </div>
       </div>
@@ -146,11 +128,5 @@ useSeoMeta({
     #b2b2b2 75%,
     #b2b2b24d 100%
   );
-}
-
-.test {
-  .gradient-text {
-    mask: red;
-  }
 }
 </style>

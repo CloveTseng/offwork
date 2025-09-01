@@ -296,7 +296,7 @@ onUnmounted(() => {
   <!-- 倒數時顯示的呼吸法標題，會隨著 expandMask 淡出 -->
   <NuxtLink
     to="/find-peace/calm-breathe"
-    class="absolute top-0 z-40 block w-full py-2.5 text-center text-xl font-bold text-white transition duration-1000 sm:top-14"
+    class="absolute top-0 z-20 block w-full py-2.5 text-center text-xl font-bold text-white transition duration-1000 sm:top-14"
     :class="{ 'pointer-events-none opacity-0': expandMask }"
   >
     <button
@@ -310,23 +310,23 @@ onUnmounted(() => {
   <!-- 一開始的倒數、mask 動畫 -->
   <div
     v-if="showReveal"
-    class="reveal-mask | pointer-events-none absolute inset-0 z-30 bg-neutral-950"
+    class="reveal-mask | pointer-events-none absolute inset-0 z-10 bg-neutral-950"
     :class="{ 'reveal-expand': expandMask }"
     :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
   ></div>
-  <!-- 標題（永遠在洞口下方 40px） -->
+  <!-- 標題（永遠在洞口下方 20px） -->
   <h3
     v-if="showReveal"
-    class="reveal-title pointer-events-none absolute left-1/2 z-40 -translate-x-1/2 text-center text-h4 font-bold text-white transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)]"
+    class="reveal-title pointer-events-none absolute left-1/2 z-20 -translate-x-1/2 text-center text-h4 font-bold text-white transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)]"
     :class="{ 'reveal-slide': expandMask }"
     :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
   >
     準備開始囉
   </h3>
-  <!-- 倒數數字（永遠在 h3 下方 40px） -->
+  <!-- 倒數數字（永遠在 h3 下方 20px） -->
   <p
     v-if="showReveal"
-    class="reveal-count pointer-events-none absolute left-1/2 z-40 -translate-x-1/2 text-center text-h1 font-bold text-alert-success transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)]"
+    class="reveal-count pointer-events-none absolute left-1/2 z-20 -translate-x-1/2 text-center text-h1 font-bold text-alert-success transition-transform duration-1000 ease-[cubic-bezier(0.6,0,0.4,1)]"
     :class="{ 'reveal-slide': expandMask }"
     :style="{ '--dx': revealOffsetX, '--dy': revealOffsetY }"
   >
@@ -340,14 +340,14 @@ onUnmounted(() => {
     @click.self="isGroupHover = !isGroupHover"
   >
     <h1
-      class="pointer-events-none relative z-20 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition"
+      class="pointer-events-none relative z-10 mb-6 py-2.5 text-center text-xl font-bold text-white opacity-0 transition"
       :class="{ 'opacity-100': isGroupHover }"
     >
       平穩呼吸法
     </h1>
     <!-- 倒數分鐘數 -->
     <p
-      class="pointer-events-none relative z-20 text-center text-h2 font-bold text-white"
+      class="pointer-events-none relative z-10 text-center text-h2 font-bold text-white"
     >
       {{ displayTime }}
     </p>
