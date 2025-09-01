@@ -43,7 +43,7 @@ onUnmounted(() => {
         :class="`${isIntersecting ? 'pointer-events-none opacity-0' : 'opacity-100'} sticky inset-x-0 top-0 z-50 -mb-[48px] flex min-h-[48px] items-center justify-between bg-neutral-950 transition-all duration-150 ease-linear sm:top-[56px]`"
       >
         <div class="size-6 py-2 pr-2"></div>
-        <p>我的</p>
+        <p class="text-xl font-bold">我的</p>
         <div class="py-2 pl-2">
           <NuxtLink to="/">
             <img src="/icons/my/setting.svg" alt="設定按鈕" />
@@ -129,7 +129,7 @@ onUnmounted(() => {
       </section>
       <button
         v-else
-        class="gradient-card-border relative mb-3 w-full overflow-hidden rounded-3xl bg-neutral px-6 py-[25.5px] text-start"
+        class="gradient-card-border relative mb-3 min-h-[112px] w-full overflow-hidden rounded-3xl bg-neutral px-6 py-[25.5px] text-start"
         @click="showCeremonyNav = true"
       >
         <div class="max-w-[207px]">
@@ -183,30 +183,30 @@ onUnmounted(() => {
       </section>
       <!-- notify -->
       <section class="mb-3 rounded-3xl bg-neutral-900 px-6 py-7">
-        <div class="mb-5 flex items-center">
+        <NuxtLink to="/my/notify" class="mb-5 flex items-center">
           <div class="me-2">
             <img src="/icons/my/alarm-add-fill.svg" alt="通知" />
           </div>
           <p class="text-xs font-bold">通知</p>
-          <NuxtLink to="/" class="ms-auto">
+          <div to="/my/notify" class="ms-auto">
             <img
               src="/icons/my/arrowRight.svg"
               class="size-6 text-sm font-bold"
             />
-          </NuxtLink>
-        </div>
-        <div class="flex items-center">
+          </div>
+        </NuxtLink>
+        <NuxtLink to="/" class="flex items-center">
           <div class="me-2">
             <img src="/icons/my/layout-grid-fill.svg" alt="桌面小組件" />
           </div>
           <p class="text-xs font-bold">桌面小組件</p>
-          <NuxtLink to="/" class="ms-auto">
+          <div class="ms-auto">
             <img
               src="/icons/my/arrowRight.svg"
               class="size-6 text-sm font-bold"
             />
-          </NuxtLink>
-        </div>
+          </div>
+        </NuxtLink>
       </section>
       <!-- nav -->
       <div class="sticky inset-x-0 bottom-2">

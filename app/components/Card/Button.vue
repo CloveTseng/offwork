@@ -13,13 +13,13 @@
           </div>
         </div>
         <div>
-          <div class="flex items-center">
-            <p class="min-h-5 text-xs text-neutral-300">
+          <div class="flex min-h-5 items-center">
+            <p class="text-xs text-neutral-300">
               {{ cardButton.title }}
             </p>
             <div
               v-if="cardButton.isUpStandard != undefined"
-              class="ms-2 flex items-center"
+              class="ms-2 flex items-baseline"
             >
               <div
                 :class="`me-1 ${cardButton.isUpStandard ? 'bg-alert-success' : 'bg-accent'} size-2 rounded-full`"
