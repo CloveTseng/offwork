@@ -5,7 +5,6 @@ useSeoMeta({
 });
 definePageMeta({
   header: {
-    // backTo: { path: "/", query: { openCeremony: "true" } },
     title: "分析",
   },
 });
@@ -47,6 +46,17 @@ definePageMeta({
           </div>
         </div>
       </section>
+      <!-- 大吼分析 -->
+      <CardAnalyzeCard
+        title= "大吼"
+        data= 80
+        unit= "dB"
+        comment= "最大分貝"
+        color= "text-alert-success"
+        url= "/"
+        charts= "bar"
+        isUpStandard= true
+      />
     </div>
     <!-- nav -->
     <div class="sticky inset-x-0 bottom-2">
