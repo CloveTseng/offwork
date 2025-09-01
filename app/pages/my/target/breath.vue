@@ -18,9 +18,12 @@ useSeoMeta({
       @click.stop="isOpen = true"
     >
       <div class="mb-3 flex items-center justify-between gap-1">
-        <p class="text-h5 font-bold text-alert-success">
-          {{ currentMin }}<span class="ms-0.5 text-sm font-normal"> 分</span>
-        </p>
+        <div class="flex items-baseline gap-1 text-alert-success">
+          <p class="text-h5 font-bold">
+            {{ currentMin }}
+          </p>
+          <p class="text-sm font-normal">分</p>
+        </div>
         <img
           src="/icons/my/arrow-left-s-line.svg"
           alt="睡眠"
