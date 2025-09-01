@@ -1,50 +1,55 @@
 <template>
   <NuxtLink
     :to="url"
-    class="border-gradient gradient-card-border block min-w-[136px] rounded-2xl bg-[#333339] p-4 active:bg-neutral-1000"
+    :class="`${data ? 'cursor-pointer' : 'cursor-not-allowed'}`"
+    class="border-gradient gradient-card-border block min-w-[136px] rounded-[32px] bg-[#333339] py-5 px-6 active:bg-neutral-1000"
   >
-    <div class="flex">
-      <div class="flex grow items-center">
-        <!-- <div v-if="cardButton.icon" class="my-[3px] me-2">
+    <div>
+      <div class="flex justify-between">
+        <div class="flex mb-3">
+          <p class="text-xl leading-[1.4] text-white font-bold">
+            {{ title }}
+          </p>
           <div
-            :class="`rounded-full ${cardButton.iconBg} size-12 overflow-hidden`"
+            v-if="isUpStandard != undefined"
+            class="ms-4 flex items-center"
           >
-            <img :src="cardButton.icon" alt="頭像" />
-          </div>
-        </div> -->
-        <div>
-          <div>
-            <div class="flex">
-              <p class="min-h-5 text-xs leading-[1rem] text-neutral-300">
-                {{ title }}
-              </p>
-              <div
-                v-if="analyzeCard.isUpStandard != undefined"
-                class="ms-2 flex items-center"
-              >
-                <div
-                  :class="`me-1 ${analyzeCard.isUpStandard ? 'bg-alert-success' : 'bg-accent'} size-2 rounded-full`"
-                ></div>
-                <p
-                  :class="`text-xs font-medium ${analyzeCard.isUpStandard ? 'text-alert-success' : 'text-accent'} `"
-                >
-                  {{ analyzeCard.isUpStandard ? "尚可" : "過多" }}
-                </p>
-              </div>
-            </div>
-            <div class="flex">
-              <p :class="`text-h5 font-bold ${analyzeCard.color}`">
-                {{ analyzeCard.data }}
-              </p>
-              <p :class="`ms-0.5 mt-3 text-xs ${analyzeCard.color}`">
-                {{ analyzeCard.unit }}
-              </p>
-            </div>
+            <div
+              :class="`me-1 ${isUpStandard ? 'bg-alert-success' : 'bg-accent'} size-[10px] rounded-full`"
+            ></div>
+            <p
+              :class="`text-sm leading-[1.6] font-bold ${isUpStandard ? 'text-alert-success' : 'text-accent'} `"
+            >
+              {{ isUpStandard ? "尚可" : "過多" }}
+            </p>
           </div>
         </div>
+        <div class="px-2 py-[6px] self-center">
+          <img src="/icons/white-right-arrow.svg" alt="右箭頭"/>
+        </div>
       </div>
-      <div class="justify-end pb-0.5">
-        <img src="/icons/my/arrowRight.svg" class="text-sm font-bold" />
+      <div class="flex justify-between">
+        <div>
+          <div class="flex" v-if="data !== undefined">
+            <p class="text-h5 font-bold">
+              {{ data }}
+            </p>
+            <p class="ms-1 mt-3 text-xs">
+              {{unit }}
+            </p>
+          </div>
+          <div>
+            <p class="text-[#BAB9C0] text-xs">{{ comment }}</p>
+          </div>
+        </div>
+        <div>
+          <div v-if="charts === 'doughnut'">
+            <ChartsDoughnutChart />
+          </div>
+          <div v-else-if="charts === 'progress'">
+            <ChartsProgressBar />
+          </div>
+        </div>
       </div>
     </div>
   </NuxtLink>
@@ -59,6 +64,9 @@ const props = defineProps({
   color: String,
   url: String,
   charts: String,
-  isUpStandard: Boolean
+  isUpStandard: {
+    type: Boolean,
+    default: undefined
+  }
 });
 </script>

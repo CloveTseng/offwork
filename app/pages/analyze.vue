@@ -21,7 +21,7 @@ definePageMeta({
           <p class="text-[14px] leading-relaxed font-bold">7/17</p>
         </div>
         <NuxtLink to="#" class="bg-[#333339] rounded-full p-2 text-center">
-          <img src="/icons/right-arrow.svg" alt="左箭頭" />
+          <img src="/icons/right-arrow.svg" alt="右箭頭" />
         </NuxtLink>
       </section>
       <!-- 爆發指數 -->
@@ -49,13 +49,34 @@ definePageMeta({
       <!-- 大吼分析 -->
       <CardAnalyzeCard
         title= "大吼"
-        data= 80
+        :data= "80"
         unit= "dB"
         comment= "最大分貝"
-        color= "text-alert-success"
         url= "/"
-        charts= "bar"
-        isUpStandard= true
+        charts= "progress"
+        :isUpStandard="false"
+      />
+      <CardAnalyzeCard
+        title= "睡眠"
+        :data= "6.5"
+        unit= "小時 / 8小時"
+        comment= "今日 / 目標"
+        url= "/"
+        charts= "doughnut"
+        :isUpStandard="true"
+      />
+      <CardAnalyzeCard
+        title= "呼吸"
+        :data= "30"
+        unit= "分鐘 / 3分鐘"
+        comment= "今日 / 目標"
+        url= "/"
+        charts= "doughnut"
+        :isUpStandard="true"
+      />
+      <CardAnalyzeCard
+        title= "冥想"
+        comment= "尚無紀錄"
       />
     </div>
     <!-- nav -->
