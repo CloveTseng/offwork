@@ -47,22 +47,16 @@ definePageMeta({
         </div>
       </section>
       <!-- 大吼分析 -->
-      <NuxtLink
-        to="/"
-        class="gradient-border-1px rounded-[32px]"
-      >
-        <article
-          class="rounded-[32px] bg-neutral-900 p-5"
-        >
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <h2 class="text-md font-bold text-white">大吼</h2>
-              <p class="">過多</p>
-            </div>
-            <img src="/icons/right-arrow.svg" alt="左箭頭" />
-          </div>
-        </article>
-      </NuxtLink>
+      <CardAnalyzeCard
+        title= "大吼"
+        data= 80
+        unit= "dB"
+        comment= "最大分貝"
+        color= "text-alert-success"
+        url= "/"
+        charts= "bar"
+        isUpStandard= true
+      />
     </div>
     <!-- nav -->
     <div class="sticky inset-x-0 bottom-2">
