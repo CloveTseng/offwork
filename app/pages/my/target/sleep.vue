@@ -4,8 +4,6 @@ const currentMin = ref(0);
 const currentHour = ref(8);
 const tempMin = ref(0);
 const tempHour = ref(0);
-// const hourScrollbar = useTemplateRef("hourRef");
-const minScrollbar = useTemplateRef("minRef");
 
 // 定位時間bar
 const anchor = async () => {
