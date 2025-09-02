@@ -82,5 +82,3 @@ watch(() => props.charts, (newChartType) => {
     </div>
   </NuxtLink>
 </template>
-
-
