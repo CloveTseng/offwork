@@ -8,8 +8,52 @@ definePageMeta({
     title: "分析",
   },
 });
+const analyzeData = ref([
+  {
+    id: 1,
+    title: "大吼",
+    data: 80,
+    unit: "dB",
+    comment: "最大分貝",
+    url: "/",
+    charts: "progress",
+    isUpStandard:false
+  },
+  {
+    id: 2,
+    title: "心情關鍵字",
+    charts: "bubble",
+  },
+  {
+    id: 3,
+    title: "睡眠",
+    data: 6.5,
+    unit: "小時 / 8小時",
+    comment: "今日 / 目標",
+    url: "#",
+    charts: "doughnut",
+    isUpStandard:true
+  },
+  {
+    id:4,
+    title: "呼吸",
+    data: 30,
+    unit: "分鐘 / 3分鐘",
+    comment: "今日 / 目標",
+    url: "#",
+    charts: "doughnut",
+    isUpStandard:true
+  },
+  {
+    id:5,
+    title: "冥想",
+    comment: "尚無紀錄",
+    url: "#",
+  },
+])
 </script>
 <template>
+  <ClientOnly>
   <main class="bg-neutral-950 px-4 ">
     <div class=" text-white grid gap-4 py-4">
       <!-- 日期及日曆 -->
@@ -46,38 +90,18 @@ definePageMeta({
           </div>
         </div>
       </section>
-      <!-- 大吼分析 -->
-      <CardAnalyzeCard
-        title= "大吼"
-        :data= "80"
-        unit= "dB"
-        comment= "最大分貝"
-        url= "/"
-        charts= "progress"
-        :isUpStandard="false"
-      />
-      <CardAnalyzeCard
-        title= "睡眠"
-        :data= "6.5"
-        unit= "小時 / 8小時"
-        comment= "今日 / 目標"
-        url= "/"
-        charts= "doughnut"
-        :isUpStandard="true"
-      />
-      <CardAnalyzeCard
-        title= "呼吸"
-        :data= "30"
-        unit= "分鐘 / 3分鐘"
-        comment= "今日 / 目標"
-        url= "/"
-        charts= "doughnut"
-        :isUpStandard="true"
-      />
-      <CardAnalyzeCard
-        title= "冥想"
-        comment= "尚無紀錄"
-      />
+      <!-- 分析圖卡 -->
+      <template v-for="item in analyzeData" :key="item.id">
+        <CardAnalyzeCard
+          :title="item.title"
+          :data="item.data"
+          :unit="item.unit"
+          :comment="item.comment"
+          :url="item.url"
+          :charts="item.charts"
+          :isUpStandard="item.isUpStandard"
+        />
+      </template>
     </div>
     <!-- nav -->
     <div class="sticky inset-x-0 bottom-2">
@@ -85,4 +109,5 @@ definePageMeta({
       <LayoutBottomBar class="mb-2 mt-[27px]" />
     </div>
   </main>
+  </ClientOnly>
 </template>

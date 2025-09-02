@@ -1,8 +1,41 @@
+<script setup>
+import { ChartsBubbleChart } from '#components';
+import { ChartsProgressBar } from '#components';
+import { ChartsDoughnutChart } from '#components';
+import { shallowRef } from 'vue';
+const props = defineProps({
+  title: String,
+  data: Number,
+  unit: String,
+  comment: String,
+  color: String,
+  url: String,
+  charts: String,
+  isUpStandard: {
+    type: Boolean,
+    default: undefined
+  }
+});
+const ChartTypes = {
+  doughnut: ChartsDoughnutChart,
+  progress: ChartsProgressBar,
+  bubble: ChartsBubbleChart
+}
+const currentChartType = shallowRef(ChartTypes[''])
+watch(() => props.charts, (newChartType) => {
+  if (ChartTypes[newChartType]) {
+    currentChartType.value = ChartTypes[newChartType];
+  } else {
+    currentChartType.value = null;
+  }
+}, { immediate: true });
+</script>
 <template>
   <NuxtLink
-    :to="url"
-    :class="`${data ? 'cursor-pointer' : 'cursor-not-allowed'}`"
+    :to="data ? url : ''"
+    :class="{'pointer-events-none' : !data}"
     class="border-gradient gradient-card-border block min-w-[136px] rounded-[32px] bg-[#333339] py-5 px-6 active:bg-neutral-1000"
+    @click.prevent="!data"
   >
     <div>
       <div class="flex justify-between">
@@ -24,11 +57,11 @@
             </p>
           </div>
         </div>
-        <div class="px-2 py-[6px] self-center">
+        <div v-if="url" class="px-2 py-[6px] self-center">
           <img src="/icons/white-right-arrow.svg" alt="右箭頭"/>
         </div>
       </div>
-      <div class="flex justify-between">
+      <div :class="['flex', comment ? 'justify-between' : 'justify-center']">
         <div>
           <div class="flex" v-if="data !== undefined">
             <p class="text-h5 font-bold">
@@ -43,30 +76,9 @@
           </div>
         </div>
         <div>
-          <div v-if="charts === 'doughnut'">
-            <ChartsDoughnutChart />
-          </div>
-          <div v-else-if="charts === 'progress'">
-            <ChartsProgressBar />
-          </div>
+          <component :is="currentChartType" v-if="currentChartType"/>
         </div>
       </div>
     </div>
   </NuxtLink>
 </template>
-
-<script setup>
-const props = defineProps({
-  title: String,
-  data: Number,
-  unit: String,
-  comment: String,
-  color: String,
-  url: String,
-  charts: String,
-  isUpStandard: {
-    type: Boolean,
-    default: undefined
-  }
-});
-</script>
