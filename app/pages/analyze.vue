@@ -51,6 +51,7 @@ const analyzeData = ref([
     url: "#",
   },
 ])
+const openModal = ref(false);
 </script>
 <template>
   <ClientOnly>
@@ -61,13 +62,18 @@ const analyzeData = ref([
         <NuxtLink to="/" class="bg-[#333339] rounded-full p-2 text-center transition">
           <img src="/icons/white-left-arrow.svg" alt="左箭頭" />
         </NuxtLink>
-        <div class="bg-[#333339] rounded-full py-2 px-4 text-center">
+        <button class="bg-[#333339] rounded-full py-2 px-4 text-center" @click="openModal = true">
           <p class="text-[14px] leading-relaxed font-bold">7/17</p>
-        </div>
+        </button>
         <NuxtLink to="#" class="bg-[#333339] rounded-full p-2 text-center">
           <img src="/icons/right-arrow.svg" alt="右箭頭" />
         </NuxtLink>
       </section>
+      <CommonModal v-model:show="openModal">
+        <div class="size-auto bg-[#242426]">
+          <p class="text-md text-white">Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字</p>
+        </div>
+      </CommonModal>
       <!-- 爆發指數 -->
       <section>
         <ChartsHalfCircleBar />

@@ -1,9 +1,3 @@
-<template>
-  <div class="py-4.5 w-[98px] h-[60px]">
-    <canvas ref="progressBarCanvas" width="98" height="60"></canvas>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted } from 'vue';
 
@@ -79,3 +73,9 @@ onMounted(() => {
   drawProgressBar();
 });
 </script>
+<template>
+  <div class="py-4.5 w-[98px] h-[60px]">
+    <canvas ref="progressBarCanvas" width="98" height="60"></canvas>
+  </div>
+</template>
+
