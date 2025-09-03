@@ -34,7 +34,7 @@ watch(() => props.charts, (newChartType) => {
   <NuxtLink
     :to="data ? url : ''"
     :class="{'pointer-events-none' : !data}"
-    class="border-gradient gradient-card-border block min-w-[136px] rounded-[32px] bg-[#333339] py-5 px-6 active:bg-neutral-1000"
+    class="border-gradient gradient-card-border block min-w-[136px] rounded-[32px] bg-neutral-900 py-5 px-6 active:bg-neutral-1000"
     @click.prevent="!data"
   >
     <div>
@@ -72,7 +72,7 @@ watch(() => props.charts, (newChartType) => {
             </p>
           </div>
           <div>
-            <p class="text-[#BAB9C0] text-xs">{{ comment }}</p>
+            <p class="text-neutral-300 text-xs">{{ comment }}</p>
           </div>
         </div>
         <div>

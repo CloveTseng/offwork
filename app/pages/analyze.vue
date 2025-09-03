@@ -59,13 +59,13 @@ const openModal = ref(false);
     <div class=" text-white grid gap-4 py-4">
       <!-- 日期及日曆 -->
       <section class="flex justify-between items-center">
-        <NuxtLink to="/" class="bg-[#333339] rounded-full p-2 text-center transition">
+        <NuxtLink to="/" class="bg-neutral-900 rounded-full p-2 text-center transition">
           <img src="/icons/white-left-arrow.svg" alt="左箭頭" />
         </NuxtLink>
-        <button class="bg-[#333339] rounded-full py-2 px-4 text-center" @click="openModal = true">
+        <button class="bg-neutral-900 rounded-full py-2 px-4 text-center" @click="openModal = true">
           <p class="text-[14px] leading-relaxed font-bold">7/17</p>
         </button>
-        <NuxtLink to="#" class="bg-[#333339] rounded-full p-2 text-center">
+        <NuxtLink to="#" class="bg-neutral-900 rounded-full p-2 text-center">
           <img src="/icons/right-arrow.svg" alt="右箭頭" />
         </NuxtLink>
       </section>
@@ -81,7 +81,7 @@ const openModal = ref(false);
       <!-- 火山君關心你 -->
       <section>
         <div class="grid grid-cols-4 pb-4 gap-2">
-          <div class="size-[80px] rounded-full p-1">
+          <div class="size-[80px] rounded-full">
             <div class="h-full w-full overflow-hidden rounded-full bg-secondary">
               <img
                 src="/images/home/normal-circle.webp"
@@ -90,8 +90,20 @@ const openModal = ref(false);
               />
             </div>
           </div>
-          <div class="bg-[#A4CD44] rounded-3xl col-span-3">
-            <p class="py-4 px-5 font-medium text-[#27292B] relative before:absolute before:top-1/3 before:-translate-y-1/2 before:right-[calc(100%-2px)] before:border-b-[10px] before:border-t-[10px] before:border-r-[20px] before:border-b-transparent before:border-t-transparent before:border-r-[#A4CD44]
+          <div class="bg-primary rounded-3xl col-span-3">
+            <p class="py-4 px-5 font-medium text-[#27292B] relative 
+            before:content-['']
+            before:absolute
+            before:top-1/3
+            before:left-[-15px]
+            before:-translate-y-1/2
+            before:w-[20px]
+            before:h-[15px]
+            before:bg-[url(/images/home/triangle.svg)]
+            before:bg-no-repeat
+            before:bg-contain
+            before:bg-center
+            before:z-10
             ">還好嗎？你似乎壓力很大，吼一吼有沒有比較舒服啊～</p>
           </div>
         </div>
