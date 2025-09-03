@@ -38,8 +38,8 @@ watch(() => props.charts, (newChartType) => {
     @click.prevent="!data"
   >
     <div>
-      <div class="flex justify-between">
-        <div class="flex mb-3">
+      <div class="flex justify-between items-center mb-3">
+        <div class="flex items-center"> 
           <p class="text-xl leading-[1.4] text-white font-bold">
             {{ title }}
           </p>

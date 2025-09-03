@@ -70,8 +70,8 @@ const openModal = ref(false);
         </NuxtLink>
       </section>
       <CommonModal v-model:show="openModal">
-        <div class="size-40 bg-[#242426]">
-          <p class="text-md text-white">Demo Modal 內的文字字字字</p>
+        <div class="size-auto bg-[#242426]">
+          <p class="text-md text-white">Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字</p>
         </div>
       </CommonModal>
       <!-- 爆發指數 -->
