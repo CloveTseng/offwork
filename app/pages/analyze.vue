@@ -52,6 +52,10 @@ const analyzeData = ref([
   },
 ])
 const openModal = ref(false);
+const closeModal = () => {
+  openModal.value = false;
+}
+provide('closeModal', closeModal)
 </script>
 <template>
   <ClientOnly>
@@ -60,19 +64,17 @@ const openModal = ref(false);
       <!-- 日期及日曆 -->
       <section class="flex justify-between items-center">
         <NuxtLink to="#" class="bg-neutral-900 rounded-full p-2 text-center transition">
-          <img src="/icons/white-left-arrow.svg" alt="左箭頭" />
+          <img src="/icons/white-left-arrow.svg" alt="左箭頭" loading="lazy" />
         </NuxtLink>
         <button class="bg-neutral-900 rounded-full py-2 px-4 text-center" @click="openModal = true">
           <p class="text-[14px] leading-relaxed font-bold">7/17</p>
         </button>
         <NuxtLink to="#" class="bg-neutral-900 rounded-full p-2 text-center">
-          <img src="/icons/right-arrow.svg" alt="右箭頭" />
+          <img src="/icons/right-arrow.svg" alt="右箭頭" loading="lazy" />
         </NuxtLink>
       </section>
       <CommonModal v-model:show="openModal">
-        <div class="size-auto bg-[#242426]">
-          <p class="text-md text-white">Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字Demo Modal 內的文字</p>
-        </div>
+        <CommonCalendar />
       </CommonModal>
       <!-- 爆發指數 -->
       <section>
@@ -86,7 +88,7 @@ const openModal = ref(false);
               <img
                 src="/images/home/normal-circle.webp"
                 alt="綠色火山君"
-                class="scale-100 object-top"
+                class="scale-100 object-top" loading="lazy"
               />
             </div>
           </div>
