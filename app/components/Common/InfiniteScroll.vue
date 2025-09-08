@@ -6,10 +6,13 @@ const props = defineProps({
   defaultValue: { type: Number, default: 0 },
   scrollStyle: String,
   itemStyle: String,
+  isNumberFormat: { type: Boolean, default: true },
+  isRotate: { type: Boolean, default: false },
 });
 const emit = defineEmits(["changeValue"]);
 const tempValue = ref(0);
 const scrollbar = useTemplateRef("scroll");
+const position = ref(0);
 // 定位
 function anchor() {
   // 滾動區所有的元素數量
@@ -47,9 +50,11 @@ function handleHourScroll() {
     console.log("跳轉到第二組");
     scrollbar.value.scrollTop = top - (itemCount / 3) * 2 * interval;
   }
+  position.value = Math.floor(top / interval + viewItemCount / 2);
   tempValue.value = Math.floor(
     (top / interval + viewItemCount / 2) % (itemCount / 3),
   );
+
   emit("changeValue", tempValue.value);
 }
 onMounted(() => {
@@ -60,28 +65,47 @@ onMounted(() => {
   <ul
     :ref="'scroll'"
     @scroll="handleHourScroll"
-    :class="`scrollbar-hide flex snap-y flex-col overflow-scroll ${scrollStyle}`"
+    :class="`scrollbar-hide flex snap-y flex-col overflow-scroll ${scrollStyle} ${isRotate && 'rotate-box'}`"
   >
     <li
       v-for="value in itemCounts"
       :key="`1-${value}`"
-      :class="`flex ${itemStyle} snap-center items-center justify-center text-h5 font-medium ${tempValue == value - 1 ? 'text-primary' : ''}`"
+      :class="`flex ${itemStyle} snap-center items-center justify-center text-h5 font-medium ${tempValue == value - 1 ? 'text-primary' : ''} ${isRotate && position == value - 1 ? 'rotate' : ''}`"
     >
-      {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
+      {{
+        value - 1 >= 10 ? value - 1 : `${isNumberFormat ? "0" : ""}${value - 1}`
+      }}
     </li>
     <li
       v-for="value in itemCounts"
       :key="`2-${value}`"
-      :class="`flex snap-center ${itemStyle} items-center justify-center text-h5 font-medium ${tempValue == value - 1 ? 'text-primary' : ''}`"
+      :class="`flex snap-center ${itemStyle} items-center justify-center text-h5 font-medium ${tempValue == value - 1 ? 'text-primary' : ''} ${isRotate && position == value - 1 + itemCounts ? 'rotate' : ''}`"
     >
-      {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
+      {{
+        value - 1 >= 10 ? value - 1 : `${isNumberFormat ? "0" : ""}${value - 1}`
+      }}
     </li>
     <li
       v-for="value in itemCounts"
       :key="`3-${value}`"
-      :class="`flex snap-center ${itemStyle} items-center justify-center text-h5 font-medium ${tempValue == value - 1 ? 'text-primary' : ''}`"
+      :class="`flex snap-center ${itemStyle} items-center justify-center text-h5 font-medium ${tempValue == value - 1 ? 'text-primary' : ''} ${isRotate && position == value - 1 + itemCounts * 2 ? 'rotate' : ''}`"
     >
-      {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
+      {{
+        value - 1 >= 10 ? value - 1 : `${isNumberFormat ? "0" : ""}${value - 1}`
+      }}
     </li>
   </ul>
 </template>
+<style>
+.rotate-box li {
+  transform: rotateX(-30deg);
+  /* transform-origin: bottom; */
+}
+.rotate ~ li {
+  transform: rotateX(30deg);
+  /* transform-origin: top; */
+}
+.rotate-box .rotate {
+  transform: rotateX(0);
+}
+</style>

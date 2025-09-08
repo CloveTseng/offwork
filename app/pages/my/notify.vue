@@ -87,46 +87,24 @@ const isOpen = ref(false);
 const tempMin = ref(0);
 const tempHour = ref(0);
 const tempIsMorning = ref(false);
-const hourScrollbar = useTemplateRef("hourRef");
-const minScrollbar = useTemplateRef("minRef");
 const isMorningScrollbar = useTemplateRef("isMorningRef");
 const anchor = async (id) => {
   isOpen.value = true; // 先打開 BottomSheet
-
+  tempId = id;
+  const tempItem = nofityList.value.filter((item) => {
+    return item.id == id;
+  })[0];
+  tempHour.value = Number.parseInt(tempItem.hour);
+  tempMin.value = Number.parseInt(tempItem.min);
+  tempIsMorning.value = tempItem.isMorning ? 1 : 0;
   await nextTick(); // 等待 DOM 更新
-  const minInterval = (minScrollbar.value.scrollHeight - 144 - 59 * 4) / 60 + 4;
-  const hourInterval =
-    (hourScrollbar.value.scrollHeight - 144 - 12 * 4) / 13 + 4;
   const isMorningInterval =
     (isMorningScrollbar.value.scrollHeight - 144 - 4) / 2 + 4;
   // 安全訪問 ref
-  if (hourScrollbar.value && minScrollbar.value) {
-    tempId = id;
-    const tempItem = nofityList.value.filter((item) => {
-      return item.id == id;
-    })[0];
-    tempHour.value = tempItem.hour;
-    tempMin.value = tempItem.min;
-    tempIsMorning.value = tempItem.isMorning ? 0 : 1;
-    hourScrollbar.value.scrollTop = hourInterval * tempHour.value;
-    minScrollbar.value.scrollTop = minInterval * tempMin.value;
+  if (isMorningScrollbar.value) {
     isMorningScrollbar.value.scrollTop =
-      isMorningInterval * tempIsMorning.value;
+      isMorningInterval * (tempIsMorning.value - 1) * -1;
   }
-};
-
-const handleHourScroll = () => {
-  const hourInterval = Math.floor(
-    (hourScrollbar.value.scrollHeight - 144 - 12 * 4) / 13 + 4,
-  );
-  tempHour.value = Math.floor(hourScrollbar.value.scrollTop / hourInterval);
-};
-
-const handleMinScroll = () => {
-  const minInterval = Math.floor(
-    (minScrollbar.value.scrollHeight - 144 - 59 * 4) / 60 + 4,
-  );
-  tempMin.value = Math.floor(minScrollbar.value.scrollTop / minInterval);
 };
 
 const handleIsMorningScroll = () => {
@@ -222,15 +200,14 @@ useSeoMeta({
             class="pointer-events-none absolute left-0 right-0 top-1/2 z-20 h-[35px] -translate-y-1/2 rounded-[7px] bg-[#78788014]"
           ></div>
           <!-- 時間區塊 -->
-          <div
-            class="gradient-background rotate-x-50 flex w-full justify-between text-md"
-          >
-            <ul
+          <div class="gradient-background rotate-x-50 flex w-full text-md">
+            <!-- ${tempHour - value + 1 > 0 ? 'origin-bottom' : 'origin-top'} -->
+            <!-- <ul
               ref="hourRef"
               @scroll="handleHourScroll"
               class="scrollbar-hide perspective-origin-center flex snap-y flex-col overflow-scroll py-[72px] text-[#B2B2B2]"
             >
-              <!-- ${tempHour - value + 1 > 0 ? 'origin-bottom' : 'origin-top'} -->
+              ${tempHour - value + 1 > 0 ? 'origin-bottom' : 'origin-top'}
               <li
                 v-for="value in 13"
                 :class="`block min-h-[34px] snap-center text-h5 font-medium transition-transform duration-150 ease-linear ${tempHour == value - 1 ? 'text-primary' : ''} text-end`"
@@ -240,8 +217,8 @@ useSeoMeta({
               >
                 {{ value - 1 }}
               </li>
-            </ul>
-            <ul
+            </ul> -->
+            <!-- <ul
               ref="minRef"
               class="scrollbar-hide relative flex snap-y flex-col overflow-scroll py-[72px] text-[#B2B2B2]"
               @scroll="handleMinScroll"
@@ -255,19 +232,48 @@ useSeoMeta({
               >
                 {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
               </li>
-            </ul>
+            </ul> -->
+            <CommonInfiniteScroll
+              :item-height="35"
+              :item-counts="12"
+              scroll-name="hourScroll"
+              :default-value="tempHour"
+              scrollStyle="text-[#B2B2B2] mr-[40px] font-normal"
+              item-style="min-h-[35px] text-end"
+              :is-number-format="false"
+              :is-rotate="true"
+              @change-value="
+                (newValue) => {
+                  tempHour = newValue;
+                }
+              "
+            />
+            <CommonInfiniteScroll
+              :item-height="35"
+              :item-counts="60"
+              scroll-name="minScroll"
+              :default-value="tempMin"
+              scrollStyle="text-[#B2B2B2] mr-[32px] font-normal"
+              item-style="min-h-[35px]"
+              :is-rotate="true"
+              @change-value="
+                (newValue) => {
+                  tempMin = newValue;
+                }
+              "
+            />
             <ul
               ref="isMorningRef"
               class="scrollbar-hide flex snap-y flex-col gap-1 overflow-scroll py-[72px] text-[#B2B2B2]"
               @scroll="handleIsMorningScroll"
             >
               <li
-                :class="`self-center text-h5 font-medium ${tempIsMorning ? 'text-primary' : ''}`"
+                :class="`self-center text-h5 font-normal ${tempIsMorning ? 'text-primary' : ''}`"
               >
                 AM
               </li>
               <li
-                :class="`self-center text-h5 font-medium ${!tempIsMorning ? 'text-primary' : ''}`"
+                :class="`self-center text-h5 font-normal ${!tempIsMorning ? 'text-primary' : ''}`"
               >
                 PM
               </li>
