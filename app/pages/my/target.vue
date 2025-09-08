@@ -16,7 +16,7 @@ useSeoMeta({
   <main class="flex h-full flex-col">
     <!-- 功能列 -->
     <section
-      class="sticky flex items-center justify-between bg-neutral-950 px-4 py-3 sm:top-[56px]"
+      class="sticky flex items-center justify-between bg-[#29292DCC] px-4 py-3 backdrop-blur sm:top-[56px]"
     >
       <NuxtLink to="/my">
         <img src="/icons/my/arrow-left-s-line.svg" alt="返回"
