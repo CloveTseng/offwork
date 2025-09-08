@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 <template>
   <div class="relative flex flex-col items-center my-5">
-    <svg viewBox="0 0 100 60" class="w-[252px] h-[126px]">
+    <svg viewBox="0 0 100 60" class="w-[250px] h-[142px]">
       <path 
       :d="pathD"
       fill="transparent"

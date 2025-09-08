@@ -59,7 +59,7 @@ const openModal = ref(false);
     <div class=" text-white grid gap-4 py-4">
       <!-- 日期及日曆 -->
       <section class="flex justify-between items-center">
-        <NuxtLink to="/" class="bg-neutral-900 rounded-full p-2 text-center transition">
+        <NuxtLink to="#" class="bg-neutral-900 rounded-full p-2 text-center transition">
           <img src="/icons/white-left-arrow.svg" alt="左箭頭" />
         </NuxtLink>
         <button class="bg-neutral-900 rounded-full py-2 px-4 text-center" @click="openModal = true">
