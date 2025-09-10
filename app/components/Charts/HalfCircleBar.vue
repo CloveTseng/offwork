@@ -43,8 +43,8 @@ const props = defineProps({
 })
 </script>
 <template>
-  <div class="relative flex flex-col items-center my-5">
-    <svg viewBox="0 0 100 60" class="w-[250px] h-[142px]">
+  <div class="relative z-0 flex flex-col items-center my-5">
+    <svg viewBox="0 0 100 60" class="w-[250px] h-[142px] z-0">
       <path 
       :d="pathD"
       fill="transparent"

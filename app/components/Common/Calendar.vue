@@ -2,7 +2,6 @@
 const weeklyData = ref(['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'])
 const firstDayIndex = ref(2);
 const activeDay = ref(17);
-const closeModal = inject('closeModal')
 const days = computed(() => {
   const blanks =  Array.from({ length: firstDayIndex.value }, () => null);
   const dayArray = Array.from({ length: 30 }, (_, i) => i + 1);
@@ -11,9 +10,10 @@ const days = computed(() => {
 const isDayActive = (day) => {
   return day === activeDay.value;
 }
+const emit = defineEmits(['selectDay']);
 const handleDayClick = (day) => {
   if (isDayActive(day)) {
-    closeModal()
+    emit('selectDay', day)
   }
 }
 </script>
