@@ -35,6 +35,12 @@ onMounted(() => {
     ease: "bounce.out"
   });
 });
+const props = defineProps({
+  chartTitle: {
+    type: String,
+    required: true
+  }
+})
 </script>
 <template>
   <div class="relative flex flex-col items-center my-5">
@@ -58,7 +64,7 @@ onMounted(() => {
       />
     </svg>
     <div class="absolute -bottom-2 mt-2 flex flex-col items-center">
-      <span class="font-bold my-1">爆發指數</span>
+      <span class="font-bold my-1">{{ chartTitle }}</span>
       <span class="text-[28px] font-bold">{{ displayedProgress }}%</span>
     </div>
   </div>

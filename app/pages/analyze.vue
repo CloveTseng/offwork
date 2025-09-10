@@ -15,7 +15,7 @@ const analyzeData = ref([
     data: 80,
     unit: "dB",
     comment: "最大分貝",
-    url: "/",
+    url: "/analysis",
     charts: "progress",
     isUpStandard:false
   },
@@ -51,34 +51,22 @@ const analyzeData = ref([
     url: "#",
   },
 ])
+const currentDate = ref('7/17');
 const openModal = ref(false);
-const closeModal = () => {
-  openModal.value = false;
-}
-provide('closeModal', closeModal)
+const chartTitle = ref('爆發指數')
 </script>
 <template>
   <ClientOnly>
   <main class="bg-neutral-950 px-4 ">
     <div class=" text-white grid gap-4 py-4">
       <!-- 日期及日曆 -->
-      <section class="flex justify-between items-center">
-        <NuxtLink to="#" class="bg-neutral-900 rounded-full p-2 text-center transition">
-          <img src="/icons/white-left-arrow.svg" alt="左箭頭" loading="lazy" />
-        </NuxtLink>
-        <button class="bg-neutral-900 rounded-full py-2 px-4 text-center" @click="openModal = true">
-          <p class="text-[14px] leading-relaxed font-bold">7/17</p>
-        </button>
-        <NuxtLink to="#" class="bg-neutral-900 rounded-full p-2 text-center">
-          <img src="/icons/right-arrow.svg" alt="右箭頭" loading="lazy" />
-        </NuxtLink>
-      </section>
+      <LayoutDateNavigation :dateText="currentDate" @open-modal="openModal = true"/>
       <CommonModal v-model:show="openModal">
         <CommonCalendar />
       </CommonModal>
       <!-- 爆發指數 -->
       <section>
-        <ChartsHalfCircleBar />
+        <ChartsHalfCircleBar :chartTitle="chartTitle"/>
       </section>
       <!-- 火山君關心你 -->
       <section>
