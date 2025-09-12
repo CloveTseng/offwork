@@ -202,37 +202,6 @@ useSeoMeta({
           <!-- 時間區塊 -->
           <div class="gradient-background rotate-x-50 flex w-full text-md">
             <!-- ${tempHour - value + 1 > 0 ? 'origin-bottom' : 'origin-top'} -->
-            <!-- <ul
-              ref="hourRef"
-              @scroll="handleHourScroll"
-              class="scrollbar-hide perspective-origin-center flex snap-y flex-col overflow-scroll py-[72px] text-[#B2B2B2]"
-            >
-              ${tempHour - value + 1 > 0 ? 'origin-bottom' : 'origin-top'}
-              <li
-                v-for="value in 13"
-                :class="`block min-h-[34px] snap-center text-h5 font-medium transition-transform duration-150 ease-linear ${tempHour == value - 1 ? 'text-primary' : ''} text-end`"
-                :style="{
-                  transform: `${tempHour - value + 1 > 0 ? `rotateX(${(tempHour - value + 1) * 20}deg)  ` : `rotateX(${(tempHour - value + 1) * 20}deg)`} `,
-                }"
-              >
-                {{ value - 1 }}
-              </li>
-            </ul> -->
-            <!-- <ul
-              ref="minRef"
-              class="scrollbar-hide relative flex snap-y flex-col overflow-scroll py-[72px] text-[#B2B2B2]"
-              @scroll="handleMinScroll"
-            >
-              <li
-                v-for="value in 60"
-                :class="`block min-h-[34px] snap-center text-h5 font-medium transition-transform duration-150 ease-linear ${tempMin == value - 1 ? 'text-primary' : ''} text-end`"
-                :style="{
-                  transform: `${tempMin - value + 1 > 0 ? `rotateX(${(tempMin - value + 1) * 20}deg)  ` : `rotateX(${(tempMin - value + 1) * 20}deg)`} `,
-                }"
-              >
-                {{ value - 1 >= 10 ? value - 1 : `0${value - 1}` }}
-              </li>
-            </ul> -->
             <CommonInfiniteScroll
               :item-height="35"
               :item-counts="12"
