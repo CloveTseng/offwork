@@ -45,7 +45,7 @@ onUnmounted(() => {
         <div class="size-6 py-2 pr-2"></div>
         <p class="text-xl font-bold">我的</p>
         <div class="py-2 pl-2">
-          <NuxtLink to="/">
+          <NuxtLink to="/analyze">
             <img src="/icons/my/setting.svg" alt="設定按鈕" />
           </NuxtLink>
         </div>
@@ -68,7 +68,7 @@ onUnmounted(() => {
         </div>
 
         <div class="ms-auto p-2">
-          <NuxtLink to="/">
+          <NuxtLink to="/analyze">
             <img src="/icons/my/setting.svg" alt="設定按鈕" />
           </NuxtLink>
         </div>

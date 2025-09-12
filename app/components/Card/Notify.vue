@@ -9,30 +9,37 @@ const emit = defineEmits([
 ]);
 const daysList = ref({
   sun: {
+    index: 0,
     chinese: "日",
     value: "sun",
   },
   mon: {
+    index: 1,
     chinese: "一",
     value: "mon",
   },
   the: {
+    index: 2,
     chinese: "二",
     value: "the",
   },
   wed: {
+    index: 3,
     chinese: "三",
     value: "wed",
   },
   thu: {
+    index: 4,
     chinese: "四",
     value: "thu",
   },
   fri: {
+    index: 5,
     chinese: "五",
     value: "fri",
   },
   sat: {
+    index: 6,
     chinese: "六",
     value: "sat",
   },
@@ -52,10 +59,15 @@ const notifyDayContext = computed(() => {
   ) {
     return "平日";
   }
+  if (notify.days.length == 7) {
+    return "每天";
+  }
+
   const textList = notify.days.map((item) => {
-    return daysList.value[item].chinese;
+    return daysList.value[item];
   });
-  return `週${textList.join("、")}`;
+  textList.sort((a, b) => a.index - b.index);
+  return `週${textList.map((item) => item.chinese).join("、")}`;
 });
 
 const switchType = (type) => {
