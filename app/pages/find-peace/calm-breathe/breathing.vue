@@ -347,7 +347,7 @@ onUnmounted(() => {
     </h1>
     <!-- 倒數分鐘數 -->
     <p
-      class="pointer-events-none relative z-10 text-center text-h2 font-bold text-white"
+      class="pointer-events-none relative z-20 text-center text-h2 font-bold text-white"
     >
       {{ displayTime }}
     </p>
