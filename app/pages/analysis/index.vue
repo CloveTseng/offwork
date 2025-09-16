@@ -7,9 +7,11 @@ definePageMeta({
   header: {
     backTo: {path: '/analyze'},
     title: "大吼",
-    right: { openParam: { openDemoBottomSheet: "true" } },
+    showRight: { openParam: { openDemoBottomSheet: "true" } },
   },
 });
+const route = useRoute();
+const router = useRouter();
 const views = [
   { key: 'day', label: '日', },
   { key: 'week', label: '週', },
@@ -33,6 +35,7 @@ const dataCard = [
 const openModal = ref(false);
 const chartTitle = ref('大吼指數')
 const activeViewKey = ref('day')
+const showDemoBottomSheet = ref(false);
 const handleCalendarSelect = () => {
   openModal.value = false
 }
@@ -51,6 +54,37 @@ const currentDate = computed(() => {
       return '2024/07 - 2025/06';
   }
 })
+// 判斷 URL 是否帶了 openDemoBottomSheet 參數（存在即可）
+const hasDemoParam = computed(
+  () => route.query.openDemoBottomSheet !== undefined,
+);
+
+// URL → UI：網址有參數就打開；移除參數就關閉
+watch(hasDemoParam, (has) => {
+  if (has && !showDemoBottomSheet.value) showDemoBottomSheet.value = true;
+  if (!has && showDemoBottomSheet.value) showDemoBottomSheet.value = false;
+});
+
+// UI → URL：開啟時補上參數；關閉時移除參數（用 replace 保持瀏覽紀錄乾淨）
+watch(showDemoBottomSheet, (open) => {
+  if (!import.meta.client) return;
+  const q = { ...route.query };
+  if (open) {
+    if (!("openDemoBottomSheet" in q)) {
+      router.replace({ query: { ...q, openDemoBottomSheet: "true" } });
+    }
+  } else {
+    if ("openDemoBottomSheet" in q) {
+      delete q.openDemoBottomSheet;
+      router.replace({ query: q });
+    }
+  }
+});
+
+// 進頁面時若本來就有參數，直接打開
+onMounted(() => {
+  if (hasDemoParam.value) showDemoBottomSheet.value = true;
+});
 </script>
 <template>
   <main class="p-4 grid gap-4 text-white">
@@ -69,6 +103,10 @@ const currentDate = computed(() => {
     <CardVolcanokun v-if="activeViewKey !== 'day'"/>
     <!-- 數據 -->
     <CardDataCard :dataCard="dataCard"/>
+    <!-- 大吼時段 -->
+    <section>
+      <CardTimeline :activeView="activeViewKey"/>
+    </section>
     <!-- 大吼關鍵字 -->
     <CardAnalyzeCard
       title="大吼關鍵字"
@@ -78,6 +116,21 @@ const currentDate = computed(() => {
     <div class="sticky inset-x-0 bottom-2">
       <LayoutBottomBar class="mb-2 mt-[27px]" />
     </div>
+    <!-- bottomSheet -->
+    <LayoutBottomSheet
+      v-model="showDemoBottomSheet"
+      hasBottomBar
+      :threshold="0.3"
+      :backdrop-fade="0.6"
+    >
+      <p class="text-white">
+        這是 Demo Bottom Sheet。<br />
+        點標題列右側按鈕（layout 代為注入 query） → URL 出現
+        <code>?openDemoBottomSheet=true</code> → 這裡自動打開。 關閉時會自動從
+        URL 移除該參數。
+      </p>
+      <LayoutBottomBar class="mb-2 mt-[27px]" />
+    </LayoutBottomSheet>
   </main>
 </template>
 <style scoped>

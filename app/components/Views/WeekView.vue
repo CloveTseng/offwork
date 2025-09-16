@@ -2,7 +2,7 @@
 
 </script>
 <template>
-123
+week
 </template>
 <style scoped>
 </style>
