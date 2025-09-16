@@ -28,6 +28,7 @@
 
   /* 隱藏 scrollbar */
   .scrollbar-hide {
+    scrollbar-width: none;
     &::-webkit-scrollbar {
       display: none;
     }
