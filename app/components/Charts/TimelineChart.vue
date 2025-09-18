@@ -105,7 +105,6 @@ onMounted(() => {
 });
 
 watch(() => props.chartData, (newData) => {
-  console.log('TimelineChart.vue: received new data:', newData)
   updateChart(newData);
 });
 
