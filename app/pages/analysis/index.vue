@@ -3,15 +3,6 @@ useSeoMeta({
   title: "大吼分析 | 健康生活 OFFWORK APP",
   ogTitle: "大吼分析 | 健康生活 OFFWORK APP",
 });
-definePageMeta({
-  header: {
-    backTo: {path: '/analyze'},
-    title: "大吼",
-    showRight: { openParam: { openDemoBottomSheet: "true" } },
-  },
-});
-const route = useRoute();
-const router = useRouter();
 const views = [
   { key: 'day', label: '日', },
   { key: 'week', label: '週', },
@@ -34,6 +25,7 @@ const dataCard = [
 ]
 const openModal = ref(false);
 const chartTitle = ref('大吼指數')
+const currentPage = ref('大吼')
 const activeViewKey = ref('day')
 const showDemoBottomSheet = ref(false);
 const handleCalendarSelect = () => {
@@ -54,39 +46,22 @@ const currentDate = computed(() => {
       return '2024/07 - 2025/06';
   }
 })
-// 判斷 URL 是否帶了 openDemoBottomSheet 參數（存在即可）
-const hasDemoParam = computed(
-  () => route.query.openDemoBottomSheet !== undefined,
-);
-
-// URL → UI：網址有參數就打開；移除參數就關閉
-watch(hasDemoParam, (has) => {
-  if (has && !showDemoBottomSheet.value) showDemoBottomSheet.value = true;
-  if (!has && showDemoBottomSheet.value) showDemoBottomSheet.value = false;
-});
-
-// UI → URL：開啟時補上參數；關閉時移除參數（用 replace 保持瀏覽紀錄乾淨）
-watch(showDemoBottomSheet, (open) => {
-  if (!import.meta.client) return;
-  const q = { ...route.query };
-  if (open) {
-    if (!("openDemoBottomSheet" in q)) {
-      router.replace({ query: { ...q, openDemoBottomSheet: "true" } });
-    }
-  } else {
-    if ("openDemoBottomSheet" in q) {
-      delete q.openDemoBottomSheet;
-      router.replace({ query: q });
-    }
-  }
-});
-
-// 進頁面時若本來就有參數，直接打開
-onMounted(() => {
-  if (hasDemoParam.value) showDemoBottomSheet.value = true;
-});
+const isOpen = ref(false);
 </script>
 <template>
+  <!-- 功能列 -->
+  <section
+    class="sticky flex items-center justify-between bg-[#29292DCC] px-4 py-3 backdrop-blur sm:top-[56px] z-50"
+  >
+    <NuxtLink to="/analyze">
+      <img src="/icons/my/arrow-left-s-line.svg" alt="返回"
+    /></NuxtLink>
+
+    <h1 class="text-xl font-bold text-white">大吼</h1>
+    <button @click="isOpen = true">
+      <img src="/icons/my/arrow-up-down-fill.svg" alt="設定" />
+    </button>
+  </section>
   <main class="p-4 grid gap-4 text-white">
     <!-- 視圖切換 -->
     <div class="sticky inset-x-0 top-[110px] z-10">
@@ -118,20 +93,52 @@ onMounted(() => {
     </div>
     <!-- bottomSheet -->
     <LayoutBottomSheet
-      v-model="showDemoBottomSheet"
-      hasBottomBar
-      :threshold="0.3"
-      :backdrop-fade="0.6"
-    >
-      <p class="text-white">
-        這是 Demo Bottom Sheet。<br />
-        點標題列右側按鈕（layout 代為注入 query） → URL 出現
-        <code>?openDemoBottomSheet=true</code> → 這裡自動打開。 關閉時會自動從
-        URL 移除該參數。
-      </p>
-      <LayoutBottomBar class="mb-2 mt-[27px]" />
+    handleMarginBottom="mb-5"
+    v-model="isOpen"
+    :threshold="0.3"
+    :backdrop-fade="0.6"
+  >
+    <ul class="text-md text-white">
+      <li>
+        <NuxtLink
+          :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == '大吼' ? 'bg-neutral-900 text-primary' : ''}`"
+          to="/"
+          @click="isOpen = true"
+        >
+          大吼
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == 'sleep' ? 'bg-neutral-900 text-primary' : ''}`"
+          to="/my/target/sleep"
+          @click="isOpen = false"
+        >
+          呼吸
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == 'sleep' ? 'bg-neutral-900 text-primary' : ''}`"
+          to="/my/target/sleep"
+          @click="isOpen = false"
+        >
+          冥想
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink
+          :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == 'sleep' ? 'bg-neutral-900 text-primary' : ''}`"
+          to="/my/target/sleep"
+          @click="isOpen = false"
+        >
+          睡眠
+        </NuxtLink>
+      </li>
+    </ul>
     </LayoutBottomSheet>
   </main>
 </template>
 <style scoped>
+
 </style>
