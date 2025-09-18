@@ -49,7 +49,7 @@ const currentDate = computed(() => {
 const isOpen = ref(false);
 </script>
 <template>
-  <div class="sticky px-4 pb-3  sm:top-[56px] top-0 z-50">
+  <div class="sticky px-4 sm:top-[56px] top-0 z-50">
     <!-- 功能列 -->
     <section
       class="flex items-center justify-between bg-[#29292DCC] backdrop-blur-lg py-[10px]"
@@ -64,7 +64,7 @@ const isOpen = ref(false);
       </button>
     </section>
     <!-- 視圖切換 -->
-    <div class="inset-x-0 py-4">
+    <div class="inset-x-0 pt-4">
       <CommonViewSwitcher :views="views" @update:view="handleViewChange"/>
     </div>
   </div>
