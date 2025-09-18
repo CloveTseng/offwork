@@ -49,24 +49,26 @@ const currentDate = computed(() => {
 const isOpen = ref(false);
 </script>
 <template>
-  <!-- 功能列 -->
-  <section
-    class="sticky flex items-center justify-between bg-[#29292DCC] px-4 py-3 backdrop-blur sm:top-[56px] z-50"
-  >
-    <NuxtLink to="/analyze">
-      <img src="/icons/my/arrow-left-s-line.svg" alt="返回"
-    /></NuxtLink>
-
-    <h1 class="text-xl font-bold text-white">大吼</h1>
-    <button @click="isOpen = true">
-      <img src="/icons/my/arrow-up-down-fill.svg" alt="設定" />
-    </button>
-  </section>
-  <main class="p-4 grid gap-4 text-white">
+  <div class="sticky px-4 pb-3  sm:top-[56px] top-0 z-50">
+    <!-- 功能列 -->
+    <section
+      class="flex items-center justify-between bg-[#29292DCC] backdrop-blur-lg py-[10px]"
+    >
+      <NuxtLink to="/analyze">
+        <img src="/icons/my/arrow-left-s-line.svg" alt="返回"
+      /></NuxtLink>
+  
+      <h1 class="text-xl font-bold text-white">大吼</h1>
+      <button @click="isOpen = true">
+        <img src="/icons/my/arrow-up-down-fill.svg" alt="設定" />
+      </button>
+    </section>
     <!-- 視圖切換 -->
-    <div class="sticky inset-x-0 top-[110px] z-10">
+    <div class="inset-x-0 py-4">
       <CommonViewSwitcher :views="views" @update:view="handleViewChange"/>
     </div>
+  </div>
+  <main class="p-4 grid gap-4 text-white">
     <!-- 日期及日曆 -->
     <LayoutDateNavigation :dateText="currentDate" @open-modal="openModal = true"/>
     <CommonModal v-model:show="openModal">
