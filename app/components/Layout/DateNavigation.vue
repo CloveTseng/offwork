@@ -11,7 +11,7 @@ const handleDateClick = () => {
 }
 </script>
 <template>
-<section class="flex justify-between items-center ">
+<section class="flex justify-between items-center">
   <NuxtLink to="#" class="bg-neutral-900 rounded-full p-2 text-center transition">
     <img src="/icons/white-left-arrow.svg" alt="左箭頭" loading="lazy" />
   </NuxtLink>

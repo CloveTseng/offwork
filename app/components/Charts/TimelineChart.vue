@@ -48,8 +48,8 @@ const updateChart = (data) => {
     xAxis: {
       type: 'category',
       data: labels,
-      // axisLabel: { color: '#FFFFFF', align: 'right' },
-      axisLabel: { show: false },
+      axisLabel: { color: '#FFFFFF', align: 'center', fontSize: '11px' },
+      // axisLabel: { show: false },
       splitLine: { show: false },
       axisLine: { show: false },
       axisTick: { show: false },
@@ -57,7 +57,7 @@ const updateChart = (data) => {
     yAxis: {
       type: 'category',
       data: yLabels,
-      axisLabel: { show: true, interval: 5, color: '#fff' },
+      axisLabel: { show: true, interval: 5, color: '#fff', fontSize: '11px' },
       axisLine: { show: false },
       axisTick: { show: false }
     },
@@ -86,7 +86,7 @@ const updateChart = (data) => {
       top: '10%',
       left: '5%',
       right: '0%',
-      bottom: '5%',
+      bottom: '0%',
       containLabel: false
     }
   };

@@ -49,10 +49,10 @@ const currentDate = computed(() => {
 const isOpen = ref(false);
 </script>
 <template>
-  <div class="sticky px-4 sm:top-[56px] top-0 z-50">
+  <div class="sticky sm:top-[56px] top-0 z-50">
     <!-- 功能列 -->
     <section
-      class="flex items-center justify-between bg-[#29292DCC] backdrop-blur-lg py-[10px]"
+      class="flex items-center justify-between bg-[#29292DCC] backdrop-blur-lg py-[10px] px-4"
     >
       <NuxtLink to="/analyze">
         <img src="/icons/my/arrow-left-s-line.svg" alt="返回"
@@ -104,7 +104,7 @@ const isOpen = ref(false);
       <li>
         <NuxtLink
           :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == '大吼' ? 'bg-neutral-900 text-primary' : ''}`"
-          to="/"
+          to="#"
           @click="isOpen = true"
         >
           大吼
@@ -113,7 +113,6 @@ const isOpen = ref(false);
       <li>
         <NuxtLink
           :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == 'sleep' ? 'bg-neutral-900 text-primary' : ''}`"
-          to="/my/target/sleep"
           @click="isOpen = false"
         >
           呼吸
@@ -122,7 +121,6 @@ const isOpen = ref(false);
       <li>
         <NuxtLink
           :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == 'sleep' ? 'bg-neutral-900 text-primary' : ''}`"
-          to="/my/target/sleep"
           @click="isOpen = false"
         >
           冥想
@@ -131,7 +129,6 @@ const isOpen = ref(false);
       <li>
         <NuxtLink
           :class="`block w-full rounded-xl px-6 py-4 text-center font-bold ${currentPage == 'sleep' ? 'bg-neutral-900 text-primary' : ''}`"
-          to="/my/target/sleep"
           @click="isOpen = false"
         >
           睡眠

@@ -13,7 +13,7 @@ const setActiveView = (key) => {
 }
 </script>
 <template>
-  <section class="rounded-full bg-neutral-900 p-1">
+  <section class="rounded-full bg-neutral-900 p-1 mx-4">
     <ul class="grid grid-cols-4">
       <li v-for="view in views" :key="view.key"
       class="font-md font-bold text-center py-1 rounded-full cursor-pointer transition duration-300 ease-in-out" 
