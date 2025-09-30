@@ -34,7 +34,7 @@
 
 ## 🛠️ 使用技術 (Tech Stack)
 
-*   **Frontend Framework**: [Nuxt.js 3](https://nuxt.com/)
+*   **Frontend Framework**: [Vue3](https://vuejs.org/) | [Nuxt.js 3](https://nuxt.com/)
 *   **Language**: [TypeScript](https://www.typescriptlang.org/)
 *   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 *   **Animation**: [Lottie](https://lottiefiles.com/)
