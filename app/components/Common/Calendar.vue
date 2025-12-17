@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const weeklyData = ref(['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'])
 const firstDayIndex = ref(2);
 const activeDay = ref(17);

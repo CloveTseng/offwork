@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { CardNotify } from "#components";
 
 let tempId = null;

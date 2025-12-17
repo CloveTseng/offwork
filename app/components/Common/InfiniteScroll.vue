@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   itemHeight: { type: Number, required: true },
   scrollName: { type: String, required: true },

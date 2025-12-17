@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { gsap } from 'gsap';
 const progress = ref(0);
 const finalProgress = 70;

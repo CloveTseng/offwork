@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // 初始化 isRelieved（只在瀏覽器端、且尚未存在時）
 onMounted(() => {
   if (!import.meta.client) return;
