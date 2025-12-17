@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const route = useRoute();
 // 獲取當前的子路由
 const currentPage = computed(() => {

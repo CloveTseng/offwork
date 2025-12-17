@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   hasBottomBar: { type: Boolean, default: false },

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   /**
    * 是否是放在開啟中的 Bottom Sheet 裡面的版本（比較短，顏色也不一樣）

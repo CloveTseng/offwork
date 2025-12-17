@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   backTo: { type: [String, Object], default: null },
   title: { type: String, required: true },

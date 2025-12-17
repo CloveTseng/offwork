@@ -1,11 +1,26 @@
-<script setup>
-const { notify } = defineProps(["notify"]);
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+
+const { notify } = defineProps<{
+  notify: {
+    id: string | number;
+    type: string;
+    days: string[];
+    hour: number;
+    min: number;
+    isMorning: boolean;
+    isNotify: boolean;
+    isOpenDetail: boolean;
+  };
+}>();
+
 const isOpen = ref(false);
+
 const emit = defineEmits([
-  "openNotifyModal",
-  "switchNotify",
-  "openTimeModal",
-  "deleteNotify",
+  'openNotifyModal',
+  'switchNotify',
+  'openTimeModal',
+  'deleteNotify'
 ]);
 const daysList = ref({
   sun: {

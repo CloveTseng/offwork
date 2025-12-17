@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 useSeoMeta({
   title: "平穩呼吸法 | 健康生活 OFFWORK APP",
   ogTitle: "平穩呼吸法 | 健康生活 OFFWORK APP",

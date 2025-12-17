@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const route = useRoute();
+
+const isActivePath = (path: string) => route.path === path;
+</script>
+
 <template>
   <nav class="rounded-full bg-neutral-1000 p-3">
     <ul class="grid grid-cols-4 gap-1 text-center text-xs font-medium">
@@ -6,11 +12,7 @@
         <NuxtLink
           to="/"
           class="flex flex-col items-center rounded-full py-1 transition hover:text-white"
-          :class="
-            $route.path === '/' || ''
-              ? 'bg-neutral-900 text-white'
-              : 'text-neutral-500'
-          "
+          :class="isActivePath('/') ? 'bg-neutral-900 text-white' : 'text-neutral-500'"
         >
           <svg
             width="25"
@@ -32,11 +34,7 @@
         <NuxtLink
           to="#"
           class="flex flex-col items-center rounded-full py-1 transition hover:text-white"
-          :class="
-            $route.path === '#'
-              ? 'bg-neutral-900 text-white'
-              : 'text-neutral-500'
-          "
+          :class="isActivePath('#') ? 'bg-neutral-900 text-white' : 'text-neutral-500'"
         >
           <svg
             width="25"
@@ -58,11 +56,7 @@
         <NuxtLink
           to="/analyze"
           class="flex flex-col items-center rounded-full py-1 transition hover:text-white"
-          :class="
-            $route.path === '/analyze'
-              ? 'bg-neutral-900 text-white'
-              : 'text-neutral-500'
-          "
+          :class="isActivePath('/analyze') ? 'bg-neutral-900 text-white' : 'text-neutral-500'"
         >
           <svg
             width="25"
@@ -84,11 +78,7 @@
         <NuxtLink
           to="/my"
           class="flex flex-col items-center rounded-full py-1 transition hover:text-white"
-          :class="
-            $route.path === '/my'
-              ? 'bg-neutral-900 text-white'
-              : 'text-neutral-500'
-          "
+          :class="isActivePath('/my') ? 'bg-neutral-900 text-white' : 'text-neutral-500'"
         >
           <svg
             width="25"
