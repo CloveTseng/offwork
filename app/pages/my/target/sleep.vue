@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const isOpen = ref(false);
 const currentMin = ref(0);
 const currentHour = ref(8);

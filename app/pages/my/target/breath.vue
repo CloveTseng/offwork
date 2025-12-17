@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const isOpen = ref(false);
 const currentMin = ref(3);
 const timeList = [1, 3, 5, 10, 15];
